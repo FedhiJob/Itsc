@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminRole {
+  ADMIN
+  SUPER_ADMIN
+  CONTENT_EDITOR
+  TRAINING_MANAGER
+  NEWS_EDITOR
+  VIEWER
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum InquiryStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+  ARCHIVED
+}
+
+model Administrator {
+  id               String            @id @default(uuid()) @db.Uuid
+  fullName         String            @map("full_name") @db.VarChar(150)
+  email            String            @unique @db.VarChar(255)
+  passwordHash     String            @map("password_hash") @db.Text
+  role             AdminRole         @default(ADMIN)
+  status           Boolean           @default(true)
+  lastLogin        DateTime?         @map("last_login")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  trainingPrograms TrainingProgram[]
+  newsArticles     NewsArticle[]
+
+  @@map("administrators")
+}
+
+model TrainingCategory {
+  id          String            @id @default(uuid()) @db.Uuid
+  name        String            @db.VarChar(100)
+  slug        String            @unique @db.VarChar(120)
+  description String?           @db.Text
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+  programs    TrainingProgram[]
+
+  @@map("training_categories")
+}
+
+model TrainingProgram {
+  id               String           @id @default(uuid()) @db.Uuid
+  categoryId       String           @map("category_id") @db.Uuid
+  authorId         String?          @map("author_id") @db.Uuid
+  title            String           @db.VarChar(255)
+  slug             String           @unique @db.VarChar(255)
+  shortDescription String           @map("short_description") @db.Text
+  fullDescription  String           @map("full_description") @db.Text
+  duration         String?          @db.VarChar(50)
+  deliveryMode     String?          @map("delivery_mode") @db.VarChar(50)
+  level            String?          @db.VarChar(50)
+  featuredImage    String?          @map("featured_image") @db.Text
+  isFeatured       Boolean          @default(false) @map("is_featured")
+  status           ContentStatus    @default(DRAFT)
+  deletedAt        DateTime?        @map("deleted_at")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+  author           Administrator?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  category         TrainingCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@index([categoryId])
+  @@index([status])
+  @@index([isFeatured])
+  @@map("training_programs")
+}
+
+model NewsArticle {
+  id            String         @id @default(uuid()) @db.Uuid
+  authorId      String?        @map("author_id") @db.Uuid
+  title         String         @db.VarChar(255)
+  slug          String         @unique @db.VarChar(255)
+  summary       String         @db.Text
+  content       String         @db.Text
+  featuredImage String?        @map("featured_image") @db.Text
+  publishedAt   DateTime?      @map("published_at")
+  status        ContentStatus  @default(DRAFT)
+  deletedAt     DateTime?      @map("deleted_at")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  author        Administrator? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([publishedAt])
+  @@map("news_articles")
+}
+
+model GalleryAlbum {
+  id          String         @id @default(uuid()) @db.Uuid
+  title       String         @db.VarChar(255)
+  slug        String         @unique @db.VarChar(255)
+  description String?        @db.Text
+  coverImage  String?        @map("cover_image") @db.Text
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+  images      GalleryImage[]
+
+  @@map("gallery_albums")
+}
+
+model GalleryImage {
+  id         String       @id @default(uuid()) @db.Uuid
+  albumId    String       @map("album_id") @db.Uuid
+  imageUrl   String       @map("image_url") @db.Text
+  caption    String?      @db.Text
+  altText    String       @map("alt_text") @db.VarChar(255)
+  uploadedAt DateTime     @default(now()) @map("uploaded_at")
+  album      GalleryAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
+
+  @@index([albumId])
+  @@map("gallery_images")
+}
+
+model ContactInquiry {
+  id           String        @id @default(uuid()) @db.Uuid
+  fullName     String        @map("full_name") @db.VarChar(150)
+  email        String        @db.VarChar(255)
+  phone        String?       @db.VarChar(50)
+  organization String?       @db.VarChar(255)
+  subject      String        @db.VarChar(255)
+  message      String        @db.Text
+  status       InquiryStatus @default(NEW)
+  submittedAt  DateTime      @default(now()) @map("submitted_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([submittedAt])
+  @@map("contact_inquiries")
+}
+
+model WebsiteSetting {
+  id        String   @id @default(uuid()) @db.Uuid
+  key       String   @unique @db.VarChar(120)
+  value     Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("website_settings")
+}
