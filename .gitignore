@@ -1,0 +1,30 @@
+# dependencies
+node_modules/
+
+# builds
+.next/
+dist/
+build/
+coverage/
+
+# env
+.env
+.env.*
+!.env.example
+!.env.development.example
+!.env.staging.example
+!.env.production.example
+
+# logs
+*.log
+npm-debug.log*
+
+# uploads and local data
+apps/api/uploads/
+apps/api/logs/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

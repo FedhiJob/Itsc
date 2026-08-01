@@ -1,0 +1,25 @@
+{
+  "name": "itsc-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Corporate website and content platform for the Information Technology and Solutions Center.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "format": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=11.0.0"
+  }
+}
