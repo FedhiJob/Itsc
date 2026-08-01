@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+"rootDir": "./", 
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+"noUncheckedIndexedAccess": true,
+
+"baseUrl": "./",
+    "paths": {
+      "@itsc/shared": ["../packages/shared/src/index.ts"],
+      "@itsc/shared/*": ["../packages/shared/src/*"]
+    },
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": true
+  },
+"include": ["src/**/*.ts", "../packages/shared/src/**/*.ts", "../packages/shared/src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
