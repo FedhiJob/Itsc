@@ -2,7 +2,7 @@
   "name": "itsc-platform",
   "version": "0.1.0",
   "private": true,
-  "description": "Corporate website and content platform for the Information Technology and Solutions Center.",
+  "description": "Corporate website and content platform for ITSC Technology Support.",
   "workspaces": [
     "apps/*",
     "packages/*"

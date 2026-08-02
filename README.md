@@ -1,7 +1,6 @@
 # ITSC Website Platform
 
-Corporate website and content management platform for the Information Technology and
-Solutions Center.
+Corporate website and content management platform for ITSC Technology Support.
 
 This project is not an LMS. Version 1.0 focuses on a professional public website, a secure
 admin portal, dynamic content management, SEO, performance, accessibility, and a modular

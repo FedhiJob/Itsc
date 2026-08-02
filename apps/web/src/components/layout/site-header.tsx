@@ -12,7 +12,7 @@ export function SiteHeader() {
         <Link href="/" className="flex items-center gap-3" aria-label="ITSC home">
           <Image
             src={logo}
-            alt="ITSC — Information Technology and Solutions Center"
+            alt="ITSC Technology Support"
             width={120}
             height={46}
             className="h-auto w-auto max-h-10 object-contain"

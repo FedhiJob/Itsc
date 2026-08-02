@@ -7,7 +7,7 @@ import { Container, Section } from "@/components/ui/section";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Learn about the Information Technology and Solutions Center (ITSC) — our mission, vision, and commitment to professional technology training."
+    "Learn about ITSC Technology Support — our mission, vision, and commitment to professional technology training."
 };
 
 const values = [
@@ -50,7 +50,7 @@ export default function AboutPage() {
         <Container className="max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-gold">About ITSC</p>
           <h1 className="mt-4 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl">
-            Information Technology Support Center
+            ITSC Technology Support
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-500">
             ITSC is a dedicated technology training and solutions provider based in Ethiopia. We
