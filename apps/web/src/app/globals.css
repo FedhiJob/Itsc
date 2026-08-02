@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8fafc;
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-500: #64748b;
+  --color-gray-700: #334155;
+  --color-gray-900: #0f172a;
+  --color-brand-gold: #febd01;
+  --color-brand-gold-600: #e5a800;
+  --color-brand-gold-700: #cc9400;
+  --color-brand-gold-50: #fffbe6;
+  --color-success: #0f9f6e;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+  --color-info: #2563eb;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-gold: 0 0 0 2px #febd01;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-gray-50: var(--color-gray-50);
+  --color-gray-100: var(--color-gray-100);
+  --color-gray-200: var(--color-gray-200);
+  --color-gray-500: var(--color-gray-500);
+  --color-gray-700: var(--color-gray-700);
+  --color-gray-900: var(--color-gray-900);
+  --color-brand-gold: var(--color-brand-gold);
+  --color-brand-gold-600: var(--color-brand-gold-600);
+  --color-brand-gold-700: var(--color-brand-gold-700);
+  --color-brand-gold-50: var(--color-brand-gold-50);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-error: var(--color-error);
+  --color-info: var(--color-info);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-full: var(--radius-full);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-gold: var(--shadow-gold);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: "Merriweather", Georgia, serif;
+  --font-serif: "Merriweather", Georgia, serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--color-gray-900);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  text-underline-offset: 4px;
+}
