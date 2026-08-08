@@ -34,15 +34,15 @@ export function SiteFooter() {
           <p className="text-sm font-semibold uppercase tracking-wide text-gray-500">Contact</p>
           <div className="mt-4 grid gap-3 text-sm text-gray-700">
             <p className="flex items-center gap-2">
-              <Phone aria-hidden="true" className="h-4 w-4" />
+              <Phone aria-hidden="true" className="h-4 w-4 text-brand-gold" />
               {siteConfig.links.phone}
             </p>
             <p className="flex items-center gap-2">
-              <Mail aria-hidden="true" className="h-4 w-4" />
+              <Mail aria-hidden="true" className="h-4 w-4 text-brand-gold" />
               {siteConfig.links.email}
             </p>
             <p className="flex items-center gap-2">
-              <MapPin aria-hidden="true" className="h-4 w-4" />
+              <MapPin aria-hidden="true" className="h-4 w-4 text-brand-gold" />
               {siteConfig.links.address}
             </p>
           </div>
