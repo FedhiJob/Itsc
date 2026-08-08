@@ -32,6 +32,12 @@ export const authenticate: RequestHandler = (request, response, next) => {
 
   const token = parts[1];
 
+  if (!token) {
+    return sendError(response, 401, "Authentication required.", [
+      { code: "AUTH_005", message: "Malformed authorization header." }
+    ]);
+  }
+
   try {
     const payload = authService.verifyToken(token);
     request.admin = { id: payload.sub, role: payload.role };

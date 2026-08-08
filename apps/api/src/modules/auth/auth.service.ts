@@ -95,7 +95,7 @@ export const authService = {
 
   signToken(payload: JwtPayload): string {
     return jwt.sign(payload, env.JWT_SECRET, {
-      expiresIn: env.JWT_EXPIRES_IN,
+      expiresIn: env.JWT_EXPIRES_IN as NonNullable<jwt.SignOptions["expiresIn"]>,
       issuer: "itsc-api"
     });
   },
