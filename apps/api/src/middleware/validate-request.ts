@@ -14,11 +14,24 @@ export function validateRequest(schemas: RequestSchemas): RequestHandler {
     }
 
     if (schemas.params) {
-      request.params = schemas.params.parse(request.params) as typeof request.params;
+      Object.defineProperty(request, "params", {
+        value: schemas.params.parse(request.params),
+        writable: true,
+        configurable: true,
+        enumerable: true
+      });
     }
 
     if (schemas.query) {
-      request.query = schemas.query.parse(request.query) as typeof request.query;
+      // Express 5 defines `req.query` as a getter-only property on the
+      // prototype, so direct assignment throws in strict-mode ESM. Shadow it
+      // with an own property instead.
+      Object.defineProperty(request, "query", {
+        value: schemas.query.parse(request.query),
+        writable: true,
+        configurable: true,
+        enumerable: true
+      });
     }
 
     next();
