@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container, Section } from "@/components/ui/section";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { contactContent } from "@/lib/mock/contact";
+import { ContactForm } from "@/components/contact/contact-form";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -73,71 +74,7 @@ export default function ContactPage() {
               <p className="mt-2 text-sm leading-6 text-gray-500">
                 Fill out the form below and we'll get back to you as soon as possible.
               </p>
-              <form className="mt-6 space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-900">
-                      Full Name <span className="text-error">*</span>
-                    </label>
-                    <input
-                      id="fullName"
-                      type="text"
-                      required
-                      className="mt-1 block w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-gold focus:outline-none focus:ring-1 focus:ring-brand-gold"
-                      placeholder="Your name"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-900">
-                      Email <span className="text-error">*</span>
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      required
-                      className="mt-1 block w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-gold focus:outline-none focus:ring-1 focus:ring-brand-gold"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-900">
-                    Subject <span className="text-error">*</span>
-                  </label>
-                  <select
-                    id="subject"
-                    required
-                    className="mt-1 block w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm text-gray-900 focus:border-brand-gold focus:outline-none focus:ring-1 focus:ring-brand-gold"
-                  >
-                    {subjects.map((subject) => (
-                      <option key={subject.value} value={subject.value}>
-                        {subject.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-900">
-                    Message <span className="text-error">*</span>
-                  </label>
-                  <textarea
-                    id="message"
-                    required
-                    rows={5}
-                    className="mt-1 block w-full rounded-md border border-gray-200 bg-background px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:border-brand-gold focus:outline-none focus:ring-1 focus:ring-brand-gold resize-y"
-                    placeholder="How can we help you?"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="inline-flex w-full items-center justify-center rounded-md bg-brand-gold px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-gold/90 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2"
-                >
-                  Send Message
-                </button>
-              </form>
+              <ContactForm subjects={subjects} />
             </div>
           </div>
         </Container>
