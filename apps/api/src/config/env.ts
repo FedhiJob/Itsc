@@ -1,5 +1,12 @@
-import "dotenv/config";
+import { config as loadEnv } from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
 import { z } from "zod";
+
+// Explicitly load the API's .env file with override so that a system-level
+// DATABASE_URL (e.g. a leftover SQLite URL) cannot shadow the project config.
+const __dirname = dirname(fileURLToPath(import.meta.url));
+loadEnv({ path: resolve(__dirname, "../../.env"), override: true });
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "staging", "production"]).default("development"),
@@ -12,7 +19,10 @@ const envSchema = z.object({
   EMAIL_HOST: z.string().optional(),
   EMAIL_PORT: z.coerce.number().int().positive().optional(),
   EMAIL_USER: z.string().optional(),
-  EMAIL_PASSWORD: z.string().optional()
+  EMAIL_PASSWORD: z.string().optional(),
+  CLOUDINARY_CLOUD_NAME: z.string().optional(),
+  CLOUDINARY_API_KEY: z.string().optional(),
+  CLOUDINARY_API_SECRET: z.string().optional()
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
