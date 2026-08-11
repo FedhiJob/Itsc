@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { adminApi, type ContentStatus, type NewsArticle } from "@/lib/admin/api";
+import { ImageUploader } from "@/components/admin/image-uploader";
 
 const statusOptions: ContentStatus[] = ["DRAFT", "PUBLISHED", "ARCHIVED"];
 
@@ -210,13 +211,11 @@ export default function AdminNewsPage() {
             </Field>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Featured Image URL" htmlFor="featuredImage">
-                <Input
-                  id="featuredImage"
-                  type="url"
+              <Field label="Featured Image">
+                <ImageUploader
                   value={form.featuredImage}
-                  onChange={(e) => setForm({ ...form, featuredImage: e.target.value })}
-                  placeholder="https://..."
+                  onChange={(url) => setForm({ ...form, featuredImage: url })}
+                  label="Featured Image"
                 />
               </Field>
               <Field label="Status" htmlFor="status" required>

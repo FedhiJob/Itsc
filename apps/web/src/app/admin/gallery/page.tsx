@@ -7,6 +7,7 @@ import { Field } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { adminApi, type GalleryAlbum } from "@/lib/admin/api";
+import { ImageUploader } from "@/components/admin/image-uploader";
 
 interface AlbumFormState {
   title: string;
@@ -192,13 +193,11 @@ export default function AdminGalleryPage() {
               />
             </Field>
 
-            <Field label="Cover Image URL" htmlFor="album-cover">
-              <Input
-                id="album-cover"
-                type="url"
+            <Field label="Cover Image">
+              <ImageUploader
                 value={form.coverImage}
-                onChange={(e) => setForm({ ...form, coverImage: e.target.value })}
-                placeholder="https://..."
+                onChange={(url) => setForm({ ...form, coverImage: url })}
+                label="Cover Image"
               />
             </Field>
 

@@ -166,16 +166,44 @@ export interface InquiriesResponse {
 // ---------------------------------------------------------------------------
 
 export const adminApi = {
+  // --- Uploads ---
+  async uploadImage(file: File): Promise<{ url: string; provider: string; publicId?: string }> {
+    const token = getToken();
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch(`${siteConfig.apiUrl}/upload/image`, {
+      method: "POST",
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData
+    });
+
+    const body = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        clearSession();
+      }
+      const message = body?.message ?? "Image upload failed.";
+      const code = body?.errors?.[0]?.code;
+      throw new ApiError(message, response.status, code);
+    }
+
+    return (body as ApiSuccess<{ url: string; provider: string; publicId?: string }>).data;
+  },
+
   // --- Auth ---
   async login(email: string, password: string): Promise<LoginResponse> {
-    return request<LoginResponse>("/auth/login", {
+    const res = await request<ApiSuccess<LoginResponse>>("/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password })
     });
+    return res.data;
   },
 
   async getMe(): Promise<{ id: string; fullName: string; email: string; role: string }> {
-    return request("/auth/me");
+    const res = await request<ApiSuccess<{ id: string; fullName: string; email: string; role: string }>>("/auth/me");
+    return res.data;
   },
 
   // --- Training Categories ---

@@ -25,7 +25,7 @@ export default function AdminLoginPage() {
     try {
       const result = await adminApi.login(email, password);
       setSession(result.accessToken, result.admin);
-      router.push("/admin");
+      router.replace("/admin");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed. Please try again.");

@@ -14,6 +14,7 @@ import {
   type TrainingCategory,
   type TrainingProgram
 } from "@/lib/admin/api";
+import { ImageUploader } from "@/components/admin/image-uploader";
 
 const statusOptions: ContentStatus[] = ["DRAFT", "PUBLISHED", "ARCHIVED"];
 
@@ -438,13 +439,11 @@ export default function AdminTrainingPage() {
               </Field>
             </div>
 
-            <Field label="Featured Image URL" htmlFor="prog-image">
-              <Input
-                id="prog-image"
-                type="url"
+            <Field label="Featured Image">
+              <ImageUploader
                 value={programForm.featuredImage}
-                onChange={(e) => setProgramForm({ ...programForm, featuredImage: e.target.value })}
-                placeholder="https://..."
+                onChange={(url) => setProgramForm({ ...programForm, featuredImage: url })}
+                label="Featured Image"
               />
             </Field>
 
