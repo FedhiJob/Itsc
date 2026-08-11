@@ -1,5 +1,6 @@
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/app-error.js";
+import { cleanData } from "../../utils/prisma-helpers.js";
 import type { CreateNewsInput, NewsQueryInput, UpdateNewsInput } from "./news.schema.js";
 
 export const newsService = {
@@ -80,7 +81,7 @@ export const newsService = {
     };
 
     return prisma.newsArticle.create({
-      data,
+      data: cleanData(data),
       include: {
         author: { select: { id: true, fullName: true } }
       }
@@ -115,7 +116,7 @@ export const newsService = {
 
     return prisma.newsArticle.update({
       where: { id },
-      data,
+      data: cleanData(data),
       include: {
         author: { select: { id: true, fullName: true } }
       }

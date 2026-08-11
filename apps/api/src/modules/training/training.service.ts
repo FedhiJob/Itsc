@@ -1,5 +1,6 @@
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/app-error.js";
+import { cleanData } from "../../utils/prisma-helpers.js";
 import type { CreateCategoryInput, CreateProgramInput, ProgramQueryInput, UpdateCategoryInput, UpdateProgramInput } from "./training.schema.js";
 
 export const trainingService = {
@@ -38,7 +39,7 @@ export const trainingService = {
       throw new AppError(409, "A category with this slug already exists.", "TRAINING_002");
     }
 
-    return prisma.trainingCategory.create({ data: input });
+    return prisma.trainingCategory.create({ data: cleanData(input) });
   },
 
   async updateCategory(id: string, input: UpdateCategoryInput) {
@@ -55,7 +56,7 @@ export const trainingService = {
       }
     }
 
-    return prisma.trainingCategory.update({ where: { id }, data: input });
+    return prisma.trainingCategory.update({ where: { id }, data: cleanData(input) });
   },
 
   async deleteCategory(id: string) {
@@ -86,8 +87,8 @@ export const trainingService = {
       where.status = query.status;
     }
 
-    if (query.featured !== undefined) {
-      where.isFeatured = query.featured;
+    if (query.isFeatured !== undefined) {
+      where.isFeatured = query.isFeatured;
     }
 
     const skip = (query.page - 1) * query.limit;
@@ -147,7 +148,7 @@ export const trainingService = {
     }
 
     return prisma.trainingProgram.create({
-      data: { ...input, authorId },
+      data: cleanData({ ...input, authorId }),
       include: {
         category: { select: { id: true, name: true, slug: true } },
         author: { select: { id: true, fullName: true } }
@@ -180,7 +181,7 @@ export const trainingService = {
 
     return prisma.trainingProgram.update({
       where: { id },
-      data: input,
+      data: cleanData(input),
       include: {
         category: { select: { id: true, name: true, slug: true } },
         author: { select: { id: true, fullName: true } }

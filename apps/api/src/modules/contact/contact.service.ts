@@ -1,10 +1,11 @@
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/app-error.js";
+import { cleanData } from "../../utils/prisma-helpers.js";
 import type { InquiryQueryInput, SubmitContactInput, UpdateInquiryInput } from "./contact.schema.js";
 
 export const contactService = {
   async submit(input: SubmitContactInput) {
-    return prisma.contactInquiry.create({ data: input });
+    return prisma.contactInquiry.create({ data: cleanData(input) });
   },
 
   async listInquiries(query: InquiryQueryInput) {
@@ -56,7 +57,7 @@ export const contactService = {
 
     return prisma.contactInquiry.update({
       where: { id },
-      data: input
+      data: cleanData(input)
     });
   }
 };

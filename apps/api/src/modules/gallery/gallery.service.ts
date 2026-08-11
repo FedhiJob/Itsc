@@ -1,5 +1,6 @@
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/app-error.js";
+import { cleanData } from "../../utils/prisma-helpers.js";
 import type { AddImageInput, CreateAlbumInput, UpdateAlbumInput, UpdateImageInput } from "./gallery.schema.js";
 
 export const galleryService = {
@@ -48,7 +49,7 @@ export const galleryService = {
       throw new AppError(409, "An album with this slug already exists.", "GALLERY_002");
     }
 
-    return prisma.galleryAlbum.create({ data: input });
+    return prisma.galleryAlbum.create({ data: cleanData(input) });
   },
 
   async updateAlbum(id: string, input: UpdateAlbumInput) {
@@ -65,7 +66,7 @@ export const galleryService = {
       }
     }
 
-    return prisma.galleryAlbum.update({ where: { id }, data: input });
+    return prisma.galleryAlbum.update({ where: { id }, data: cleanData(input) });
   },
 
   async deleteAlbum(id: string) {
@@ -87,7 +88,7 @@ export const galleryService = {
     }
 
     return prisma.galleryImage.create({
-      data: { ...input, albumId },
+      data: cleanData({ ...input, albumId }),
       include: { album: { select: { id: true, title: true, slug: true } } }
     });
   },
@@ -101,7 +102,7 @@ export const galleryService = {
 
     return prisma.galleryImage.update({
       where: { id },
-      data: input,
+      data: cleanData(input),
       include: { album: { select: { id: true, title: true, slug: true } } }
     });
   },

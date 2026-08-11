@@ -27,7 +27,7 @@ export const updateProgramSchema = createProgramSchema.partial();
 export const programQuerySchema = z.object({
   category: z.string().optional(),
   status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
-  featured: z.coerce.boolean().optional(),
+  isFeatured: z.coerce.boolean().optional(),
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(50).default(10)
 });
