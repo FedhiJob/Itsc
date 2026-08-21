@@ -16,6 +16,8 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default("1h"),
   FRONTEND_URL: z.url().default("http://localhost:3000"),
   OPENAI_API_KEY: z.string().optional(),
+  OPENAI_BASE_URL: z.string().optional(),
+  OPENAI_MODEL: z.string().optional(),
   EMAIL_HOST: z.string().optional(),
   EMAIL_PORT: z.coerce.number().int().positive().optional(),
   EMAIL_USER: z.string().optional(),
