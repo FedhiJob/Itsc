@@ -6,6 +6,16 @@
 
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { config as loadEnv } from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
+
+// Explicitly load the API's .env file so the Prisma datasource can read
+// DATABASE_URL even when this script is invoked outside the app bootstrap.
+loadEnv({
+  path: resolve(dirname(fileURLToPath(import.meta.url)), "../.env"),
+  override: true
+});
 
 const prisma = new PrismaClient();
 
