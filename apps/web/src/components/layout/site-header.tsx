@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Bot, Menu, Phone, X } from "lucide-react";
+import { Bot, Mail, MapPin, Menu, Phone, X } from "lucide-react";
 import { mainNavigation, siteConfig } from "@/config/site";
 import { Button } from "@/components/ui/button";
-import logo from "/public/logo.png";
+import logo from "../../../public/itsc_logo.png";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
@@ -40,7 +40,17 @@ export function SiteHeader() {
   }, [menuOpen]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur">
+      <div className="hidden bg-brand-gold text-brand-ink lg:block">
+        <div className="mx-auto flex h-9 w-full max-w-7xl items-center justify-between px-6 text-xs font-semibold xl:px-8">
+          <div className="flex items-center gap-6">
+            <span className="inline-flex items-center gap-1.5"><MapPin aria-hidden="true" className="h-3.5 w-3.5" /> {siteConfig.links.address}</span>
+            <a href={`mailto:${siteConfig.links.email}`} className="inline-flex items-center gap-1.5 hover:underline"><Mail aria-hidden="true" className="h-3.5 w-3.5" /> {siteConfig.links.email}</a>
+            <a href={`tel:${siteConfig.links.phone}`} className="inline-flex items-center gap-1.5 hover:underline"><Phone aria-hidden="true" className="h-3.5 w-3.5" /> {siteConfig.links.phone}</a>
+          </div>
+          <span className="uppercase tracking-[0.14em]">Imparting Knowledge, Skills &amp; Attitudes</span>
+        </div>
+      </div>
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3" aria-label="ITSC home">
           <Image
@@ -61,7 +71,7 @@ export function SiteHeader() {
               aria-current={pathname === item.href ? "page" : undefined}
               className={cn(
                 "rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
-                pathname === item.href ? "text-brand-gold" : "text-gray-500"
+                pathname === item.href ? "bg-brand-gold/10 text-brand-ink" : "text-gray-500"
               )}
             >
               {item.label}

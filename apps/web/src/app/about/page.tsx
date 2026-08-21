@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/section";
+import { PageHero } from "@/components/ui/page-hero";
+import { Reveal } from "@/components/sections/reveal";
 import { aboutContent } from "@/lib/mock/about";
 import { resolveIcon } from "@/lib/icons";
 
@@ -19,40 +21,36 @@ export default function AboutPage() {
     <>
       <Section className="border-b border-gray-200 bg-white">
         <Container className="max-w-3xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-gold">{eyebrow}</p>
-          <h1 className="mt-4 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl">
-            {title}
-          </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-500">{intro}</p>
+          <PageHero eyebrow={eyebrow} title={title} description={intro} />
         </Container>
       </Section>
 
       <Section>
         <Container>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {values.map((item) => {
+            {values.map((item, index) => {
               const Icon = resolveIcon(item.icon);
               return (
-                <article
-                  key={item.title}
-                  className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
-                >
+                <Reveal key={item.title} style={{ transitionDelay: `${index * 90}ms` }}>
+                <article className="group h-full rounded-2xl border border-gray-200 bg-white p-7 shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand-gold/50">
                   {Icon ? <Icon aria-hidden="true" className="h-8 w-8 text-brand-gold" /> : null}
-                  <h2 className="mt-4 text-xl font-semibold text-gray-900">{item.title}</h2>
+                  <h2 className="mt-5 text-xl font-bold text-brand-ink">{item.title}</h2>
                   <p className="mt-3 text-sm leading-6 text-gray-500">
                     {item.description}
                   </p>
                 </article>
+                </Reveal>
               );
             })}
           </div>
         </Container>
       </Section>
 
-      <Section className="bg-gray-50">
+      <Section className="bg-brand-ink text-white">
         <Container className="max-w-2xl text-center">
-          <h2 className="text-3xl font-bold text-gray-900">{cta.title}</h2>
-          <p className="mt-4 text-base leading-7 text-gray-500">{cta.description}</p>
+          <Reveal>
+          <h2 className="font-serif text-3xl font-black">{cta.title}</h2>
+          <p className="mt-4 text-base leading-7 text-white/72">{cta.description}</p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Button asChild size="lg">
               <Link href={cta.primaryCta.href}>
@@ -61,11 +59,12 @@ export default function AboutPage() {
               </Link>
             </Button>
             {cta.secondaryCta ? (
-              <Button asChild variant="outline" size="lg">
+                <Button asChild variant="outline" size="lg" className="border-white/25 bg-transparent text-white hover:bg-white hover:text-brand-ink">
                 <Link href={cta.secondaryCta.href}>{cta.secondaryCta.label}</Link>
               </Button>
             ) : null}
           </div>
+          </Reveal>
         </Container>
       </Section>
     </>

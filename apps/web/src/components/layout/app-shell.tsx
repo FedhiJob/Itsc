@@ -25,8 +25,14 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="flex min-h-full flex-col">
+      <a
+        href="#main-content"
+        className="sr-only fixed left-4 top-4 z-[60] rounded-md bg-brand-gold px-4 py-2 text-sm font-bold text-brand-ink focus:not-sr-only"
+      >
+        Skip to content
+      </a>
       <SiteHeader />
-      <main className="flex-1">{children}</main>
+      <main id="main-content" className="flex-1">{children}</main>
       <SiteFooter />
     </div>
   );

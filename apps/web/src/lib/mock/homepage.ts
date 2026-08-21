@@ -7,17 +7,15 @@ import type { HomepageContent } from "@itsc/shared";
 
 export const homepageContent: HomepageContent = {
   hero: {
-    eyebrow: "Corporate website foundation",
-    title: "Professional technology training, presented with clarity and trust.",
+    eyebrow: "ITSC Technology Support",
+    title: "Build the skills that move technology forward.",
     subtitle:
-      "ITSC helps students, professionals, organizations, and government institutions discover practical training services and connect with the right support.",
+      "Practical technology training, certification, and enterprise support for ambitious professionals and organizations.",
     primaryCta: { label: "Explore Programs", href: "/training-programs", variant: "primary" },
     secondaryCta: { label: "Corporate Training", href: "/corporate-training", variant: "outline" },
     highlights: [
-      { label: "Training Tracks", value: "AI, Cloud, Cybersecurity" },
-      { label: "Audience", value: "Students, teams, institutions" },
-      { label: "Admin Ready", value: "Content-driven architecture" },
-      { label: "AI Assistant", value: "Built for guided support" }
+      { label: "Learn", value: "Hands-on, career-ready training" },
+      { label: "Grow", value: "Certification and enterprise capability" }
     ]
   },
   stats: [
@@ -28,23 +26,23 @@ export const homepageContent: HomepageContent = {
   ],
   services: [
     {
-      title: "Public Website",
-      description: "Home, About, Programs, News, Gallery, Contact, and Corporate Training.",
+      title: "Professional Training",
+      description: "Practical programmes for students, professionals, and technical teams.",
       icon: "graduation-cap"
     },
     {
-      title: "Admin Portal",
-      description: "A content-driven dashboard for ITSC staff to manage the website.",
+      title: "Corporate Solutions",
+      description: "Custom learning and capability-building for organizations and institutions.",
       icon: "building"
     },
     {
-      title: "Secure API",
-      description: "Express, Prisma, PostgreSQL, validation, rate limits, and JWT auth.",
+      title: "Networking & Consulting",
+      description: "Reliable technical guidance, infrastructure support, and advisory services.",
       icon: "shield"
     },
     {
-      title: "AI Assistant",
-      description: "A modular chatbot service prepared for future RAG and multilingual support.",
+      title: "Certification",
+      description: "Internationally recognized learning pathways and exam preparation.",
       icon: "sparkles"
     }
   ],
