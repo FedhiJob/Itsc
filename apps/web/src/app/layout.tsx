@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Merriweather } from "next/font/google";
 import { AppShell } from "@/components/layout/app-shell";
+import { ChatWidget } from "@/components/chat";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -59,6 +60,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <AppShell>{children}</AppShell>
+        <ChatWidget />
       </body>
     </html>
   );

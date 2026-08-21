@@ -6,6 +6,7 @@ import { newsRoutes } from "./news/news.routes.js";
 import { galleryRoutes } from "./gallery/gallery.routes.js";
 import { contactRoutes } from "./contact/contact.routes.js";
 import { uploadRoutes } from "./upload/upload.routes.js";
+import chatRoutes from "./chat/chat.routes.js";
 
 export const apiRoutes = Router();
 
@@ -16,3 +17,4 @@ apiRoutes.use("/news", newsRoutes);
 apiRoutes.use("/gallery", galleryRoutes);
 apiRoutes.use("/contact", contactRoutes);
 apiRoutes.use("/upload", uploadRoutes);
+apiRoutes.use("/chat", chatRoutes);

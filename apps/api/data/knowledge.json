@@ -1,0 +1,153 @@
+﻿{
+  \"organization\": {
+    \"name\": \"ITSC PLC\",
+    \"founded\": 1999,
+    \"description\": \"ITSC PLC is dedicated to delivering cutting-edge Information Technology (IT) solutions and services geared towards optimizing business productivity.\",
+    \"location\": {
+      \"address\": \"Mega House, 8th and 9th floor, Africa Avenue, Bole Road, Addis Ababa, Ethiopia\",
+      \"city\": \"Addis Ababa\",
+      \"country\": \"Ethiopia\"
+    },
+    \"contact\": {
+      \"phone\": [\"0115507150\", \"0911208112\", \"0911214125\"],
+      \"fax\": \"0115508420\",
+      \"email\": \"info@itsc.com.et\",
+      \"website\": \"itsc.com.et\"
+    }
+  },
+  \"mission\": \"To empower individuals and organizations through cutting-edge IT training and certification, fostering excellence, innovation, and resilience in the ever-evolving digital landscape.\",
+  \"vision\": \"Striving to be a globally recognized leader in IT training and certification, driving transformative impact by shaping skilled and adaptable professionals.\",
+  \"coreValues\": [
+    \"Commitment to Continuous Improvement and Innovation\",
+    \"Emphasis on Students' Success and Realization of Individual Potential\",
+    \"Commitment to the Development of ICT in the Country\",
+    \"Ambition for the Existence of Many Internationally Certified Information Technology Professionals\",
+    \"Trust\"
+  ],
+  \"services\": [
+    {
+      \"name\": \"Advanced IT Training and Certification\",
+      \"description\": \"We provide cutting-edge training programs designed to equip individuals with advanced IT skills and internationally recognized certifications.\"
+    },
+    {
+      \"name\": \"Application Design and Development\",
+      \"description\": \"Our expertise extends to the design and development of innovative applications, tailored to meet the unique needs of our clients.\"
+    },
+    {
+      \"name\": \"Network Design, Implementation, and Support\",
+      \"description\": \"ITSC has demonstrated proficiency in formulating end-to-end solutions encompassing network architecture, seamless implementation, and continual support.\"
+    },
+    {
+      \"name\": \"Corporate Training Needs Assessment\",
+      \"description\": \"We conduct thorough assessments of corporate training needs, customizing programs to align with organizational objectives.\"
+    }
+  ],
+  \"partnerships\": [
+    {\"partner\": \"Microsoft\", \"type\": \"Gold Certified Partner\", \"details\": \"First CTEC in Ethiopia since 2001, 4 MCTs, trained 5000+ ICT personnel.\"},
+    {\"partner\": \"Cisco\", \"type\": \"Cisco Sponsored Organization\", \"details\": \"Authorized Official Cisco training and Certification center.\"},
+    {\"partner\": \"EC-Council\", \"type\": \"Approved Training Center\", \"details\": \"Only approved center for East and Central Africa.\"},
+    {\"partner\": \"CompTIA\", \"type\": \"Delivery Partner\", \"details\": \"Only CompTIA Delivery Partner in Ethiopia.\"},
+    {\"partner\": \"Huawei\", \"type\": \"Authorized Learning Partner\", \"details\": \"Deliver Huawei IT technologies with 4 HCSIs on staff.\"},
+    {\"partner\": \"Pearson VUE\", \"type\": \"Authorized Testing Center\", \"details\": \"Authorized testing center since 2004.\"},
+    {\"partner\": \"LPI\", \"type\": \"Authorized Training Partner (Silver)\", \"details\": \"Only Silver ATP for LPI in Ethiopia.\"},
+    {\"partner\": \"Android-ATC\", \"type\": \"Authorized Training Partner\", \"details\": \"Only Android-ATC partner in Africa.\"},
+    {\"partner\": \"ISO\", \"type\": \"ISO 9001:2015 Certified\", \"details\": \"Only training company with ISO 9001:2015 certification in Ethiopia.\"}
+  ],
+  \"trainingCategories\": [
+    {
+      \"name\": \"CompTIA\",
+      \"courses\": [
+        {\"name\": \"CompTIA A+\", \"duration\": \"5 days\"},
+        {\"name\": \"CompTIA Network+\", \"duration\": \"5 days\"},
+        {\"name\": \"CompTIA Security+\", \"duration\": \"5 days\"},
+        {\"name\": \"CompTIA Cloud+\", \"duration\": \"5 days\"},
+        {\"name\": \"CompTIA Linux+\", \"duration\": \"5 days\"},
+        {\"name\": \"CompTIA Server+\", \"duration\": \"5 days\"},
+        {\"name\": \"CompTIA Project+\", \"duration\": \"5 days\"},
+        {\"name\": \"CompTIA PenTest+\", \"duration\": \"5 days\"},
+        {\"name\": \"CompTIA Mobility+\", \"duration\": \"5 days\"},
+        {\"name\": \"CompTIA Cybersecurity Analyst (CySA+)\", \"duration\": \"5 days\"},
+        {\"name\": \"CompTIA Advanced Security Practitioner (CASP+)\", \"duration\": \"5 days\"}
+      ]
+    },
+    {
+      \"name\": \"Microsoft\",
+      \"courses\": [
+        {\"name\": \"Azure Solutions Architect\", \"duration\": \"5 days\"},
+        {\"name\": \"Azure Administrator\", \"duration\": \"5 days\"},
+        {\"name\": \"Windows Server 2016\", \"duration\": \"5 days\"},
+        {\"name\": \"Windows 10\", \"duration\": \"3-5 days\"},
+        {\"name\": \"SQL Server\", \"duration\": \"3-5 days\"},
+        {\"name\": \"SharePoint\", \"duration\": \"3-5 days\"},
+        {\"name\": \"Exchange Server\", \"duration\": \"5 days\"},
+        {\"name\": \"Office 365\", \"duration\": \"5 days\"},
+        {\"name\": \"Power BI\", \"duration\": \"3 days\"},
+        {\"name\": \"Microsoft 365\", \"duration\": \"5 days\"}
+      ]
+    },
+    {
+      \"name\": \"Cisco\",
+      \"courses\": [
+        {\"name\": \"CCNA\", \"duration\": \"5 days\"},
+        {\"name\": \"CCNP Enterprise\", \"duration\": \"5 days per course\"},
+        {\"name\": \"CCNP Security\", \"duration\": \"5 days per course\"},
+        {\"name\": \"CCNP Data Center\", \"duration\": \"5 days per course\"},
+        {\"name\": \"CCNP Collaboration\", \"duration\": \"5 days per course\"},
+        {\"name\": \"Cisco SD-WAN\", \"duration\": \"5 days\"},
+        {\"name\": \"Cisco Wireless\", \"duration\": \"5 days\"},
+        {\"name\": \"Cisco Automation\", \"duration\": \"5 days\"}
+      ]
+    },
+    {
+      \"name\": \"EC-Council\",
+      \"courses\": [
+        {\"name\": \"Certified Ethical Hacker (CEH)\", \"duration\": \"5 days\"},
+        {\"name\": \"Computer Hacking Forensics Investigator (CHFI)\", \"duration\": \"5 days\"},
+        {\"name\": \"EC-Council Certified Security Analyst (ECSA)\", \"duration\": \"5 days\"},
+        {\"name\": \"Certified Chief Information Security Officer (CCISO)\", \"duration\": \"5 days\"},
+        {\"name\": \"EC-Council Certified Incident Handler (ECIH)\", \"duration\": \"2 days\"},
+        {\"name\": \"Certified Threat Incident Handler (CTIA)\", \"duration\": \"5 days\"}
+      ]
+    },
+    {
+      \"name\": \"Project Management\",
+      \"courses\": [
+        {\"name\": \"Project Management Professional (PMP)\", \"duration\": \"5 days\"},
+        {\"name\": \"PRINCE2 Foundation\", \"duration\": \"2 days\"},
+        {\"name\": \"PRINCE2 Practitioner\", \"duration\": \"4 days\"},
+        {\"name\": \"Agile Certified Practitioner (PMI-ACP)\", \"duration\": \"5 days\"},
+        {\"name\": \"SCRUM Master\", \"duration\": \"2 days\"},
+        {\"name\": \"SCRUM Product Owner\", \"duration\": \"2 days\"},
+        {\"name\": \"DevOps Fundamentals\", \"duration\": \"3 days\"}
+      ]
+    },
+    {
+      \"name\": \"Programming & Development\",
+      \"courses\": [
+        {\"name\": \"Python: The Basics\", \"duration\": \"5 days\"},
+        {\"name\": \"Advanced Python\", \"duration\": \"5 days\"},
+        {\"name\": \"Python for Data Science\", \"duration\": \"5 days\"},
+        {\"name\": \"C++ Fundamentals\", \"duration\": \"5 days\"},
+        {\"name\": \"Java Programming\", \"duration\": \"5 days\"},
+        {\"name\": \"HTML5 and CSS3\", \"duration\": \"5 days\"},
+        {\"name\": \"Advanced HTML5\", \"duration\": \"5 days\"},
+        {\"name\": \"Web Development\", \"duration\": \"5 days\"}
+      ]
+    }
+  ],
+  \"majorClients\": [
+    \"Information Network Security Agency (INSA)\",
+    \"Ministry of Innovation and Technology (MINT)\",
+    \"Addis Ababa University\",
+    \"Ethio Telecom\",
+    \"Ethiopian Airlines\",
+    \"Commercial Bank of Ethiopia\",
+    \"Dashen Bank\",
+    \"African Union (AU)\",
+    \"UNDP/UN-WHO/UN-WFP\",
+    \"USAID\",
+    \"American Embassy\",
+    \"Huawei Technologies\",
+    \"ZTE\"
+  ]
+}
