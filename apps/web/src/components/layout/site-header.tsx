@@ -40,7 +40,8 @@ export function SiteHeader() {
   }, [menuOpen]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur">
+    <>
+      <header className="sticky top-0 z-40 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur">
       <div className="hidden bg-brand-gold text-brand-ink lg:block">
         <div className="mx-auto flex h-9 w-full max-w-7xl items-center justify-between px-6 text-xs font-semibold xl:px-8">
           <div className="flex items-center gap-6">
@@ -105,47 +106,50 @@ export function SiteHeader() {
           </button>
         </div>
       </div>
+      </header>
 
-      {/* Mobile slide-out menu */}
+      {/* Mobile slide-out menu.
+          Rendered OUTSIDE <header> so the fixed overlay escapes the header's
+          z-40 stacking context and truly covers every other element on the page. */}
       {menuOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+        <div className="fixed inset-0 z-[100] lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
           <button
             type="button"
             aria-label="Close navigation menu"
             onClick={() => setMenuOpen(false)}
-            className="absolute inset-0 h-full w-full bg-gray-900/50"
+            className="absolute inset-0 h-full w-full bg-brand-navy/40 backdrop-blur-[2px]"
           />
           <div
             id="mobile-menu"
-            className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col overflow-y-auto bg-white shadow-xl"
+            className="absolute inset-y-0 right-0 flex w-full max-w-[19rem] flex-col bg-white shadow-2xl"
           >
-            <div className="flex h-16 items-center justify-between border-b border-gray-200 px-4">
+            <div className="flex h-16 shrink-0 items-center justify-between border-b border-gray-100 px-5">
               <Image
                 src={logo}
                 alt="ITSC Technology Support"
-                width={130}
-                height={48}
-                className="h-auto w-auto max-h-11 object-contain"
+                width={120}
+                height={44}
+                className="h-auto w-auto max-h-10 object-contain"
               />
               <button
                 type="button"
                 onClick={() => setMenuOpen(false)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 text-gray-900"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-900"
                 aria-label="Close navigation menu"
               >
                 <X aria-hidden="true" className="h-5 w-5" />
               </button>
             </div>
 
-            <nav className="flex-1 space-y-1 px-4 py-6" aria-label="Mobile navigation">
+            <nav className="flex-1 overflow-y-auto space-y-0.5 px-4 py-4" aria-label="Mobile navigation">
               {mainNavigation.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={pathname === item.href ? "page" : undefined}
                   className={cn(
-                    "block rounded-md px-3 py-2.5 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900",
-                    pathname === item.href ? "text-brand-gold" : "text-gray-500"
+                    "block rounded-lg px-3 py-2.5 text-[15px] font-medium transition-colors hover:bg-gray-100",
+                    pathname === item.href ? "bg-brand-gold/10 text-brand-gold-700" : "text-gray-700"
                   )}
                 >
                   {item.label}
@@ -153,12 +157,14 @@ export function SiteHeader() {
               ))}
             </nav>
 
-            <div className="space-y-3 border-t border-gray-200 px-4 py-6">
+            <div className="shrink-0 space-y-3 border-t border-gray-100 px-5 py-5">
               <a
                 href={`tel:${siteConfig.links.phone}`}
-                className="flex items-center gap-2 text-sm font-medium text-gray-500"
+                className="flex items-center gap-2.5 text-sm font-medium text-gray-500"
               >
-                <Phone aria-hidden="true" className="h-4 w-4 text-brand-gold" />
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
+                  <Phone aria-hidden="true" className="h-4 w-4 text-brand-gold-700" />
+                </span>
                 {siteConfig.links.phone}
               </a>
               <Button asChild className="w-full">
@@ -171,6 +177,6 @@ export function SiteHeader() {
           </div>
         </div>
       ) : null}
-    </header>
+    </>
   );
 }
