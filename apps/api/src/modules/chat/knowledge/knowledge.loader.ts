@@ -4,7 +4,15 @@ import { fileURLToPath } from 'node:url';
 import type { KnowledgeBase } from './knowledge.types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const KNOWLEDGE_FILE = path.resolve(__dirname, '../../../../data/knowledge.json');
+
+// Candidate locations, tried in order: compiled output lives at
+// dist/src/modules/chat/knowledge (5 levels up to apps/api), tsx runs from
+// src/ (4 levels up). cwd-relative covers both when started from apps/api.
+const KNOWLEDGE_CANDIDATES = [
+  path.resolve(process.cwd(), 'data/knowledge.json'),
+  path.resolve(__dirname, '../../../../../data/knowledge.json'),
+  path.resolve(__dirname, '../../../../data/knowledge.json')
+];
 
 let knowledgeCache: KnowledgeBase | null = null;
 
@@ -14,11 +22,29 @@ export async function loadKnowledge(): Promise<KnowledgeBase> {
   }
 
   try {
-    const data = await fs.readFile(KNOWLEDGE_FILE, 'utf-8');
+    let data: string | null = null;
+    for (const candidate of KNOWLEDGE_CANDIDATES) {
+      try {
+        data = await fs.readFile(candidate, 'utf-8');
+        break;
+      } catch {
+        // Try the next candidate location.
+      }
+    }
+
+    if (!data) {
+      throw new Error(
+        `knowledge.json not found. Tried: ${KNOWLEDGE_CANDIDATES.join(', ')}`
+      );
+    }
+
     knowledgeCache = JSON.parse(data) as KnowledgeBase;
     return knowledgeCache;
   } catch (error) {
-    console.error('Failed to load knowledge base:', error);
+    console.error(
+      'Failed to load knowledge base:',
+      error instanceof Error ? error.message : error
+    );
     throw new Error('Knowledge base unavailable');
   }
 }

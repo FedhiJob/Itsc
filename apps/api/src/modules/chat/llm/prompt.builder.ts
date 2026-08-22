@@ -13,24 +13,25 @@ IMPORTANT GUIDELINES:
 7. When mentioning specific courses or programs, include duration if available.
 
 ITSC KNOWLEDGE BASE:
-{knowledge}
-
-USER QUESTION:
-{question}`;
+{knowledge}`;
 
 export function buildPrompt(question: string, knowledgeChunks: KnowledgeChunk[]): LLMMessage[] {
   const knowledgeText = knowledgeChunks
     .map(chunk => `[${chunk.source}${chunk.section ? ` - ${chunk.section}` : ''}] ${chunk.content}`)
     .join('\n\n');
 
-  const systemMessage = SYSTEM_PROMPT
-    .replace('{knowledge}', knowledgeText)
-    .replace('{question}', question);
+  const systemMessage = SYSTEM_PROMPT.replace('{knowledge}', knowledgeText);
 
+  // Gemini's OpenAI-compatible endpoint requires at least one user message;
+  // sending only a system message is rejected with HTTP 400.
   return [
     {
       role: 'system',
       content: systemMessage
+    },
+    {
+      role: 'user',
+      content: question
     }
   ];
 }
