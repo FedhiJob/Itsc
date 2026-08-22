@@ -88,11 +88,13 @@ export function SiteHeader() {
             <Phone aria-hidden="true" className="h-4 w-4" />
             {siteConfig.links.phone}
           </a>
-          <Button asChild size="sm" className="hidden sm:inline-flex">
-            <Link href="/contact">
-              <Bot aria-hidden="true" className="h-4 w-4" />
-              Ask ITSC
-            </Link>
+          <Button
+            size="sm"
+            className="hidden sm:inline-flex"
+            onClick={() => window.dispatchEvent(new CustomEvent("itsc:open-chat"))}
+          >
+            <Bot aria-hidden="true" className="h-4 w-4" />
+            Ask ITSC
           </Button>
           <button
             type="button"
@@ -167,11 +169,15 @@ export function SiteHeader() {
                 </span>
                 {siteConfig.links.phone}
               </a>
-              <Button asChild className="w-full">
-                <Link href="/contact">
-                  <Bot aria-hidden="true" className="h-4 w-4" />
-                  Ask ITSC
-                </Link>
+              <Button
+                className="w-full"
+                onClick={() => {
+                  setMenuOpen(false);
+                  window.dispatchEvent(new CustomEvent("itsc:open-chat"));
+                }}
+              >
+                <Bot aria-hidden="true" className="h-4 w-4" />
+                Ask ITSC
               </Button>
             </div>
           </div>

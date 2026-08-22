@@ -30,6 +30,13 @@ export function ChatWidget() {
 
   useEffect(() => scrollToBottom(), [messages]);
 
+  // Open the chat when an "Ask ITSC" button anywhere on the page is clicked.
+  useEffect(() => {
+    const openChat = () => setIsOpen(true);
+    window.addEventListener("itsc:open-chat", openChat);
+    return () => window.removeEventListener("itsc:open-chat", openChat);
+  }, []);
+
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
