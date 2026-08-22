@@ -27,6 +27,12 @@ export class OpenAIService {
 
   async generateResponse(messages: LLMMessage[]): Promise<string> {
     try {
+      if (!process.env.OPENAI_API_KEY) {
+        throw new Error(
+          'LLM API key is not configured (OPENAI_API_KEY is empty). Set it in the server environment.'
+        );
+      }
+
       const request: LLMRequest = {
         model: this.config.model,
         messages,
@@ -43,6 +49,10 @@ export class OpenAIService {
       const content = response.choices[0]?.message?.content;
       return content || 'I apologize, but I could not generate a response.';
     } catch (error) {
+      if (error instanceof Error) {
+        console.error('LLM API error:', error.message);
+        throw error;
+      }
       console.error('LLM API error:', error);
       throw new Error('Failed to generate response from AI assistant');
     }

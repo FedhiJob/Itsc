@@ -32,9 +32,12 @@ export async function chatHandler(req: Request, res: Response): Promise<void> {
     }
 
     console.error('Chat error:', error);
+    const detail =
+      error instanceof Error ? error.message : 'Unknown error';
     res.status(500).json({
       success: false,
-      message: 'Failed to process chat request'
+      message: 'Failed to process chat request',
+      error: detail
     });
   }
 }
