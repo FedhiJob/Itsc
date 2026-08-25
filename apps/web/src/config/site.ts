@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "ITSC",
-  fullName: "ITSC Technology Support",
+  fullName: "ITSC",
   description:
     "Professional technology training, corporate capacity building, and AI-assisted guidance from ITSC.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",

@@ -11,7 +11,7 @@ import { resolveIcon } from "@/lib/icons";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Learn about ITSC Technology Support — our mission, vision, and commitment to professional technology training."
+    "Learn about ITSC — our mission, vision, and commitment to professional technology training."
 };
 
 export default function AboutPage() {

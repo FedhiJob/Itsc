@@ -7,7 +7,7 @@ import type { HomepageContent } from "@itsc/shared";
 
 export const homepageContent: HomepageContent = {
   hero: {
-    eyebrow: "ITSC Technology Support",
+    eyebrow: "ITSC",
     title: "Build the skills that move technology forward.",
     subtitle:
       "Practical technology training, certification, and enterprise support for ambitious professionals and organizations.",

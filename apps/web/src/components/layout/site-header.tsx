@@ -56,7 +56,7 @@ export function SiteHeader() {
         <Link href="/" className="flex items-center gap-3" aria-label="ITSC home">
           <Image
             src={logo}
-            alt="ITSC Technology Support"
+            alt="ITSC"
             width={150}
             height={58}
             className="h-auto w-auto max-h-12 object-contain"
@@ -128,7 +128,7 @@ export function SiteHeader() {
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-gray-100 px-5">
               <Image
                 src={logo}
-                alt="ITSC Technology Support"
+                alt="ITSC"
                 width={120}
                 height={44}
                 className="h-auto w-auto max-h-10 object-contain"

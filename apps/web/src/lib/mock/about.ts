@@ -7,7 +7,7 @@ import type { AboutContent } from "@itsc/shared";
 
 export const aboutContent: AboutContent = {
   eyebrow: "About ITSC",
-  title: "ITSC Technology Support",
+  title: "ITSC",
   intro:
     "ITSC is a dedicated technology training and solutions provider based in Ethiopia. We equip students, professionals, and organizations with practical skills in AI, cloud computing, cybersecurity, and emerging technologies.",
   values: [
