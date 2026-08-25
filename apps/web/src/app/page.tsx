@@ -7,12 +7,14 @@ import { PartnerMarquee } from "@/components/sections/partner-marquee";
 import { Reveal } from "@/components/sections/reveal";
 import { TrainingCard } from "@/components/features/training-card";
 import { homepageContent } from "@/lib/mock/homepage";
-import { trainingPrograms } from "@/lib/mock/training";
+import { getTrainingContent } from "@/lib/api/training";
 import { resolveIcon } from "@/lib/icons";
 
-export default function Home() {
+export default async function Home() {
   const { hero, services, stats, partners, missionVision, cta } = homepageContent;
-  const featuredPrograms = trainingPrograms.filter((program) => program.isFeatured).slice(0, 3);
+  const { programs } = await getTrainingContent();
+  const featured = programs.filter((program) => program.isFeatured);
+  const featuredPrograms = (featured.length > 0 ? featured : programs).slice(0, 3);
 
   return (
     <>

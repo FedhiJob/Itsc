@@ -83,7 +83,7 @@ function toDetail(api: ApiProgram): TrainingProgramDetail {
 export async function getTrainingContent(): Promise<TrainingProgramsContent> {
   const [catApi, progApi] = await Promise.all([
     apiFetchSafe<ApiCategory[]>("/training/categories"),
-    apiFetchSafe<ApiProgramList>("/training/programs?status=PUBLISHED&isFeatured=true&limit=50")
+    apiFetchSafe<ApiProgramList>("/training/programs?status=PUBLISHED&limit=50")
   ]);
 
   const categories = catApi?.map(toCategory) ?? trainingCategories;
