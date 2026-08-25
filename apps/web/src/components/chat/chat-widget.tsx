@@ -43,6 +43,16 @@ export function ChatWidget() {
     }
   }, [isOpen]);
 
+  // Lock page scroll while the chat is open so only the chat panel scrolls.
+  useEffect(() => {
+    if (!isOpen) return;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [isOpen]);
+
   const clearConversation = () => {
     setMessages([WELCOME_MESSAGE]);
     setConversationId(undefined);
@@ -102,7 +112,7 @@ export function ChatWidget() {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="bg-white rounded-2xl shadow-2xl w-[calc(100vw-2rem)] max-w-md h-[80vh] max-h-[600px] flex flex-col overflow-hidden sm:w-96 sm:h-[600px] sm:max-h-[600px]">
+        <div className="bg-white rounded-2xl shadow-2xl w-[calc(100vw-2rem)] max-w-md h-[80vh] max-h-[600px] flex flex-col overflow-hidden overscroll-contain sm:w-96 sm:h-[600px] sm:max-h-[600px]">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 flex justify-between items-center">
             <div className="flex items-center space-x-3">
@@ -137,7 +147,7 @@ export function ChatWidget() {
           </div>
 
           {/* Messages Container */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+          <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-4 bg-gray-50">
             {messages.map((message, index) => (
               <div
                 key={index}
