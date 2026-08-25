@@ -27,7 +27,13 @@ export const uploadImageHandler = async (
       throw new AppError(400, "No file was uploaded.", "UPLOAD_001");
     }
 
-    const result = await uploadImage(file.buffer, file.originalname, file.mimetype);
+    // Derive the public base URL from the incoming request so locally stored
+    // uploads always return an absolute, valid URL regardless of host.
+    const proto = request.get("x-forwarded-proto") ?? request.protocol;
+    const host = request.get("host");
+    const baseUrl = host ? `${proto}://${host}` : undefined;
+
+    const result = await uploadImage(file.buffer, file.originalname, file.mimetype, baseUrl);
 
     return sendSuccess(response, 201, "Image uploaded successfully.", {
       url: result.url,

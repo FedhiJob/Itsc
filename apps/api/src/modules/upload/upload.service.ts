@@ -81,19 +81,24 @@ async function uploadToCloudinary(
 async function uploadToDisk(
   buffer: Buffer,
   originalName: string,
-  mime: string
+  mime: string,
+  baseUrl?: string
 ): Promise<UploadResult> {
   await mkdir(UPLOADS_DIR, { recursive: true });
   const ext = EXTENSIONS[mime] ?? (path.extname(originalName) || ".bin");
   const filename = `${Date.now()}-${randomUUID()}${ext}`;
   await writeFile(path.join(UPLOADS_DIR, filename), buffer);
-  return { url: `/uploads/${filename}`, provider: "local" };
+  // Return an absolute URL so consumers (e.g. the featuredImage field, which
+  // is validated as a URL) can display the file regardless of origin.
+  const base = (baseUrl ?? env.PUBLIC_BASE_URL).replace(/\/$/, "");
+  return { url: `${base}/uploads/${filename}`, provider: "local" };
 }
 
 export async function uploadImage(
   buffer: Buffer,
   originalName: string,
-  mime: string
+  mime: string,
+  baseUrl?: string
 ): Promise<UploadResult> {
   if (!buffer || buffer.length === 0) {
     throw new AppError(400, "No file was uploaded.", "UPLOAD_001");
@@ -113,9 +118,9 @@ export async function uploadImage(
     } catch (error) {
       // Fall back to local disk if Cloudinary is unreachable/misconfigured.
       console.warn("Cloudinary upload failed, falling back to local storage:", error);
-      return uploadToDisk(buffer, originalName, mime);
+      return uploadToDisk(buffer, originalName, mime, baseUrl);
     }
   }
 
-  return uploadToDisk(buffer, originalName, mime);
+  return uploadToDisk(buffer, originalName, mime, baseUrl);
 }

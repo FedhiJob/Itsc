@@ -18,6 +18,9 @@ const envSchema = z.object({
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_BASE_URL: z.string().optional(),
   OPENAI_MODEL: z.string().optional(),
+  // Public base URL of this API, used to build absolute URLs for locally
+  // stored uploads (fallback path when Cloudinary is not configured).
+  PUBLIC_BASE_URL: z.string().default("http://localhost:5000"),
   EMAIL_HOST: z.string().optional(),
   EMAIL_PORT: z.coerce.number().int().positive().optional(),
   EMAIL_USER: z.string().optional(),
