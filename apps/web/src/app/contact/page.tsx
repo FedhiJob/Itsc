@@ -16,8 +16,20 @@ const iconForType = {
   address: MapPin
 } as const;
 
-export default function ContactPage() {
+interface ContactPageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+function getQueryValue(value: string | string[] | undefined) {
+  return typeof value === "string" ? value : undefined;
+}
+
+export default async function ContactPage({ searchParams }: ContactPageProps) {
   const { eyebrow, title, intro, infoItems, subjects } = contactContent;
+  const query = await searchParams;
+  const requestedSubject = getQueryValue(query.subject);
+  const sourcePage = getQueryValue(query.source);
+  const sourceLabel = getQueryValue(query.sourceLabel);
 
   return (
     <>
@@ -74,7 +86,12 @@ export default function ContactPage() {
               <p className="mt-2 text-sm leading-6 text-gray-500">
                 Fill out the form below and we'll get back to you as soon as possible.
               </p>
-              <ContactForm subjects={subjects} />
+              <ContactForm
+                subjects={subjects}
+                requestedSubject={requestedSubject}
+                sourcePage={sourcePage}
+                sourceLabel={sourceLabel}
+              />
             </div>
           </div>
         </Container>

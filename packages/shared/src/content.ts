@@ -141,6 +141,8 @@ export interface TrainingProgramDetail extends TrainingProgramSummary {
   objectives: string[];
   prerequisites: string[];
   featuredImage?: MediaImage;
+  outlineText?: string;
+  outlineFileUrl?: string;
 }
 
 export interface TrainingProgramsContent {

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar, Clock, GraduationCap, MapPin, Target } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Download, GraduationCap, MapPin, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/section";
 import { siteConfig } from "@/config/site";
@@ -109,6 +109,21 @@ export default async function TrainingProgramDetailPage({ params }: Props) {
                   </li>
                 ))}
               </ul>
+
+              {program.outlineText || program.outlineFileUrl ? (
+                <section className="mt-10 rounded-xl border border-brand-gold/25 bg-brand-gold/[0.05] p-6 sm:p-7">
+                  <p className="text-sm font-bold uppercase tracking-[0.14em] text-brand-gold">Course outline</p>
+                  <h3 className="mt-2 text-2xl font-bold text-brand-ink">What you&apos;ll cover</h3>
+                  {program.outlineText ? <p className="mt-4 whitespace-pre-line leading-7 text-gray-600">{program.outlineText}</p> : null}
+                  {program.outlineFileUrl ? (
+                    <Button asChild variant="outline" className="mt-6 border-brand-ink/20 bg-white">
+                      <a href={program.outlineFileUrl} target="_blank" rel="noopener noreferrer">
+                        <Download aria-hidden="true" className="h-4 w-4" /> Download course outline
+                      </a>
+                    </Button>
+                  ) : null}
+                </section>
+              ) : null}
             </div>
 
             <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
@@ -118,8 +133,8 @@ export default async function TrainingProgramDetailPage({ params }: Props) {
               </p>
               <div className="mt-6 space-y-3">
                 <Button asChild className="w-full">
-                  <Link href="/contact?subject=enrollment">
-                    Enroll Now
+                  <Link href={`/contact?subject=enrollment&source=${encodeURIComponent(`/training-programs/${program.slug}`)}&sourceLabel=${encodeURIComponent(program.title)}`}>
+                    Get in touch
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="w-full">

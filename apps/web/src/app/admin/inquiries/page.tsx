@@ -87,6 +87,9 @@ export default function AdminInquiriesPage() {
                   <div>
                     <p className="text-sm font-semibold text-gray-900">{inquiry.fullName}</p>
                     <p className="text-xs text-gray-500">{inquiry.subject}</p>
+                    {inquiry.sourceLabel ? (
+                      <p className="mt-1 text-xs font-medium text-brand-gold">From: {inquiry.sourceLabel}</p>
+                    ) : null}
                     <p className="mt-1 text-xs text-gray-400">
                       {new Date(inquiry.submittedAt).toLocaleString("en-US", {
                         year: "numeric",
@@ -148,6 +151,13 @@ export default function AdminInquiriesPage() {
                   <div className="mt-4 rounded-md bg-gray-50 p-4">
                     <p className="text-sm leading-6 text-gray-700">{inquiry.message}</p>
                   </div>
+                  {inquiry.sourcePage ? (
+                    <div className="mt-4 rounded-md border border-brand-gold/20 bg-brand-gold/5 px-4 py-3 text-sm text-gray-600">
+                      <span className="font-semibold text-brand-ink">Lead source:</span>{" "}
+                      {inquiry.sourceLabel ? `${inquiry.sourceLabel} — ` : ""}
+                      <code className="break-all text-xs text-gray-500">{inquiry.sourcePage}</code>
+                    </div>
+                  ) : null}
                 </div>
               ) : null}
             </div>

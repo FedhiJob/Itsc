@@ -30,6 +30,8 @@ interface ApiProgram {
   deliveryMode: string | null;
   level: string | null;
   featuredImage: string | null;
+  outlineText: string | null;
+  outlineFileUrl: string | null;
   isFeatured: boolean;
   status: string;
   createdAt: string;
@@ -77,6 +79,8 @@ function toDetail(api: ApiProgram): TrainingProgramDetail {
     prerequisites: []
   };
   if (api.featuredImage) result.featuredImage = { src: api.featuredImage, alt: api.title };
+  if (api.outlineText) result.outlineText = api.outlineText;
+  if (api.outlineFileUrl) result.outlineFileUrl = api.outlineFileUrl;
   return result;
 }
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
 import { authenticate, authorize } from "../auth/auth.middleware.js";
-import { uploadImageHandler } from "./upload.controller.js";
+import { uploadDocumentHandler, uploadImageHandler } from "./upload.controller.js";
 
 export const uploadRoutes = Router();
 
@@ -18,4 +18,12 @@ uploadRoutes.post(
   authorize("ADMIN", "SUPER_ADMIN", "CONTENT_EDITOR", "NEWS_EDITOR", "TRAINING_MANAGER"),
   upload.single("file"),
   uploadImageHandler
+);
+
+uploadRoutes.post(
+  "/document",
+  authenticate,
+  authorize("ADMIN", "SUPER_ADMIN", "CONTENT_EDITOR", "NEWS_EDITOR", "TRAINING_MANAGER"),
+  upload.single("file"),
+  uploadDocumentHandler
 );

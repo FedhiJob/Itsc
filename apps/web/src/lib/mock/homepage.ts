@@ -47,12 +47,17 @@ export const homepageContent: HomepageContent = {
     }
   ],
   partners: [
-    { src: "/logos/lpi.png", alt: "LPI", href: "https://lpi.org" },
-    { src: "/logos/cisco.png", alt: "Cisco", href: "https://cisco.com" },
-    { src: "/logos/microsoft.png", alt: "Microsoft", href: "https://microsoft.com" },
-    { src: "/logos/comptia.png", alt: "CompTIA", href: "https://comptia.org" },
-    { src: "/logos/ec-council.png", alt: "EC Council", href: "https://eccouncil.org" },
-    { src: "/logos/pearson-vue.png", alt: "Pearson VUE", href: "https://pearsonvue.com" }
+    { src: "/companies/LPI.png", alt: "Linux Professional Institute", href: "https://www.lpi.org" },
+    { src: "/companies/cisco.png", alt: "Cisco", href: "https://www.cisco.com" },
+    { src: "/companies/microsoft.png", alt: "Microsoft", href: "https://www.microsoft.com" },
+    { src: "/companies/comptia.png", alt: "CompTIA", href: "https://www.comptia.org" },
+    { src: "/companies/ec-council.png", alt: "EC-Council", href: "https://www.eccouncil.org" },
+    { src: "/companies/huawei.png", alt: "Huawei", href: "https://www.huawei.com" },
+    { src: "/companies/pearson-vue.png", alt: "Pearson VUE", href: "https://home.pearsonvue.com" },
+    { src: "/companies/pecb.png", alt: "PECB", href: "https://pecb.com" },
+    { src: "/companies/isc2.png", alt: "ISC2", href: "https://www.isc2.org" },
+    { src: "/companies/android-atc.png", alt: "Android ATC", href: "https://androidatc.com" },
+    { src: "/companies/iso.png", alt: "ISO 9001:2015 certification" }
   ],
   clients: [
     { src: "/logos/nib.png", alt: "NIB" },

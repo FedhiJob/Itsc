@@ -12,7 +12,7 @@ export const corporateTrainingContent: CorporateTrainingContent = {
     "Empower your team with customized technology training. ITSC partners with organizations and government institutions to build workforce capabilities in emerging technologies.",
   primaryCta: {
     label: "Request a Consultation",
-    href: "/contact?subject=corporate-training",
+    href: "/contact?subject=corporate-training&source=%2Fcorporate-training&sourceLabel=Corporate%20Training",
     variant: "primary"
   },
   benefits: [
@@ -83,7 +83,7 @@ export const corporateTrainingContent: CorporateTrainingContent = {
       "Contact us to discuss your organization's training needs and get a customized proposal.",
     primaryCta: {
       label: "Get in Touch",
-      href: "/contact?subject=corporate-training",
+      href: "/contact?subject=corporate-training&source=%2Fcorporate-training&sourceLabel=Corporate%20Training",
       variant: "primary"
     },
     secondaryCta: { label: "View All Programs", href: "/training-programs", variant: "outline" }

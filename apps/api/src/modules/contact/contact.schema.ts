@@ -6,7 +6,9 @@ export const submitContactSchema = z.object({
   phone: z.string().max(50).optional(),
   organization: z.string().max(255).optional(),
   subject: z.string().min(2, "Subject must be at least 2 characters.").max(255),
-  message: z.string().min(10, "Message must be at least 10 characters.")
+  message: z.string().min(10, "Message must be at least 10 characters."),
+  sourcePage: z.string().max(500).optional(),
+  sourceLabel: z.string().max(255).optional()
 });
 
 export const updateInquirySchema = z.object({

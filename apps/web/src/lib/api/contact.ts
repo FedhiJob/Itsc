@@ -9,6 +9,8 @@ export interface SubmitInquiryInput {
   organization?: string;
   subject: string;
   message: string;
+  sourcePage?: string;
+  sourceLabel?: string;
 }
 
 export interface SubmitInquiryResult {

@@ -5,6 +5,9 @@ import { submitInquiry, type SubmitInquiryInput } from "@/lib/api/contact";
 
 interface Props {
   subjects: { value: string; label: string }[];
+  requestedSubject: string | undefined;
+  sourcePage: string | undefined;
+  sourceLabel: string | undefined;
 }
 
 interface FormState {
@@ -16,13 +19,16 @@ interface FormState {
   message: string;
 }
 
-export function ContactForm({ subjects }: Props) {
+export function ContactForm({ subjects, requestedSubject = "", sourcePage, sourceLabel }: Props) {
+  const initialSubject = subjects.some((subject) => subject.value === requestedSubject)
+    ? requestedSubject
+    : subjects[0]?.value ?? "";
   const [state, setState] = useState<FormState>({
     fullName: "",
     email: "",
     phone: "",
     organization: "",
-    subject: subjects[0]?.value ?? "",
+    subject: initialSubject,
     message: ""
   });
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -44,6 +50,8 @@ export function ContactForm({ subjects }: Props) {
     };
     if (state.phone) payload.phone = state.phone;
     if (state.organization) payload.organization = state.organization;
+    if (sourcePage) payload.sourcePage = sourcePage;
+    if (sourceLabel) payload.sourceLabel = sourceLabel;
     const result = await submitInquiry(payload);
     if (result.success) {
       setStatus("success");
@@ -52,7 +60,7 @@ export function ContactForm({ subjects }: Props) {
         email: "",
         phone: "",
         organization: "",
-        subject: subjects[0]?.value ?? "",
+        subject: initialSubject,
         message: ""
       });
     } else {
@@ -71,6 +79,12 @@ export function ContactForm({ subjects }: Props) {
       {status === "error" && errorMsg ? (
         <div role="alert" className="rounded-md border border-error/20 bg-error/5 px-4 py-3 text-sm text-error">
           {errorMsg}
+        </div>
+      ) : null}
+
+      {sourceLabel ? (
+        <div className="rounded-md border border-brand-gold/25 bg-brand-gold/10 px-4 py-3 text-sm text-brand-ink">
+          You&apos;re contacting us about <strong>{sourceLabel}</strong>.
         </div>
       ) : null}
 

@@ -105,6 +105,8 @@ export interface TrainingProgram {
   deliveryMode: string | null;
   level: string | null;
   featuredImage: string | null;
+  outlineText: string | null;
+  outlineFileUrl: string | null;
   isFeatured: boolean;
   status: ContentStatus;
   createdAt: string;
@@ -151,6 +153,8 @@ export interface ContactInquiry {
   organization: string | null;
   subject: string;
   message: string;
+  sourcePage: string | null;
+  sourceLabel: string | null;
   status: InquiryStatus;
   submittedAt: string;
   updatedAt: string;
@@ -189,6 +193,23 @@ export const adminApi = {
       throw new ApiError(message, response.status, code);
     }
 
+    return (body as ApiSuccess<{ url: string; provider: string; publicId?: string }>).data;
+  },
+
+  async uploadDocument(file: File): Promise<{ url: string; provider: string; publicId?: string }> {
+    const token = getToken();
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await fetch(`${siteConfig.apiUrl}/upload/document`, {
+      method: "POST",
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData
+    });
+    const body = await response.json().catch(() => null);
+    if (!response.ok) {
+      if (response.status === 401) clearSession();
+      throw new ApiError(body?.message ?? "Document upload failed.", response.status, body?.errors?.[0]?.code);
+    }
     return (body as ApiSuccess<{ url: string; provider: string; publicId?: string }>).data;
   },
 

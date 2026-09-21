@@ -15,6 +15,7 @@ import {
   type TrainingProgram
 } from "@/lib/admin/api";
 import { ImageUploader } from "@/components/admin/image-uploader";
+import { DocumentUploader } from "@/components/admin/document-uploader";
 
 const statusOptions: ContentStatus[] = ["DRAFT", "PUBLISHED", "ARCHIVED"];
 
@@ -38,6 +39,8 @@ interface ProgramFormState {
   deliveryMode: string;
   level: string;
   featuredImage: string;
+  outlineText: string;
+  outlineFileUrl: string;
   isFeatured: boolean;
   status: ContentStatus;
 }
@@ -52,6 +55,8 @@ const emptyProgramForm: ProgramFormState = {
   deliveryMode: "",
   level: "",
   featuredImage: "",
+  outlineText: "",
+  outlineFileUrl: "",
   isFeatured: false,
   status: "DRAFT"
 };
@@ -184,6 +189,8 @@ export default function AdminTrainingPage() {
       deliveryMode: program.deliveryMode ?? "",
       level: program.level ?? "",
       featuredImage: program.featuredImage ?? "",
+      outlineText: program.outlineText ?? "",
+      outlineFileUrl: program.outlineFileUrl ?? "",
       isFeatured: program.isFeatured,
       status: program.status
     });
@@ -215,6 +222,8 @@ export default function AdminTrainingPage() {
       if (programForm.deliveryMode) payload.deliveryMode = programForm.deliveryMode;
       if (programForm.level) payload.level = programForm.level;
       if (programForm.featuredImage) payload.featuredImage = programForm.featuredImage;
+      payload.outlineText = programForm.outlineText || null;
+      payload.outlineFileUrl = programForm.outlineFileUrl || null;
       if (editingProgram) {
         await adminApi.updateProgram(editingProgram.id, payload);
       } else {
@@ -446,6 +455,21 @@ export default function AdminTrainingPage() {
                 label="Featured Image"
               />
             </Field>
+
+            <div className="rounded-xl border border-brand-gold/20 bg-brand-gold/[0.04] p-5">
+              <div className="mb-4">
+                <h3 className="text-base font-semibold text-brand-ink">Course outline <span className="text-sm font-normal text-gray-500">(optional)</span></h3>
+                <p className="mt-1 text-sm text-gray-500">Add a summary learners can read online, a downloadable outline document, or both.</p>
+              </div>
+              <div className="space-y-4">
+                <Field label="Outline description" htmlFor="prog-outline-text">
+                  <Textarea id="prog-outline-text" rows={5} value={programForm.outlineText} onChange={(e) => setProgramForm({ ...programForm, outlineText: e.target.value })} placeholder="Summarize modules, topics, learning sequence, or assessment approach." />
+                </Field>
+                <Field label="Outline file">
+                  <DocumentUploader value={programForm.outlineFileUrl} onChange={(url) => setProgramForm({ ...programForm, outlineFileUrl: url })} />
+                </Field>
+              </div>
+            </div>
 
             <div className="flex justify-end gap-3">
               <Button type="button" variant="outline" onClick={closeProgramForm}>

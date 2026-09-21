@@ -18,6 +18,8 @@ export const createProgramSchema = z.object({
   deliveryMode: z.string().max(50).optional(),
   level: z.string().max(50).optional(),
   featuredImage: z.string().url().optional(),
+  outlineText: z.string().max(20000).nullable().optional(),
+  outlineFileUrl: z.string().url().nullable().optional(),
   isFeatured: z.boolean().default(false),
   status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).default("DRAFT")
 });

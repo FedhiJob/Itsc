@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { sendSuccess } from "../../utils/api-response.js";
 import { AppError } from "../../utils/app-error.js";
-import { uploadImage } from "./upload.service.js";
+import { uploadDocument, uploadImage } from "./upload.service.js";
 
 /** Shape of the file attached by `multer`'s `.single("file")` middleware. */
 interface UploadedFile {
@@ -42,6 +42,27 @@ export const uploadImageHandler = async (
       fileName: file.originalname,
       mimeType: file.mimetype,
       size: file.size
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const uploadDocumentHandler = async (
+  request: UploadRequest,
+  response: Response,
+  next: NextFunction
+) => {
+  try {
+    const file = request.file;
+    if (!file) throw new AppError(400, "No file was uploaded.", "UPLOAD_001");
+    const proto = request.get("x-forwarded-proto") ?? request.protocol;
+    const host = request.get("host");
+    const baseUrl = host ? `${proto}://${host}` : undefined;
+    const result = await uploadDocument(file.buffer, file.originalname, file.mimetype, baseUrl);
+    return sendSuccess(response, 201, "Document uploaded successfully.", {
+      url: result.url, provider: result.provider, publicId: result.publicId,
+      fileName: file.originalname, mimeType: file.mimetype, size: file.size
     });
   } catch (error) {
     return next(error);

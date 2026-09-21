@@ -26,6 +26,16 @@ const EXTENSIONS: Record<string, string> = {
   "image/avif": ".avif"
 };
 
+const ALLOWED_DOCUMENT_MIME = new Set([
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+]);
+
+const DOCUMENT_EXTENSIONS: Record<string, string> = {
+  "application/pdf": ".pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx"
+};
+
 export interface UploadResult {
   url: string;
   publicId?: string;
@@ -94,6 +104,23 @@ async function uploadToDisk(
   return { url: `${base}/uploads/${filename}`, provider: "local" };
 }
 
+async function uploadDocumentToCloudinary(buffer: Buffer): Promise<UploadResult> {
+  cloudinary.config({ cloud_name: env.CLOUDINARY_CLOUD_NAME!, api_key: env.CLOUDINARY_API_KEY!, api_secret: env.CLOUDINARY_API_SECRET!, secure: true });
+  const publicId = `itsc-outlines/${Date.now()}-${randomUUID()}`;
+  const result = await new Promise<{ secure_url: string }>((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { public_id: publicId, resource_type: "raw", folder: "itsc-outlines", overwrite: false },
+      (error, response) => {
+        if (error) reject(error);
+        else if (response) resolve(response as unknown as { secure_url: string });
+        else reject(new Error("Cloudinary returned an empty response."));
+      }
+    );
+    stream.end(buffer);
+  });
+  return { url: result.secure_url, publicId, provider: "cloudinary" };
+}
+
 export async function uploadImage(
   buffer: Buffer,
   originalName: string,
@@ -123,4 +150,27 @@ export async function uploadImage(
   }
 
   return uploadToDisk(buffer, originalName, mime, baseUrl);
+}
+
+export async function uploadDocument(
+  buffer: Buffer,
+  originalName: string,
+  mime: string,
+  baseUrl?: string
+): Promise<UploadResult> {
+  if (!buffer || buffer.length === 0) {
+    throw new AppError(400, "No file was uploaded.", "UPLOAD_001");
+  }
+  if (!ALLOWED_DOCUMENT_MIME.has(mime)) {
+    throw new AppError(400, "Unsupported file type. Please upload a PDF or DOCX document.", "UPLOAD_002");
+  }
+  if (hasCloudinaryConfig()) {
+    try {
+      return await uploadDocumentToCloudinary(buffer);
+    } catch (error) {
+      console.warn("Cloudinary document upload failed, falling back to local storage:", error);
+    }
+  }
+  const extension = DOCUMENT_EXTENSIONS[mime] ?? ".bin";
+  return uploadToDisk(buffer, `${path.parse(originalName).name}${extension}`, mime, baseUrl);
 }

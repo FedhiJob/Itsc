@@ -67,9 +67,11 @@ model TrainingProgram {
   fullDescription  String           @map("full_description") @db.Text
   duration         String?          @db.VarChar(50)
   deliveryMode     String?          @map("delivery_mode") @db.VarChar(50)
-  level            String?          @db.VarChar(50)
-  featuredImage    String?          @map("featured_image") @db.Text
-  isFeatured       Boolean          @default(false) @map("is_featured")
+    level            String?          @db.VarChar(50)
+    featuredImage    String?          @map("featured_image") @db.Text
+    outlineText      String?          @map("outline_text") @db.Text
+    outlineFileUrl   String?          @map("outline_file_url") @db.Text
+    isFeatured       Boolean          @default(false) @map("is_featured")
   status           ContentStatus    @default(DRAFT)
   deletedAt        DateTime?        @map("deleted_at")
   createdAt        DateTime         @default(now()) @map("created_at")
@@ -134,10 +136,12 @@ model ContactInquiry {
   fullName     String        @map("full_name") @db.VarChar(150)
   email        String        @db.VarChar(255)
   phone        String?       @db.VarChar(50)
-  organization String?       @db.VarChar(255)
-  subject      String        @db.VarChar(255)
-  message      String        @db.Text
-  status       InquiryStatus @default(NEW)
+    organization String?       @db.VarChar(255)
+    subject      String        @db.VarChar(255)
+    message      String        @db.Text
+    sourcePage   String?       @map("source_page") @db.VarChar(500)
+    sourceLabel  String?       @map("source_label") @db.VarChar(255)
+    status       InquiryStatus @default(NEW)
   submittedAt  DateTime      @default(now()) @map("submitted_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
 
