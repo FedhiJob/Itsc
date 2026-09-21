@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/section";
 import { siteConfig } from "@/config/site";
 import { getNewsArticle } from "@/lib/api/news";
+import { ImageContainer } from "@/lib/image";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -69,6 +70,7 @@ export default async function NewsArticleDetailPage({ params }: Props) {
               {article.title}
             </h1>
             <p className="mt-4 text-lg leading-8 text-gray-500">{article.summary}</p>
+            {article.featuredImage ? <div className="relative mt-8 aspect-[16/7] overflow-hidden rounded-2xl bg-brand-ink shadow-card"><ImageContainer src={article.featuredImage.src} alt={article.featuredImage.alt} /></div> : null}
           </div>
         </Container>
       </Section>

@@ -76,7 +76,7 @@ export default async function Home() {
           <div className="mt-10 grid gap-6 lg:grid-cols-3">
             {featuredPrograms.map((program, index) => (
               <Reveal key={program.id} style={{ transitionDelay: `${index * 100}ms` }}>
-                <TrainingCard title={program.title} slug={program.slug} description={program.shortDescription} category={program.category.name} duration={program.duration} level={program.level} delivery={program.deliveryMode} />
+                <TrainingCard title={program.title} slug={program.slug} description={program.shortDescription} category={program.category.name} duration={program.duration} level={program.level} delivery={program.deliveryMode} image={program.featuredImage} />
               </Reveal>
             ))}
           </div>

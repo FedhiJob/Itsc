@@ -382,6 +382,7 @@ export default function AdminTrainingPage() {
                     </option>
                   ))}
                 </Select>
+                <p className="mt-1 text-xs text-gray-500">Only published programs appear on the public training pages.</p>
               </Field>
               <Field label="Featured">
                 <Select

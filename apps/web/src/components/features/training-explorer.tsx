@@ -26,7 +26,7 @@ export function TrainingExplorer({ categories, programs }: TrainingExplorerProps
       </div>
       {visiblePrograms.length ? (
         <div className="mt-7 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {visiblePrograms.map((program) => <TrainingCard key={program.id} title={program.title} slug={program.slug} description={program.shortDescription} category={program.category.name} duration={program.duration} level={program.level} delivery={program.deliveryMode} />)}
+          {visiblePrograms.map((program) => <TrainingCard key={program.id} title={program.title} slug={program.slug} description={program.shortDescription} category={program.category.name} duration={program.duration} level={program.level} delivery={program.deliveryMode} image={program.featuredImage} />)}
         </div>
       ) : (
         <div className="mt-7 rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-14 text-center text-gray-500">No programs are currently available in this category.</div>

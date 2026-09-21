@@ -21,8 +21,8 @@ export class ApiError extends Error {
 
 export async function apiFetch<T>(path: string): Promise<T> {
   const response = await fetch(`${siteConfig.apiUrl}${path}`, {
-    // Revalidate every 60s so content updates are picked up without a redeploy.
-    next: { revalidate: 60 }
+    // CMS changes should be visible as soon as an administrator publishes them.
+    cache: "no-store"
   });
 
   const body = (await response.json().catch(() => null)) as ApiSuccess<T> | null;

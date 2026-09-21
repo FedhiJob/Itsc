@@ -129,6 +129,7 @@ export interface TrainingProgramSummary {
   deliveryMode?: string;
   level?: string;
   isFeatured: boolean;
+  featuredImage?: MediaImage;
   category: {
     id: string;
     name: string;

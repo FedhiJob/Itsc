@@ -4,6 +4,7 @@ import { ArrowRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/section";
 import { getNewsContent } from "@/lib/api/news";
+import { ImageContainer } from "@/lib/image";
 
 export const metadata: Metadata = {
   title: "News & Events",
@@ -34,6 +35,9 @@ export default async function NewsPage() {
                 key={article.slug}
                 className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
               >
+                <div className={article.featuredImage ? "grid gap-6 md:grid-cols-[15rem_1fr]" : undefined}>
+                  {article.featuredImage ? <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-brand-ink"><ImageContainer src={article.featuredImage.src} alt={article.featuredImage.alt} /></div> : null}
+                  <div>
                 <div className="flex flex-wrap items-center gap-3 text-xs font-medium">
                   <span className="rounded-md bg-brand-gold/10 px-2 py-1 text-brand-gold">
                     {article.category}
@@ -60,6 +64,8 @@ export default async function NewsPage() {
                       <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
                     </Link>
                   </Button>
+                </div>
+                  </div>
                 </div>
               </article>
             ))}

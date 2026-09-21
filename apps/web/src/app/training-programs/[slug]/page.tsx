@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/section";
 import { siteConfig } from "@/config/site";
 import { getTrainingProgram } from "@/lib/api/training";
+import { ImageContainer } from "@/lib/image";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -78,6 +79,12 @@ export default async function TrainingProgramDetailPage({ params }: Props) {
               </div>
             ) : null}
           </div>
+          {program.featuredImage ? (
+            <div className="relative mt-10 aspect-[16/7] overflow-hidden rounded-2xl bg-brand-ink shadow-card">
+              <ImageContainer src={program.featuredImage.src} alt={program.featuredImage.alt} />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_45%,rgb(16_37_63_/_0.35))]" />
+            </div>
+          ) : null}
         </Container>
       </Section>
 

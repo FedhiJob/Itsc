@@ -68,6 +68,7 @@ function toSummary(api: ApiProgram): TrainingProgramSummary {
   if (api.duration) result.duration = api.duration;
   if (api.deliveryMode) result.deliveryMode = api.deliveryMode;
   if (api.level) result.level = api.level;
+  if (api.featuredImage) result.featuredImage = { src: api.featuredImage, alt: api.title };
   return result;
 }
 
@@ -78,7 +79,6 @@ function toDetail(api: ApiProgram): TrainingProgramDetail {
     objectives: [],
     prerequisites: []
   };
-  if (api.featuredImage) result.featuredImage = { src: api.featuredImage, alt: api.title };
   if (api.outlineText) result.outlineText = api.outlineText;
   if (api.outlineFileUrl) result.outlineFileUrl = api.outlineFileUrl;
   return result;
