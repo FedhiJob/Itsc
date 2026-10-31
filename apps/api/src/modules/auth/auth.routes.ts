@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authRateLimiter } from "../../middleware/rate-limiters.js";
 import { validateRequest } from "../../middleware/validate-request.js";
-import { authenticate } from "./auth.middleware.js";
+import { authenticate, authorize } from "./auth.middleware.js";
 import { createAdmin, getMe, login } from "./auth.controller.js";
 import { createAdminSchema, loginSchema } from "./auth.schema.js";
 
@@ -16,7 +16,8 @@ authRoutes.post(
 
 authRoutes.post(
   "/register",
-  authRateLimiter,
+  authenticate,
+  authorize("SUPER_ADMIN"),
   validateRequest({ body: createAdminSchema }),
   createAdmin
 );

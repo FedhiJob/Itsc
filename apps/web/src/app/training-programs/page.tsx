@@ -5,12 +5,18 @@ import { TrainingExplorer } from "@/components/features/training-explorer";
 import { getTrainingContent } from "@/lib/api/training";
 
 export const metadata: Metadata = {
-  title: "Training Programs",
+  title: "Certifications & Training Courses | ITSC",
   description:
-    "Explore ITSC's training programs in AI, cloud computing, cybersecurity, and emerging technologies."
+    "Explore ITSC's comprehensive training catalogue spanning CompTIA, Cisco, Microsoft, Oracle, Cybersecurity, Cloud, and Enterprise Systems."
 };
 
-export default async function TrainingProgramsPage() {
+interface Props {
+  searchParams?: Promise<{ category?: string }>;
+}
+
+export default async function TrainingProgramsPage({ searchParams }: Props) {
+  const params = searchParams ? await searchParams : {};
+  const initialCategory = params.category ?? "all";
   const { eyebrow, title, intro, categories, programs } = await getTrainingContent();
 
   return (
@@ -26,7 +32,13 @@ export default async function TrainingProgramsPage() {
           <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-gold">Find the right path</p>
           <h2 className="mt-3 font-serif text-3xl font-black text-brand-ink sm:text-4xl">Explore by discipline.</h2>
           <p className="mt-3 max-w-2xl leading-7 text-gray-500">Filter our current programmes by the technology area that matters most to you.</p>
-          <div className="mt-8"><TrainingExplorer categories={categories} programs={programs} /></div>
+          <div className="mt-8">
+            <TrainingExplorer
+              categories={categories}
+              programs={programs}
+              initialCategory={initialCategory}
+            />
+          </div>
         </Container>
       </Section>
     </>

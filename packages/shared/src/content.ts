@@ -117,6 +117,9 @@ export interface TrainingCategory {
   name: string;
   slug: string;
   description?: string;
+  parentId?: string;
+  sortOrder?: number;
+  children?: TrainingCategory[];
   count?: number;
 }
 
@@ -124,6 +127,8 @@ export interface TrainingProgramSummary {
   id: string;
   title: string;
   slug: string;
+  code?: string;
+  sortOrder?: number;
   shortDescription: string;
   duration?: string;
   deliveryMode?: string;
@@ -134,6 +139,7 @@ export interface TrainingProgramSummary {
     id: string;
     name: string;
     slug: string;
+    parentId?: string;
   };
 }
 

@@ -38,19 +38,37 @@ export default async function TrainingProgramDetailPage({ params }: Props) {
     <>
       <Section className="border-b border-gray-200 bg-white">
         <Container>
-          <Link
-            href="/training-programs"
-            className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900"
-          >
-            <ArrowLeft aria-hidden="true" className="h-4 w-4" />
-            Back to Programs
-          </Link>
+          <div className="flex flex-wrap items-center gap-2 text-sm font-medium text-gray-500">
+            <Link
+              href="/training-programs"
+              className="inline-flex items-center gap-1 hover:text-gray-900"
+            >
+              <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+              All Programs
+            </Link>
+            <span>/</span>
+            <Link
+              href={`/training-programs?category=${program.category.slug}`}
+              className="text-brand-gold-700 hover:text-brand-ink"
+            >
+              {program.category.name}
+            </Link>
+          </div>
 
           <div className="mt-6 max-w-3xl">
-            <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-brand-gold">
-              <span className="rounded-md bg-brand-gold/10 px-2 py-1">{program.category.name}</span>
+            <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
+              {program.code ? (
+                <span className="rounded-md bg-brand-ink px-2.5 py-1 font-mono text-xs font-bold text-brand-gold">
+                  Code: {program.code}
+                </span>
+              ) : null}
+              <span className="rounded-md bg-brand-gold/10 px-2.5 py-1 text-brand-ink">
+                {program.category.name}
+              </span>
               {program.level ? (
-                <span className="rounded-md bg-gray-100 px-2 py-1">{program.level}</span>
+                <span className="rounded-md bg-gray-100 px-2.5 py-1 text-gray-700">
+                  {program.level}
+                </span>
               ) : null}
             </div>
             <h1 className="mt-4 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl">
@@ -93,35 +111,47 @@ export default async function TrainingProgramDetailPage({ params }: Props) {
           <div className="grid gap-12 lg:grid-cols-3">
             <div className="lg:col-span-2">
               <h2 className="text-2xl font-bold text-gray-900">About This Program</h2>
-              <p className="mt-4 text-base leading-7 text-gray-500">
+              <p className="mt-4 text-base leading-7 text-gray-500 whitespace-pre-line">
                 {program.fullDescription}
               </p>
 
-              <h3 className="mt-10 text-xl font-semibold text-gray-900">Learning Objectives</h3>
-              <ul className="mt-4 space-y-3">
-                {program.objectives.map((objective, index) => (
-                  <li key={index} className="flex items-start gap-3 text-sm leading-6 text-gray-500">
-                    <Target aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-brand-gold" />
-                    <span>{objective}</span>
-                  </li>
-                ))}
-              </ul>
+              {program.objectives && program.objectives.length > 0 ? (
+                <>
+                  <h3 className="mt-10 text-xl font-semibold text-gray-900">Learning Objectives</h3>
+                  <ul className="mt-4 space-y-3">
+                    {program.objectives.map((objective, index) => (
+                      <li key={index} className="flex items-start gap-3 text-sm leading-6 text-gray-600">
+                        <Target aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-brand-gold" />
+                        <span>{objective}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : null}
 
-              <h3 className="mt-10 text-xl font-semibold text-gray-900">Prerequisites</h3>
-              <ul className="mt-4 space-y-2">
-                {program.prerequisites.map((prereq, index) => (
-                  <li key={index} className="flex items-start gap-3 text-sm leading-6 text-gray-500">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gold" />
-                    <span>{prereq}</span>
-                  </li>
-                ))}
-              </ul>
+              {program.prerequisites && program.prerequisites.length > 0 ? (
+                <>
+                  <h3 className="mt-10 text-xl font-semibold text-gray-900">Prerequisites</h3>
+                  <ul className="mt-4 space-y-2">
+                    {program.prerequisites.map((prereq, index) => (
+                      <li key={index} className="flex items-start gap-3 text-sm leading-6 text-gray-600">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gold" />
+                        <span>{prereq}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : null}
 
               {program.outlineText || program.outlineFileUrl ? (
                 <section className="mt-10 rounded-xl border border-brand-gold/25 bg-brand-gold/[0.05] p-6 sm:p-7">
                   <p className="text-sm font-bold uppercase tracking-[0.14em] text-brand-gold">Course outline</p>
                   <h3 className="mt-2 text-2xl font-bold text-brand-ink">What you&apos;ll cover</h3>
-                  {program.outlineText ? <p className="mt-4 whitespace-pre-line leading-7 text-gray-600">{program.outlineText}</p> : null}
+                  {program.outlineText ? (
+                    <p className="mt-4 whitespace-pre-line leading-7 text-gray-600">
+                      {program.outlineText}
+                    </p>
+                  ) : null}
                   {program.outlineFileUrl ? (
                     <Button asChild variant="outline" className="mt-6 border-brand-ink/20 bg-white">
                       <a href={program.outlineFileUrl} target="_blank" rel="noopener noreferrer">

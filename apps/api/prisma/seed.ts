@@ -20,14 +20,21 @@ loadEnv({
 const prisma = new PrismaClient();
 
 async function main() {
-  const email = "admin@itsc.com.et";
-  // MOCK PASSWORD — replace with a strong password before production.
-  const password = "ChangeMe123!";
+  const isProduction = process.env.NODE_ENV === "production";
+  const email = process.env.BOOTSTRAP_ADMIN_EMAIL || (isProduction ? "" : "admin@itsc.com.et");
+  const password = process.env.BOOTSTRAP_ADMIN_PASSWORD || (isProduction ? "" : "ChangeMe123!");
+  const fullName = process.env.BOOTSTRAP_ADMIN_NAME || "ITSC System Administrator";
+
+  if (isProduction && (!email || !password || password.length < 12)) {
+    throw new Error(
+      "In production, BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD (minimum 12 characters) must be supplied via environment variables."
+    );
+  }
 
   const existing = await prisma.administrator.findUnique({ where: { email } });
 
   if (existing) {
-    console.log(`Admin already exists: ${email} (id: ${existing.id})`);
+    console.log(`[Bootstrap] Admin already exists: ${email} (id: ${existing.id}, role: ${existing.role})`);
     return;
   }
 
@@ -35,15 +42,14 @@ async function main() {
 
   const admin = await prisma.administrator.create({
     data: {
-      fullName: "ITSC Administrator",
+      fullName,
       email,
       passwordHash,
       role: "SUPER_ADMIN"
     }
   });
 
-  console.log(`Created admin: ${admin.email} (id: ${admin.id})`);
-  console.log(`Default password: ${password} — CHANGE THIS AFTER FIRST LOGIN.`);
+  console.log(`[Bootstrap] Super Administrator created successfully: ${admin.email} (id: ${admin.id})`);
 }
 
 main()

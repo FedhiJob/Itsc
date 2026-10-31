@@ -7,6 +7,7 @@ import { galleryRoutes } from "./gallery/gallery.routes.js";
 import { contactRoutes } from "./contact/contact.routes.js";
 import { uploadRoutes } from "./upload/upload.routes.js";
 import chatRoutes from "./chat/chat.routes.js";
+import { settingsRoutes } from "./settings/settings.routes.js";
 
 export const apiRoutes = Router();
 
@@ -18,3 +19,4 @@ apiRoutes.use("/gallery", galleryRoutes);
 apiRoutes.use("/contact", contactRoutes);
 apiRoutes.use("/upload", uploadRoutes);
 apiRoutes.use("/chat", chatRoutes);
+apiRoutes.use("/settings", settingsRoutes);

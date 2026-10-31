@@ -191,7 +191,7 @@ export function ContactForm({ subjects, requestedSubject = "", sourcePage, sourc
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="inline-flex w-full items-center justify-center rounded-md bg-brand-gold px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-gold/90 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 disabled:opacity-50"
+          className="inline-flex w-full items-center justify-center rounded-md bg-brand-gold px-4 py-2.5 text-sm font-semibold text-brand-navy shadow-sm hover:bg-brand-gold/90 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 disabled:opacity-50"
         >
           {status === "submitting" ? "Sending..." : "Send Message"}
         </button>

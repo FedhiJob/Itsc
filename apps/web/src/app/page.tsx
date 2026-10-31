@@ -7,12 +7,12 @@ import { PartnerMarquee } from "@/components/sections/partner-marquee";
 import { HeroCarousel } from "@/components/sections/hero-carousel";
 import { Reveal } from "@/components/sections/reveal";
 import { TrainingCard } from "@/components/features/training-card";
-import { homepageContent } from "@/lib/mock/homepage";
+import { getHomepageContent } from "@/lib/api/settings";
 import { getTrainingContent } from "@/lib/api/training";
 import { resolveIcon } from "@/lib/icons";
 
 export default async function Home() {
-  const { hero, services, stats, partners, missionVision, cta } = homepageContent;
+  const { hero, services, stats, partners, missionVision, cta } = await getHomepageContent();
   const { programs } = await getTrainingContent();
   const featured = programs.filter((program) => program.isFeatured);
   const featuredPrograms = (featured.length > 0 ? featured : programs).slice(0, 3);
@@ -76,7 +76,17 @@ export default async function Home() {
           <div className="mt-10 grid gap-6 lg:grid-cols-3">
             {featuredPrograms.map((program, index) => (
               <Reveal key={program.id} style={{ transitionDelay: `${index * 100}ms` }}>
-                <TrainingCard title={program.title} slug={program.slug} description={program.shortDescription} category={program.category.name} duration={program.duration} level={program.level} delivery={program.deliveryMode} image={program.featuredImage} />
+                <TrainingCard
+                  title={program.title}
+                  slug={program.slug}
+                  code={program.code}
+                  description={program.shortDescription}
+                  category={program.category.name}
+                  duration={program.duration}
+                  level={program.level}
+                  delivery={program.deliveryMode}
+                  image={program.featuredImage}
+                />
               </Reveal>
             ))}
           </div>

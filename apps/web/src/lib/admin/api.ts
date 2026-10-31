@@ -89,6 +89,10 @@ export interface TrainingCategory {
   name: string;
   slug: string;
   description: string | null;
+  parentId?: string | null;
+  sortOrder?: number;
+  parent?: { id: string; name: string; slug: string } | null;
+  children?: TrainingCategory[];
   createdAt: string;
   updatedAt: string;
   _count?: { programs: number };
@@ -99,6 +103,8 @@ export interface TrainingProgram {
   categoryId: string;
   title: string;
   slug: string;
+  code?: string | null;
+  sortOrder?: number;
   shortDescription: string;
   fullDescription: string;
   duration: string | null;
@@ -108,10 +114,12 @@ export interface TrainingProgram {
   outlineText: string | null;
   outlineFileUrl: string | null;
   isFeatured: boolean;
+  objectives?: string[];
+  prerequisites?: string[];
   status: ContentStatus;
   createdAt: string;
   updatedAt: string;
-  category?: { id: string; name: string; slug: string };
+  category?: { id: string; name: string; slug: string; parentId?: string | null; parent?: { id: string; name: string; slug: string } | null };
   author?: { id: string; fullName: string } | null;
 }
 
@@ -143,6 +151,10 @@ export interface GalleryImage {
   caption: string | null;
   altText: string;
   uploadedAt: string;
+}
+
+export interface GalleryAlbumWithImages extends GalleryAlbum {
+  images: GalleryImage[];
 }
 
 export interface ContactInquiry {
@@ -233,14 +245,29 @@ export const adminApi = {
     return res.data;
   },
 
-  async createCategory(input: { name: string; slug: string; description?: string }) {
+  async createCategory(input: {
+    name: string;
+    slug: string;
+    description?: string;
+    parentId?: string | null;
+    sortOrder?: number;
+  }) {
     return request("/training/categories", {
       method: "POST",
       body: JSON.stringify(input)
     });
   },
 
-  async updateCategory(id: string, input: { name?: string; slug?: string; description?: string }) {
+  async updateCategory(
+    id: string,
+    input: {
+      name?: string;
+      slug?: string;
+      description?: string;
+      parentId?: string | null;
+      sortOrder?: number;
+    }
+  ) {
     return request(`/training/categories/${id}`, {
       method: "PATCH",
       body: JSON.stringify(input)
@@ -337,6 +364,40 @@ export const adminApi = {
 
   async deleteAlbum(id: string) {
     return request(`/gallery/albums/${id}`, { method: "DELETE" });
+  },
+
+  // --- Gallery Images ---
+  async getAlbumWithImages(slug: string): Promise<GalleryAlbumWithImages> {
+    const res = await request<ApiSuccess<GalleryAlbumWithImages>>(
+      `/gallery/albums/${slug}`
+    );
+    return res.data;
+  },
+
+  async addImageToAlbum(
+    albumId: string,
+    input: { imageUrl: string; altText: string; caption?: string }
+  ): Promise<GalleryImage> {
+    const res = await request<ApiSuccess<GalleryImage>>(`/gallery/albums/${albumId}/images`, {
+      method: "POST",
+      body: JSON.stringify(input)
+    });
+    return res.data;
+  },
+
+  async updateGalleryImage(
+    imageId: string,
+    input: { imageUrl?: string; altText?: string; caption?: string }
+  ): Promise<GalleryImage> {
+    const res = await request<ApiSuccess<GalleryImage>>(`/gallery/images/${imageId}`, {
+      method: "PATCH",
+      body: JSON.stringify(input)
+    });
+    return res.data;
+  },
+
+  async deleteGalleryImage(imageId: string) {
+    return request(`/gallery/images/${imageId}`, { method: "DELETE" });
   },
 
   // --- Inquiries ---

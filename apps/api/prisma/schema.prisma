@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum AdminRole {
@@ -46,14 +47,19 @@ model Administrator {
 }
 
 model TrainingCategory {
-  id          String            @id @default(uuid()) @db.Uuid
-  name        String            @db.VarChar(100)
-  slug        String            @unique @db.VarChar(120)
-  description String?           @db.Text
-  createdAt   DateTime          @default(now()) @map("created_at")
-  updatedAt   DateTime          @updatedAt @map("updated_at")
+  id          String             @id @default(uuid()) @db.Uuid
+  name        String             @db.VarChar(100)
+  slug        String             @unique @db.VarChar(120)
+  description String?            @db.Text
+  parentId    String?            @map("parent_id") @db.Uuid
+  sortOrder   Int                @default(0) @map("sort_order")
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @updatedAt @map("updated_at")
+  parent      TrainingCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children    TrainingCategory[] @relation("CategoryHierarchy")
   programs    TrainingProgram[]
 
+  @@index([parentId])
   @@map("training_categories")
 }
 
@@ -63,15 +69,19 @@ model TrainingProgram {
   authorId         String?          @map("author_id") @db.Uuid
   title            String           @db.VarChar(255)
   slug             String           @unique @db.VarChar(255)
+  code             String?          @db.VarChar(50)
   shortDescription String           @map("short_description") @db.Text
   fullDescription  String           @map("full_description") @db.Text
   duration         String?          @db.VarChar(50)
   deliveryMode     String?          @map("delivery_mode") @db.VarChar(50)
-    level            String?          @db.VarChar(50)
-    featuredImage    String?          @map("featured_image") @db.Text
-    outlineText      String?          @map("outline_text") @db.Text
-    outlineFileUrl   String?          @map("outline_file_url") @db.Text
-    isFeatured       Boolean          @default(false) @map("is_featured")
+  level            String?          @db.VarChar(50)
+  featuredImage    String?          @map("featured_image") @db.Text
+  outlineText      String?          @map("outline_text") @db.Text
+  outlineFileUrl   String?          @map("outline_file_url") @db.Text
+  isFeatured       Boolean          @default(false) @map("is_featured")
+  sortOrder        Int              @default(0) @map("sort_order")
+  objectives       String[]         @default([])
+  prerequisites    String[]         @default([])
   status           ContentStatus    @default(DRAFT)
   deletedAt        DateTime?        @map("deleted_at")
   createdAt        DateTime         @default(now()) @map("created_at")
@@ -92,6 +102,7 @@ model NewsArticle {
   slug          String         @unique @db.VarChar(255)
   summary       String         @db.Text
   content       String         @db.Text
+  category      String?        @db.VarChar(100)
   featuredImage String?        @map("featured_image") @db.Text
   publishedAt   DateTime?      @map("published_at")
   status        ContentStatus  @default(DRAFT)
@@ -102,6 +113,7 @@ model NewsArticle {
 
   @@index([status])
   @@index([publishedAt])
+  @@index([category])
   @@map("news_articles")
 }
 
@@ -111,6 +123,7 @@ model GalleryAlbum {
   slug        String         @unique @db.VarChar(255)
   description String?        @db.Text
   coverImage  String?        @map("cover_image") @db.Text
+  isFeatured  Boolean        @default(false) @map("is_featured")
   createdAt   DateTime       @default(now()) @map("created_at")
   updatedAt   DateTime       @updatedAt @map("updated_at")
   images      GalleryImage[]
@@ -124,10 +137,12 @@ model GalleryImage {
   imageUrl   String       @map("image_url") @db.Text
   caption    String?      @db.Text
   altText    String       @map("alt_text") @db.VarChar(255)
+  sortOrder  Int          @default(0) @map("sort_order")
   uploadedAt DateTime     @default(now()) @map("uploaded_at")
   album      GalleryAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
 
   @@index([albumId])
+  @@index([albumId, sortOrder])
   @@map("gallery_images")
 }
 
@@ -136,12 +151,12 @@ model ContactInquiry {
   fullName     String        @map("full_name") @db.VarChar(150)
   email        String        @db.VarChar(255)
   phone        String?       @db.VarChar(50)
-    organization String?       @db.VarChar(255)
-    subject      String        @db.VarChar(255)
-    message      String        @db.Text
-    sourcePage   String?       @map("source_page") @db.VarChar(500)
-    sourceLabel  String?       @map("source_label") @db.VarChar(255)
-    status       InquiryStatus @default(NEW)
+  organization String?       @db.VarChar(255)
+  subject      String        @db.VarChar(255)
+  message      String        @db.Text
+  sourcePage   String?       @map("source_page") @db.VarChar(500)
+  sourceLabel  String?       @map("source_label") @db.VarChar(255)
+  status       InquiryStatus @default(NEW)
   submittedAt  DateTime      @default(now()) @map("submitted_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
 
@@ -158,4 +173,24 @@ model WebsiteSetting {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("website_settings")
+}
+
+enum LogoType {
+  PARTNER
+  CLIENT
+}
+
+model TrustLogo {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(150)
+  logoUrl    String   @map("logo_url") @db.Text
+  websiteUrl String?  @map("website_url") @db.Text
+  type       LogoType
+  sortOrder  Int      @default(0) @map("sort_order")
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([type, isActive])
+  @@map("trust_logos")
 }

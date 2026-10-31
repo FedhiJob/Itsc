@@ -7,6 +7,7 @@ import { ImageContainer } from "@/lib/image";
 interface TrainingCardProps {
   title: string;
   slug: string;
+  code?: string | undefined;
   description: string;
   category: string;
   duration?: string | undefined;
@@ -18,6 +19,7 @@ interface TrainingCardProps {
 export function TrainingCard({
   title,
   slug,
+  code,
   description,
   category,
   duration,
@@ -42,9 +44,14 @@ export function TrainingCard({
         <Sparkles aria-hidden="true" className="absolute bottom-5 right-5 h-7 w-7 text-brand-gold" />
       </div>
       <CardBody className="pt-6">
-        <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-brand-gold">
-          <span className="rounded-md bg-brand-gold/10 px-2 py-1">{category}</span>
-          {level ? <span className="rounded-md bg-gray-100 px-2 py-1">{level}</span> : null}
+        <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
+          {code ? (
+            <span className="rounded-md bg-brand-gold/20 px-2 py-0.5 font-mono text-xs font-bold text-brand-ink">
+              {code}
+            </span>
+          ) : null}
+          <span className="rounded-md bg-brand-gold/10 px-2 py-1 text-brand-ink">{category}</span>
+          {level ? <span className="rounded-md bg-gray-100 px-2 py-1 text-gray-700">{level}</span> : null}
         </div>
         <h3 className="mt-3 font-serif text-xl font-bold text-gray-900">{title}</h3>
         <p className="mt-2 text-sm leading-6 text-gray-500">{description}</p>
