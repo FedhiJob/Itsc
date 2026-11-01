@@ -119,14 +119,9 @@ export const trainingService = {
 
   // --- Programs ---
   async listPrograms(query: ProgramQueryInput) {
-    const where: Record<string, unknown> = { deletedAt: null };
     const andConditions: Array<Record<string, unknown>> = [{ deletedAt: null }];
 
     if (query.category) {
-      where.OR = [
-        { category: { slug: query.category } },
-        { category: { parent: { slug: query.category } } }
-      ];
       andConditions.push({
         OR: [
           { category: { slug: query.category } },
@@ -136,16 +131,13 @@ export const trainingService = {
     }
 
     if (query.status) {
-      where.status = query.status;
       andConditions.push({ status: query.status });
     }
 
     if (query.isFeatured !== undefined) {
-      where.isFeatured = query.isFeatured;
       andConditions.push({ isFeatured: query.isFeatured });
     }
 
-    const skip = (query.page - 1) * query.limit;
     if (query.search) {
       andConditions.push({
         OR: [
@@ -179,7 +171,6 @@ export const trainingService = {
         },
         orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
         skip,
-        take: query.limit
         take: limit
       }),
       prisma.trainingProgram.count({ where })
@@ -188,12 +179,9 @@ export const trainingService = {
     return {
       programs,
       pagination: {
-        page: query.page,
-        limit: query.limit,
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / query.limit)
         totalPages: Math.ceil(total / limit)
       }
     };
