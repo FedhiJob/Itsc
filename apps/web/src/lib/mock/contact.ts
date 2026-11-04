@@ -20,7 +20,7 @@ export const contactContent: ContactContent = {
     {
       type: "phone",
       label: "Phone",
-      value: "+251 000 000 000"
+      value: "+251115507150"
     },
     {
       type: "address",
