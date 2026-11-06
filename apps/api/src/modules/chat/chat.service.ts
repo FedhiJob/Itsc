@@ -1,9 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { retrieveKnowledge } from './knowledge/knowledge.retriever.js';
-import type { KnowledgeChunk } from './knowledge/knowledge.types.js';
 import { buildPrompt } from './llm/prompt.builder.js';
 import { OpenAIService } from './llm/openai.service.js';
-import type { ChatResponse } from './chat.types.js';
+import type { ChatMessage, ChatResponse } from './chat.types.js';
 
 export class ChatService {
   private openaiService: OpenAIService;
@@ -12,21 +11,25 @@ export class ChatService {
     this.openaiService = new OpenAIService();
   }
 
-  async processMessage(message: string, conversationId?: string): Promise<ChatResponse> {
+  async processMessage(
+    message: string,
+    conversationId?: string,
+    conversationHistory?: ChatMessage[]
+  ): Promise<ChatResponse> {
     // Generate conversation ID if not provided
     const id = conversationId || uuidv4();
 
-    // Retrieve relevant knowledge
-    const knowledgeChunks: KnowledgeChunk[] = await retrieveKnowledge(message);
+    // Retrieve relevant knowledge and structured courses from live database
+    const { chunks, courses } = await retrieveKnowledge(message, conversationHistory);
 
-    // Build prompt with knowledge and question
-    const messages = buildPrompt(message, knowledgeChunks);
+    // Build prompt with knowledge, recent history, and current question
+    const messages = buildPrompt(message, chunks, conversationHistory);
 
-    // Generate response using OpenAI
-    const answer = await this.openaiService.generateResponse(messages);
+    // Generate response using OpenAI / Gemini with resilient fallback
+    const answer = await this.openaiService.generateResponse(messages, chunks, courses);
 
     // Build sources from knowledge chunks
-    const sources = knowledgeChunks.map(chunk => ({
+    const sources = chunks.map(chunk => ({
       title: chunk.source,
       section: chunk.section,
       content: chunk.content
@@ -35,6 +38,7 @@ export class ChatService {
     return {
       answer,
       sources,
+      courses: courses.length > 0 ? courses : undefined,
       conversationId: id
     };
   }

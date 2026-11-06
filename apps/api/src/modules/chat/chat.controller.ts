@@ -13,7 +13,8 @@ export async function chatHandler(req: Request, res: Response): Promise<void> {
     // Process the message
     const response = await chatService.processMessage(
       validatedData.message,
-      validatedData.conversationId
+      validatedData.conversationId,
+      validatedData.conversationHistory
     );
 
     res.status(200).json({
@@ -31,13 +32,14 @@ export async function chatHandler(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    console.error('Chat error:', error);
-    const detail =
-      error instanceof Error ? error.message : 'Unknown error';
+    console.error('Chat processing error:', error instanceof Error ? error.message : 'Unknown error');
+    const isProduction = process.env.NODE_ENV === 'production';
     res.status(500).json({
       success: false,
-      message: 'Failed to process chat request',
-      error: detail
+      message: 'Failed to process chat request. Please try again shortly.',
+      error: isProduction
+        ? 'An unexpected error occurred.'
+        : (error instanceof Error ? error.message : 'Unknown error')
     });
   }
 }

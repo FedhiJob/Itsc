@@ -156,7 +156,7 @@ export function SiteHeader() {
               onClick={() => window.dispatchEvent(new CustomEvent("itsc:open-chat"))}
             >
               <Bot aria-hidden="true" className="h-4 w-4" />
-              Ask ITSC
+              ITSC AI
             </Button>
             <button
               type="button"
@@ -294,7 +294,7 @@ export function SiteHeader() {
                 }}
               >
                 <Bot aria-hidden="true" className="h-4 w-4" />
-                Ask ITSC
+                ITSC AI
               </Button>
             </div>
           </div>

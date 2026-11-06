@@ -1,3 +1,5 @@
+import type { StructuredCourse } from '../chat.types.js';
+
 export interface KnowledgeBase {
   organization: OrganizationInfo;
   mission: string;
@@ -15,6 +17,11 @@ export interface KnowledgeChunk {
   source: string;
   section: string | undefined;
   relevanceScore?: number;
+}
+
+export interface KnowledgeRetrievalResult {
+  chunks: KnowledgeChunk[];
+  courses: StructuredCourse[];
 }
 
 export interface OrganizationInfo {
