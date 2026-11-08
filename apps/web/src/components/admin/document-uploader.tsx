@@ -39,7 +39,19 @@ export function DocumentUploader({ value, onChange }: DocumentUploaderProps) {
         <div className="min-w-48 flex-1">
           <p className="text-sm font-medium text-gray-900">Course outline document</p>
           <p className="text-xs text-gray-500">PDF or DOCX, up to 10 MB.</p>
-          {value ? <a href={value} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs font-medium text-brand-gold hover:text-brand-gold-600">View uploaded document</a> : null}
+          {value ? (
+            <div className="mt-1 flex items-center gap-2">
+              <a
+                href={value}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-brand-gold hover:text-brand-gold-600 underline"
+              >
+                <span>View / test uploaded document</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
+          ) : null}
         </div>
         <Button type="button" variant="outline" size="sm" disabled={uploading} onClick={() => inputRef.current?.click()}>
           {uploading ? <><Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" /> Uploading...</> : <><UploadCloud aria-hidden="true" className="h-4 w-4" /> {value ? "Replace" : "Upload"}</>}

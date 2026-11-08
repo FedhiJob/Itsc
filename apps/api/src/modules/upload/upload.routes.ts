@@ -1,11 +1,15 @@
 import { Router } from "express";
 import multer from "multer";
 import { authenticate, authorize } from "../auth/auth.middleware.js";
-import { uploadDocumentHandler, uploadImageHandler } from "./upload.controller.js";
+import {
+  getDocumentHandler,
+  uploadDocumentHandler,
+  uploadImageHandler
+} from "./upload.controller.js";
 
 export const uploadRoutes = Router();
 
-// Keep files in memory (they're forwarded to Cloudinary or written to disk
+// Keep files in memory (they're forwarded to Cloudinary or written to disk/Neon DB
 // by the service). Limit uploads to 10 MB, single file field named "file".
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -27,3 +31,7 @@ uploadRoutes.post(
   upload.single("file"),
   uploadDocumentHandler
 );
+
+// Public route to view or download uploaded documents (e.g. course outline PDFs)
+uploadRoutes.get("/document/:id", getDocumentHandler);
+uploadRoutes.get("/document/:id/:filename", getDocumentHandler);

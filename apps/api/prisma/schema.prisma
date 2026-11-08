@@ -194,3 +194,16 @@ model TrustLogo {
   @@index([type, isActive])
   @@map("trust_logos")
 }
+
+model UploadedDocument {
+  id        String   @id @default(uuid()) @db.Uuid
+  fileName  String   @map("file_name") @db.VarChar(255)
+  mimeType  String   @map("mime_type") @db.VarChar(100)
+  size      Int
+  fileData  Bytes    @map("file_data")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("uploaded_documents")
+}
+
