@@ -31,6 +31,15 @@ const emptyForm: NewsFormState = {
   status: "DRAFT"
 };
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export default function AdminNewsPage() {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
@@ -83,6 +92,17 @@ export default function AdminNewsPage() {
     setShowForm(false);
     setEditing(null);
     setFormError(null);
+  }
+
+  function handleTitleChange(title: string) {
+    setForm((prev) => {
+      const isAutoSlug = !editing && (!prev.slug || prev.slug === slugify(prev.title));
+      return {
+        ...prev,
+        title,
+        slug: isAutoSlug ? slugify(title) : prev.slug
+      };
+    });
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -146,7 +166,7 @@ export default function AdminNewsPage() {
           {error}
         </div>
       ) : null}
-
+  
       {showForm ? (
         <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
@@ -175,7 +195,7 @@ export default function AdminNewsPage() {
                 <Input
                   id="title"
                   value={form.title}
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  onChange={(e) => handleTitleChange(e.target.value)}
                   required
                 />
               </Field>

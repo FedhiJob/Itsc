@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Loader2, Lock, Mail } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Loader2, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -14,8 +14,13 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [capsLockActive, setCapsLockActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  function checkCapsLock(e: KeyboardEvent<HTMLInputElement>) {
+    setCapsLockActive(e.getModifierState("CapsLock"));
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -90,10 +95,21 @@ export default function AdminLoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={checkCapsLock}
+                  onKeyUp={checkCapsLock}
                   placeholder="••••••••"
                   className="pl-9"
                 />
               </div>
+              {capsLockActive && (
+                <div
+                  role="status"
+                  className="mt-2 flex items-center gap-1.5 rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-xs font-semibold text-amber-800"
+                >
+                  <AlertTriangle className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+                  <span>Caps Lock is on</span>
+                </div>
+              )}
             </Field>
 
             <Button type="submit" className="w-full" disabled={loading}>

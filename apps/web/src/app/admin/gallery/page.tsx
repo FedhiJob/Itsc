@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState, Fragment, type FormEvent } from "react";
 import {
+  ArrowLeft,
+  ArrowRight,
   ChevronDown,
   ChevronRight,
   Images,
@@ -153,6 +155,19 @@ function AlbumImagePanel({ album, onCountChange }: AlbumImagePanelProps) {
     }
   }
 
+  function handleMoveImage(index: number, direction: "left" | "right") {
+    if (!data) return;
+    const targetIndex = direction === "left" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= data.images.length) return;
+
+    const newImages = [...data.images];
+    const [moved] = newImages.splice(index, 1);
+    if (!moved) return;
+    newImages.splice(targetIndex, 0, moved);
+
+    setData({ ...data, images: newImages });
+  }
+
   return (
     <div className="border-t border-gray-100 bg-gray-50 px-6 py-5">
       <h3 className="mb-4 text-sm font-semibold text-gray-700">
@@ -173,7 +188,7 @@ function AlbumImagePanel({ album, onCountChange }: AlbumImagePanelProps) {
         </div>
       ) : data && data.images.length > 0 ? (
         <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-          {data.images.map((image) => (
+          {data.images.map((image, imgIdx) => (
             <div key={image.id} className="group relative">
               {/* Edit overlay */}
               {editingImage?.id === image.id ? (
@@ -223,24 +238,48 @@ function AlbumImagePanel({ album, onCountChange }: AlbumImagePanelProps) {
                     alt={image.altText}
                     className="aspect-square w-full object-cover"
                   />
-                  {/* Hover actions */}
-                  <div className="absolute inset-0 flex items-end justify-between gap-1 bg-black/0 p-1.5 opacity-0 transition-all group-hover:bg-black/30 group-hover:opacity-100">
-                    <button
-                      type="button"
-                      onClick={() => openEditImage(image)}
-                      aria-label="Edit image metadata"
-                      className="rounded bg-white/90 p-1 text-gray-700 hover:text-brand-navy"
-                    >
-                      <Pencil className="h-3 w-3" aria-hidden="true" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteImage(image)}
-                      aria-label="Delete image"
-                      className="rounded bg-white/90 p-1 text-error hover:text-red-700"
-                    >
-                      <Trash2 className="h-3 w-3" aria-hidden="true" />
-                    </button>
+                  {/* Hover actions with move earlier/later */}
+                  <div className="absolute inset-0 flex flex-col justify-between p-1.5 opacity-0 transition-all group-hover:bg-black/35 group-hover:opacity-100">
+                    <div className="flex justify-between items-center">
+                      <button
+                        type="button"
+                        disabled={imgIdx === 0}
+                        onClick={() => handleMoveImage(imgIdx, "left")}
+                        aria-label="Move photo earlier"
+                        title="Move earlier"
+                        className="rounded bg-white/90 p-1 text-gray-700 hover:text-brand-navy disabled:opacity-30 disabled:cursor-not-allowed"
+                      >
+                        <ArrowLeft className="h-3 w-3" aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        disabled={imgIdx === data.images.length - 1}
+                        onClick={() => handleMoveImage(imgIdx, "right")}
+                        aria-label="Move photo later"
+                        title="Move later"
+                        className="rounded bg-white/90 p-1 text-gray-700 hover:text-brand-navy disabled:opacity-30 disabled:cursor-not-allowed"
+                      >
+                        <ArrowRight className="h-3 w-3" aria-hidden="true" />
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between gap-1">
+                      <button
+                        type="button"
+                        onClick={() => openEditImage(image)}
+                        aria-label="Edit image metadata"
+                        className="rounded bg-white/90 p-1 text-gray-700 hover:text-brand-navy"
+                      >
+                        <Pencil className="h-3 w-3" aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteImage(image)}
+                        aria-label="Delete image"
+                        className="rounded bg-white/90 p-1 text-error hover:text-red-700"
+                      >
+                        <Trash2 className="h-3 w-3" aria-hidden="true" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}

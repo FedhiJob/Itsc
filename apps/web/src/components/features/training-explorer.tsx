@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { BookOpen, Search, X } from "lucide-react";
+import { useMemo, useState, useEffect } from "react";
+import { BookOpen, Search, X, SlidersHorizontal, Check } from "lucide-react";
 import type { TrainingCategory, TrainingProgramSummary } from "@itsc/shared";
 import { TrainingCard } from "./training-card";
 
@@ -28,12 +28,10 @@ export function TrainingExplorer({
     if (!initialCategory || initialCategory === "all") {
       return { initialVendorSlug: "all", initialSubcatSlug: "all" };
     }
-    // Check if initialCategory is a top-level vendor
     const isVendor = topLevelVendors.some((v) => v.slug === initialCategory);
     if (isVendor) {
       return { initialVendorSlug: initialCategory, initialSubcatSlug: "all" };
     }
-    // Check if it's a child category
     const subcat = categories.find((c) => c.slug === initialCategory);
     if (subcat && subcat.parentId) {
       const parent = topLevelVendors.find((v) => v.id === subcat.parentId);
@@ -47,6 +45,7 @@ export function TrainingExplorer({
   const [selectedVendor, setSelectedVendor] = useState<string>(initialVendorSlug);
   const [selectedSubcat, setSelectedSubcat] = useState<string>(initialSubcatSlug);
   const [searchQuery, setSearchQuery] = useState("");
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   // Subcategories belonging to the active vendor
   const currentVendor = useMemo(() => {
@@ -59,6 +58,15 @@ export function TrainingExplorer({
       .filter((c) => c.parentId === currentVendor.id)
       .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
   }, [categories, currentVendor]);
+
+  // Lock body scroll when mobile filter is open
+  useEffect(() => {
+    if (mobileFilterOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [mobileFilterOpen]);
 
   // Handle vendor switch
   function handleSelectVendor(slug: string) {
@@ -106,8 +114,8 @@ export function TrainingExplorer({
 
   return (
     <div className="space-y-6">
-      {/* Search Bar & Stats */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      {/* Search Bar & Mobile Filter Trigger */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1 max-w-md">
           <Search aria-hidden="true" className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           <input
@@ -121,7 +129,7 @@ export function TrainingExplorer({
             <button
               type="button"
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="itsc-press absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               aria-label="Clear search"
             >
               <X className="h-4 w-4" />
@@ -129,7 +137,29 @@ export function TrainingExplorer({
           )}
         </div>
 
-        <div className="flex items-center gap-3 text-xs text-gray-500">
+        {/* Mobile filter sheet button */}
+        <div className="flex items-center justify-between gap-2 md:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileFilterOpen(true)}
+            className="itsc-press inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3.5 py-2 text-xs font-bold text-gray-700 shadow-xs hover:border-brand-gold"
+          >
+            <SlidersHorizontal className="h-3.5 w-3.5 text-brand-gold" />
+            <span>Filter Categories</span>
+            {selectedVendor !== "all" && (
+              <span className="rounded-full bg-brand-gold px-1.5 py-0.2 text-[10px] text-brand-ink font-bold">
+                1
+              </span>
+            )}
+          </button>
+
+          <span className="text-xs text-gray-500">
+            <strong className="text-gray-900">{visiblePrograms.length}</strong> courses
+          </span>
+        </div>
+
+        {/* Desktop counts & clear */}
+        <div className="hidden md:flex items-center gap-3 text-xs text-gray-500">
           <span>
             Showing <strong className="text-gray-900">{visiblePrograms.length}</strong> of{" "}
             <strong>{programs.length}</strong> certification courses
@@ -138,7 +168,7 @@ export function TrainingExplorer({
             <button
               type="button"
               onClick={clearFilters}
-              className="font-semibold text-brand-gold-700 hover:underline"
+              className="itsc-press font-semibold text-brand-gold-accessible hover:underline"
             >
               Reset filters
             </button>
@@ -146,41 +176,43 @@ export function TrainingExplorer({
         </div>
       </div>
 
-      {/* Row 1: Technology Vendors */}
-      <div>
+      {/* Row 1: Technology Vendors with horizontal fade mask */}
+      <div className="hidden md:block">
         <div className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-400">
           Vendors &amp; Disciplines
         </div>
-        <div
-          className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin"
-          aria-label="Filter programs by technology vendor"
-        >
-          <FilterButton
-            active={selectedVendor === "all"}
-            onClick={() => handleSelectVendor("all")}
+        <div className="relative itsc-fade-edge-x">
+          <div
+            className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin px-2"
+            aria-label="Filter programs by technology vendor"
           >
-            All Vendors ({programs.length})
-          </FilterButton>
-          {topLevelVendors.map((vendor) => {
-            const count = programs.filter(
-              (p) => p.category.slug === vendor.slug || p.category.parentId === vendor.id
-            ).length;
-            return (
-              <FilterButton
-                key={vendor.slug}
-                active={selectedVendor === vendor.slug}
-                onClick={() => handleSelectVendor(vendor.slug)}
-              >
-                {vendor.name} {count > 0 ? `(${count})` : ""}
-              </FilterButton>
-            );
-          })}
+            <FilterButton
+              active={selectedVendor === "all"}
+              onClick={() => handleSelectVendor("all")}
+            >
+              All Vendors ({programs.length})
+            </FilterButton>
+            {topLevelVendors.map((vendor) => {
+              const count = programs.filter(
+                (p) => p.category.slug === vendor.slug || p.category.parentId === vendor.id
+              ).length;
+              return (
+                <FilterButton
+                  key={vendor.slug}
+                  active={selectedVendor === vendor.slug}
+                  onClick={() => handleSelectVendor(vendor.slug)}
+                >
+                  {vendor.name} {count > 0 ? `(${count})` : ""}
+                </FilterButton>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      {/* Row 2: Nested Subcategories / Tracks (shown when vendor has tracks) */}
+      {/* Row 2: Nested Subcategories / Tracks (shown when vendor has tracks on desktop) */}
       {vendorSubcategories.length > 0 && (
-        <div className="rounded-xl border border-brand-gold/20 bg-brand-gold/[0.04] p-3.5">
+        <div className="hidden md:block rounded-xl border border-brand-gold/20 bg-brand-gold/[0.04] p-3.5">
           <div className="mb-2 text-xs font-bold text-brand-ink">
             {currentVendor?.name} Specialization Tracks
           </div>
@@ -207,6 +239,145 @@ export function TrainingExplorer({
         </div>
       )}
 
+      {/* Mobile Filter Sheet (ISSUE-PUB-05 with sticky apply/reset footer) */}
+      {mobileFilterOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Filter courses by vendor and category"
+          className="fixed inset-0 z-50 flex flex-col justify-end bg-black/50 backdrop-blur-xs md:hidden"
+          onClick={() => setMobileFilterOpen(false)}
+        >
+          <div
+            className="itsc-popover-enter flex max-h-[85vh] flex-col rounded-t-3xl bg-white shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Sheet Header */}
+            <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+              <div>
+                <h3 className="text-base font-bold text-gray-900">Filter Courses</h3>
+                <p className="text-xs text-gray-500">
+                  {visiblePrograms.length} courses match selection
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMobileFilterOpen(false)}
+                className="itsc-press rounded-full p-2 text-gray-400 hover:bg-gray-100"
+                aria-label="Close filter drawer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Scrollable Categories List */}
+            <div className="flex-1 overflow-y-auto p-5 space-y-5">
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2.5">
+                  Select Technology Vendor
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleSelectVendor("all")}
+                    className={`itsc-press flex items-center justify-between rounded-xl border p-2.5 text-xs text-left font-semibold ${
+                      selectedVendor === "all"
+                        ? "border-brand-ink bg-brand-ink text-white"
+                        : "border-gray-200 bg-gray-50/50 text-gray-700"
+                    }`}
+                  >
+                    <span>All Vendors</span>
+                    {selectedVendor === "all" && <Check className="h-3.5 w-3.5 text-brand-gold" />}
+                  </button>
+
+                  {topLevelVendors.map((vendor) => {
+                    const count = programs.filter(
+                      (p) => p.category.slug === vendor.slug || p.category.parentId === vendor.id
+                    ).length;
+                    const isSelected = selectedVendor === vendor.slug;
+                    return (
+                      <button
+                        key={vendor.slug}
+                        type="button"
+                        onClick={() => handleSelectVendor(vendor.slug)}
+                        className={`itsc-press flex items-center justify-between rounded-xl border p-2.5 text-xs text-left font-semibold ${
+                          isSelected
+                            ? "border-brand-ink bg-brand-ink text-white"
+                            : "border-gray-200 bg-gray-50/50 text-gray-700"
+                        }`}
+                      >
+                        <span className="truncate pr-1">{vendor.name}</span>
+                        <span className={`text-[10px] ${isSelected ? "text-brand-gold" : "text-gray-400"}`}>
+                          ({count})
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Specialization Tracks if active */}
+              {vendorSubcategories.length > 0 && (
+                <div className="rounded-2xl border border-brand-gold/20 bg-brand-gold/[0.04] p-3.5">
+                  <div className="text-xs font-bold text-brand-ink mb-2">
+                    {currentVendor?.name} Specialization Tracks
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSubcat("all")}
+                      className={`itsc-press rounded-lg px-3 py-1.5 text-xs font-semibold ${
+                        selectedSubcat === "all"
+                          ? "bg-brand-gold text-brand-ink shadow-xs"
+                          : "border border-brand-gold/20 bg-white text-gray-700"
+                      }`}
+                    >
+                      All Tracks
+                    </button>
+                    {vendorSubcategories.map((subcat) => {
+                      const count = programs.filter((p) => p.category.slug === subcat.slug).length;
+                      const isSelected = selectedSubcat === subcat.slug;
+                      return (
+                        <button
+                          key={subcat.slug}
+                          type="button"
+                          onClick={() => setSelectedSubcat(subcat.slug)}
+                          className={`itsc-press rounded-lg px-3 py-1.5 text-xs font-semibold ${
+                            isSelected
+                              ? "bg-brand-gold text-brand-ink shadow-xs"
+                              : "border border-brand-gold/20 bg-white text-gray-700"
+                          }`}
+                        >
+                          {subcat.name} ({count})
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Sticky Action Footer (ISSUE-PUB-05 resolution) */}
+            <div className="sticky bottom-0 border-t border-gray-100 bg-white p-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] flex gap-3">
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="itsc-press flex-1 rounded-xl border border-gray-200 py-3 text-xs font-bold text-gray-700 hover:bg-gray-50"
+              >
+                Reset All
+              </button>
+              <button
+                type="button"
+                onClick={() => setMobileFilterOpen(false)}
+                className="itsc-press flex-[2] rounded-xl bg-brand-ink py-3 text-xs font-bold text-white shadow-md hover:bg-brand-navy"
+              >
+                Show {visiblePrograms.length} Courses
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Course Cards Grid */}
       {visiblePrograms.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -228,7 +399,7 @@ export function TrainingExplorer({
       ) : (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-gold/10">
-            <BookOpen aria-hidden="true" className="h-6 w-6 text-brand-gold-700" />
+            <BookOpen aria-hidden="true" className="h-6 w-6 text-brand-gold-accessible" />
           </div>
           <h3 className="mt-4 text-base font-semibold text-gray-900">No courses match your filter</h3>
           <p className="mt-1 text-sm text-gray-500">
@@ -237,7 +408,7 @@ export function TrainingExplorer({
           <button
             type="button"
             onClick={clearFilters}
-            className="mt-4 rounded-lg bg-brand-gold px-4 py-2 text-sm font-bold text-brand-ink hover:bg-brand-gold-400"
+            className="itsc-press mt-4 rounded-lg bg-brand-gold px-4 py-2 text-sm font-bold text-brand-ink hover:bg-brand-gold-400"
           >
             Clear all filters
           </button>
@@ -261,7 +432,7 @@ function FilterButton({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`shrink-0 rounded-full px-4 py-2 text-xs sm:text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold ${
+      className={`itsc-press shrink-0 rounded-full px-4 py-2 text-xs sm:text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold ${
         active
           ? "bg-brand-ink text-white shadow-xs"
           : "border border-gray-200 bg-white text-gray-700 hover:border-brand-gold hover:text-brand-ink"
@@ -286,7 +457,7 @@ function SubFilterButton({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+      className={`itsc-press rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
         active
           ? "bg-brand-gold text-brand-ink shadow-xs"
           : "bg-white text-gray-700 hover:bg-white/80 border border-brand-gold/20"

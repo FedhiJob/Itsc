@@ -158,6 +158,29 @@ export default function AdminInquiriesPage() {
                       <code className="break-all text-xs text-gray-500">{inquiry.sourcePage}</code>
                     </div>
                   ) : null}
+
+                  {/* Quick Response Actions */}
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={`mailto:${inquiry.email}?subject=${encodeURIComponent(`Re: ${inquiry.subject || "Your ITSC Training Inquiry"}`)}&body=${encodeURIComponent(`Dear ${inquiry.fullName},\n\nThank you for contacting the Information Technology Support Centre (ITSC) regarding your inquiry.\n\n---\nOriginal message:\n"${inquiry.message}"\n\nWarm regards,\nITSC Admissions & Training Team\nAddis Ababa, Ethiopia\n+251 11 550 7150\ninfo@itsc.com.et`)}`}
+                        className="itsc-press inline-flex items-center gap-1.5 rounded-lg bg-brand-navy px-3.5 py-2 text-xs font-semibold text-white shadow-xs hover:bg-brand-ink transition-colors cursor-pointer"
+                      >
+                        <Mail className="h-3.5 w-3.5 text-brand-gold" />
+                        <span>Reply via Email</span>
+                      </a>
+                    </div>
+                    {inquiry.status === "NEW" ? (
+                      <button
+                        type="button"
+                        onClick={() => handleStatusChange(inquiry, "IN_PROGRESS")}
+                        disabled={updatingId === inquiry.id}
+                        className="itsc-press inline-flex items-center gap-1 text-xs font-semibold text-brand-navy hover:text-brand-gold transition-colors cursor-pointer"
+                      >
+                        <span>Mark In Progress &rarr;</span>
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
               ) : null}
             </div>

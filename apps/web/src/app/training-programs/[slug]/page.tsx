@@ -7,6 +7,8 @@ import { Container, Section } from "@/components/ui/section";
 import { siteConfig } from "@/config/site";
 import { getTrainingProgram } from "@/lib/api/training";
 import { ImageContainer } from "@/lib/image";
+import { CourseSyllabusViewer } from "@/components/features/course-syllabus-viewer";
+import { CourseStickyCta } from "@/components/features/course-sticky-cta";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -143,24 +145,12 @@ export default async function TrainingProgramDetailPage({ params }: Props) {
                 </>
               ) : null}
 
-              {program.outlineText || program.outlineFileUrl ? (
-                <section className="mt-10 rounded-xl border border-brand-gold/25 bg-brand-gold/[0.05] p-6 sm:p-7">
-                  <p className="text-sm font-bold uppercase tracking-[0.14em] text-brand-gold">Course outline</p>
-                  <h3 className="mt-2 text-2xl font-bold text-brand-ink">What you&apos;ll cover</h3>
-                  {program.outlineText ? (
-                    <p className="mt-4 whitespace-pre-line leading-7 text-gray-600">
-                      {program.outlineText}
-                    </p>
-                  ) : null}
-                  {program.outlineFileUrl ? (
-                    <Button asChild variant="outline" className="mt-6 border-brand-ink/20 bg-white">
-                      <a href={program.outlineFileUrl} target="_blank" rel="noopener noreferrer">
-                        <Download aria-hidden="true" className="h-4 w-4" /> Download course outline
-                      </a>
-                    </Button>
-                  ) : null}
-                </section>
-              ) : null}
+              <CourseSyllabusViewer
+                title={program.title}
+                code={program.code}
+                outlineText={program.outlineText}
+                outlineFileUrl={program.outlineFileUrl}
+              />
             </div>
 
             <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
@@ -190,6 +180,13 @@ export default async function TrainingProgramDetailPage({ params }: Props) {
           </div>
         </Container>
       </Section>
+
+      <CourseStickyCta
+        title={program.title}
+        slug={program.slug}
+        code={program.code}
+        duration={program.duration}
+      />
     </>
   );
 }

@@ -1,7 +1,22 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
-import { BookOpen, Filter, Loader2, Pencil, Plus, Search, Trash2, X } from "lucide-react";
+import {
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  FileText,
+  Filter,
+  Layers,
+  Loader2,
+  Pencil,
+  Plus,
+  Search,
+  Sparkles,
+  Trash2,
+  X
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -20,6 +35,7 @@ import { DocumentUploader } from "@/components/admin/document-uploader";
 const statusOptions: ContentStatus[] = ["DRAFT", "PUBLISHED", "ARCHIVED"];
 
 type Tab = "programs" | "categories";
+type ProgramFormTab = "basic" | "curriculum" | "schedule" | "publishing";
 
 interface CategoryFormState {
   name: string;
@@ -97,6 +113,7 @@ export default function AdminTrainingPage() {
 
   // Program form state
   const [showProgramForm, setShowProgramForm] = useState(false);
+  const [programTab, setProgramTab] = useState<ProgramFormTab>("basic");
   const [editingProgram, setEditingProgram] = useState<TrainingProgram | null>(null);
   const [programForm, setProgramForm] = useState<ProgramFormState>(emptyProgramForm);
   const [savingProgram, setSavingProgram] = useState(false);
@@ -241,6 +258,7 @@ export default function AdminTrainingPage() {
   // --- Program handlers ---
   function openCreateProgram() {
     setEditingProgram(null);
+    setProgramTab("basic");
     setProgramForm({
       ...emptyProgramForm,
       categoryId: categories[0]?.id ?? ""
@@ -251,6 +269,7 @@ export default function AdminTrainingPage() {
 
   function openEditProgram(program: TrainingProgram) {
     setEditingProgram(program);
+    setProgramTab("basic");
     setProgramForm({
       categoryId: program.categoryId,
       title: program.title,
@@ -282,6 +301,35 @@ export default function AdminTrainingPage() {
 
   async function handleProgramSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setProgramFormError(null);
+
+    // Cross-tab validation checks
+    if (!programForm.title.trim()) {
+      setProgramTab("basic");
+      setProgramFormError("Course title is required on the Basic Info tab.");
+      return;
+    }
+    if (!programForm.slug.trim()) {
+      setProgramTab("basic");
+      setProgramFormError("Slug is required on the Basic Info tab.");
+      return;
+    }
+    if (!programForm.categoryId) {
+      setProgramTab("basic");
+      setProgramFormError("Please select a Category on the Basic Info tab.");
+      return;
+    }
+    if (!programForm.shortDescription.trim()) {
+      setProgramTab("basic");
+      setProgramFormError("Short description is required on the Basic Info tab.");
+      return;
+    }
+    if (!programForm.fullDescription.trim()) {
+      setProgramTab("curriculum");
+      setProgramFormError("Full curriculum description is required on the Curriculum tab.");
+      return;
+    }
+
     setSavingProgram(true);
     setProgramFormError(null);
     try {
@@ -419,224 +467,350 @@ export default function AdminTrainingPage() {
             </div>
           ) : null}
 
-          <form onSubmit={handleProgramSubmit} className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="sm:col-span-2">
-                <Field label="Course Title" htmlFor="prog-title" required>
-                  <Input
-                    id="prog-title"
-                    value={programForm.title}
-                    onChange={(e) => setProgramForm({ ...programForm, title: e.target.value })}
-                    placeholder="e.g. CompTIA Security+ or Azure Fundamentals"
+          <form onSubmit={handleProgramSubmit} className="space-y-6">
+            {/* Multi-step Tab Navigation */}
+            <div className="mb-6 flex border-b border-gray-200 overflow-x-auto gap-1">
+              <button
+                type="button"
+                onClick={() => setProgramTab("basic")}
+                className={`itsc-press flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  programTab === "basic"
+                    ? "border-brand-navy text-brand-navy bg-brand-navy/[0.04] rounded-t-lg"
+                    : "border-transparent text-gray-500 hover:text-gray-900"
+                }`}
+              >
+                <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
+                  programTab === "basic" ? "bg-brand-navy text-white" : "bg-gray-100 text-gray-600"
+                }`}>1</span>
+                <BookOpen className="h-3.5 w-3.5" />
+                <span>Basic Info</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setProgramTab("curriculum")}
+                className={`itsc-press flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  programTab === "curriculum"
+                    ? "border-brand-navy text-brand-navy bg-brand-navy/[0.04] rounded-t-lg"
+                    : "border-transparent text-gray-500 hover:text-gray-900"
+                }`}
+              >
+                <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
+                  programTab === "curriculum" ? "bg-brand-navy text-white" : "bg-gray-100 text-gray-600"
+                }`}>2</span>
+                <FileText className="h-3.5 w-3.5" />
+                <span>Curriculum &amp; Syllabus</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setProgramTab("schedule")}
+                className={`itsc-press flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  programTab === "schedule"
+                    ? "border-brand-navy text-brand-navy bg-brand-navy/[0.04] rounded-t-lg"
+                    : "border-transparent text-gray-500 hover:text-gray-900"
+                }`}
+              >
+                <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
+                  programTab === "schedule" ? "bg-brand-navy text-white" : "bg-gray-100 text-gray-600"
+                }`}>3</span>
+                <Clock className="h-3.5 w-3.5" />
+                <span>Schedule &amp; Delivery</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setProgramTab("publishing")}
+                className={`itsc-press flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  programTab === "publishing"
+                    ? "border-brand-navy text-brand-navy bg-brand-navy/[0.04] rounded-t-lg"
+                    : "border-transparent text-gray-500 hover:text-gray-900"
+                }`}
+              >
+                <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
+                  programTab === "publishing" ? "bg-brand-navy text-white" : "bg-gray-100 text-gray-600"
+                }`}>4</span>
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>Publishing &amp; Media</span>
+              </button>
+            </div>
+
+            {/* TAB 1: Basic Info */}
+            {programTab === "basic" && (
+              <div className="space-y-4 itsc-popover-enter">
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <div className="sm:col-span-2">
+                    <Field label="Course Title" htmlFor="prog-title" required>
+                      <Input
+                        id="prog-title"
+                        value={programForm.title}
+                        onChange={(e) => setProgramForm({ ...programForm, title: e.target.value })}
+                        placeholder="e.g. CompTIA Security+ or Azure Fundamentals"
+                        required
+                      />
+                    </Field>
+                  </div>
+                  <div>
+                    <Field label="Course Code" htmlFor="prog-code">
+                      <Input
+                        id="prog-code"
+                        value={programForm.code}
+                        onChange={(e) => setProgramForm({ ...programForm, code: e.target.value })}
+                        placeholder="e.g. SY0-701, AZ-900"
+                      />
+                    </Field>
+                  </div>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Slug" htmlFor="prog-slug" required>
+                    <Input
+                      id="prog-slug"
+                      value={programForm.slug}
+                      onChange={(e) => setProgramForm({ ...programForm, slug: e.target.value })}
+                      placeholder="comptia-security-plus"
+                      required
+                    />
+                  </Field>
+                  <Field label="Category & Track" htmlFor="prog-category" required>
+                    <Select
+                      id="prog-category"
+                      value={programForm.categoryId}
+                      onChange={(e) => setProgramForm({ ...programForm, categoryId: e.target.value })}
+                      required
+                    >
+                      {formattedCategoryOptions.map((opt) => (
+                        <option key={opt.id} value={opt.id}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </Select>
+                  </Field>
+                </div>
+
+                <Field label="Short Description" htmlFor="prog-short" required>
+                  <Textarea
+                    id="prog-short"
+                    rows={3}
+                    value={programForm.shortDescription}
+                    onChange={(e) =>
+                      setProgramForm({ ...programForm, shortDescription: e.target.value })
+                    }
+                    placeholder="Brief summary shown in course catalog listings, search cards, and spotlight previews."
                     required
                   />
                 </Field>
               </div>
-              <div>
-                <Field label="Course Code" htmlFor="prog-code">
-                  <Input
-                    id="prog-code"
-                    value={programForm.code}
-                    onChange={(e) => setProgramForm({ ...programForm, code: e.target.value })}
-                    placeholder="e.g. SY0-701, AZ-900"
-                  />
-                </Field>
-              </div>
-            </div>
+            )}
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Slug" htmlFor="prog-slug" required>
-                <Input
-                  id="prog-slug"
-                  value={programForm.slug}
-                  onChange={(e) => setProgramForm({ ...programForm, slug: e.target.value })}
-                  placeholder="comptia-security-plus"
-                  required
-                />
-              </Field>
-              <Field label="Category & Track" htmlFor="prog-category" required>
-                <Select
-                  id="prog-category"
-                  value={programForm.categoryId}
-                  onChange={(e) => setProgramForm({ ...programForm, categoryId: e.target.value })}
-                  required
-                >
-                  {formattedCategoryOptions.map((opt) => (
-                    <option key={opt.id} value={opt.id}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-3">
-              <Field label="Status" htmlFor="prog-status" required>
-                <Select
-                  id="prog-status"
-                  value={programForm.status}
-                  onChange={(e) =>
-                    setProgramForm({ ...programForm, status: e.target.value as ContentStatus })
-                  }
-                >
-                  {statusOptions.map((status) => (
-                    <option key={status} value={status}>
-                      {status}
-                    </option>
-                  ))}
-                </Select>
-                <p className="mt-1 text-xs text-gray-500">Only published programs appear publicly.</p>
-              </Field>
-              <Field label="Featured on Home">
-                <Select
-                  id="prog-featured"
-                  value={programForm.isFeatured ? "true" : "false"}
-                  onChange={(e) =>
-                    setProgramForm({ ...programForm, isFeatured: e.target.value === "true" })
-                  }
-                >
-                  <option value="false">No</option>
-                  <option value="true">Yes</option>
-                </Select>
-              </Field>
-              <Field label="Sort Order" htmlFor="prog-sort">
-                <Input
-                  id="prog-sort"
-                  type="number"
-                  value={programForm.sortOrder}
-                  onChange={(e) =>
-                    setProgramForm({ ...programForm, sortOrder: Number(e.target.value) || 0 })
-                  }
-                />
-              </Field>
-            </div>
-
-            <Field label="Short Description" htmlFor="prog-short" required>
-              <Textarea
-                id="prog-short"
-                rows={2}
-                value={programForm.shortDescription}
-                onChange={(e) =>
-                  setProgramForm({ ...programForm, shortDescription: e.target.value })
-                }
-                placeholder="Brief summary shown in course listings and search cards."
-                required
-              />
-            </Field>
-
-            <Field label="Full Description" htmlFor="prog-full" required>
-              <Textarea
-                id="prog-full"
-                rows={5}
-                value={programForm.fullDescription}
-                onChange={(e) =>
-                  setProgramForm({ ...programForm, fullDescription: e.target.value })
-                }
-                placeholder="Comprehensive description of curriculum, target audience, and training outcomes."
-                required
-              />
-            </Field>
-
-            <div className="grid gap-4 sm:grid-cols-3">
-              <Field label="Duration" htmlFor="prog-duration">
-                <Input
-                  id="prog-duration"
-                  value={programForm.duration}
-                  onChange={(e) => setProgramForm({ ...programForm, duration: e.target.value })}
-                  placeholder="e.g. 5 Days or 40 Hours"
-                />
-              </Field>
-              <Field label="Delivery Mode" htmlFor="prog-delivery">
-                <Input
-                  id="prog-delivery"
-                  value={programForm.deliveryMode}
-                  onChange={(e) => setProgramForm({ ...programForm, deliveryMode: e.target.value })}
-                  placeholder="e.g. Instructor-led Classroom / Virtual"
-                />
-              </Field>
-              <Field label="Skill Level" htmlFor="prog-level">
-                <Input
-                  id="prog-level"
-                  value={programForm.level}
-                  onChange={(e) => setProgramForm({ ...programForm, level: e.target.value })}
-                  placeholder="e.g. Foundation / Intermediate / Advanced"
-                />
-              </Field>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Learning Objectives (One per line)" htmlFor="prog-objectives">
-                <Textarea
-                  id="prog-objectives"
-                  rows={4}
-                  value={programForm.objectives}
-                  onChange={(e) => setProgramForm({ ...programForm, objectives: e.target.value })}
-                  placeholder="Understand threat landscapes&#10;Implement security controls&#10;Configure firewalls"
-                />
-              </Field>
-              <Field label="Prerequisites (One per line)" htmlFor="prog-prerequisites">
-                <Textarea
-                  id="prog-prerequisites"
-                  rows={4}
-                  value={programForm.prerequisites}
-                  onChange={(e) => setProgramForm({ ...programForm, prerequisites: e.target.value })}
-                  placeholder="CompTIA Network+ or equivalent experience&#10;2 years hands-on networking background"
-                />
-              </Field>
-            </div>
-
-            <Field label="Featured Image">
-              <ImageUploader
-                value={programForm.featuredImage}
-                onChange={(url) => setProgramForm({ ...programForm, featuredImage: url })}
-                label="Featured Image"
-              />
-            </Field>
-
-            <div className="rounded-xl border border-brand-gold/20 bg-brand-gold/[0.04] p-5">
-              <div className="mb-4">
-                <h3 className="text-base font-semibold text-brand-ink">
-                  Course Outline & Brochure <span className="text-sm font-normal text-gray-500">(optional)</span>
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Add detailed syllabus modules or attach a downloadable PDF outline.
-                </p>
-              </div>
-              <div className="space-y-4">
-                <Field label="Outline Syllabus Text" htmlFor="prog-outline-text">
+            {/* TAB 2: Curriculum & Outline */}
+            {programTab === "curriculum" && (
+              <div className="space-y-4 itsc-popover-enter">
+                <Field label="Full Description" htmlFor="prog-full" required>
                   <Textarea
-                    id="prog-outline-text"
+                    id="prog-full"
                     rows={5}
-                    value={programForm.outlineText}
-                    onChange={(e) => setProgramForm({ ...programForm, outlineText: e.target.value })}
-                    placeholder="Module 1: Architecture and Design&#10;Module 2: Threats, Attacks, and Vulnerabilities..."
+                    value={programForm.fullDescription}
+                    onChange={(e) =>
+                      setProgramForm({ ...programForm, fullDescription: e.target.value })
+                    }
+                    placeholder="Comprehensive description of curriculum, learning objectives, target audience, and training outcomes."
+                    required
                   />
                 </Field>
-                <Field label="Outline Document (PDF)">
-                  <DocumentUploader
-                    value={programForm.outlineFileUrl}
-                    onChange={(url) => setProgramForm({ ...programForm, outlineFileUrl: url })}
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Learning Objectives (One per line)" htmlFor="prog-objectives">
+                    <Textarea
+                      id="prog-objectives"
+                      rows={4}
+                      value={programForm.objectives}
+                      onChange={(e) => setProgramForm({ ...programForm, objectives: e.target.value })}
+                      placeholder="Understand threat landscapes&#10;Implement security controls&#10;Configure enterprise firewalls"
+                    />
+                  </Field>
+                  <Field label="Prerequisites (One per line)" htmlFor="prog-prerequisites">
+                    <Textarea
+                      id="prog-prerequisites"
+                      rows={4}
+                      value={programForm.prerequisites}
+                      onChange={(e) => setProgramForm({ ...programForm, prerequisites: e.target.value })}
+                      placeholder="CompTIA Network+ or equivalent experience&#10;2 years hands-on networking background"
+                    />
+                  </Field>
+                </div>
+
+                <div className="rounded-xl border border-brand-gold/20 bg-brand-gold/[0.04] p-5">
+                  <div className="mb-4">
+                    <h3 className="text-base font-semibold text-brand-ink">
+                      Course Outline &amp; Syllabus <span className="text-sm font-normal text-gray-500">(in-browser &amp; PDF download)</span>
+                    </h3>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Add structured syllabus modules for in-browser accordion viewing or attach a downloadable PDF outline.
+                    </p>
+                  </div>
+                  <div className="space-y-4">
+                    <Field label="Outline Syllabus Text" htmlFor="prog-outline-text">
+                      <Textarea
+                        id="prog-outline-text"
+                        rows={5}
+                        value={programForm.outlineText}
+                        onChange={(e) => setProgramForm({ ...programForm, outlineText: e.target.value })}
+                        placeholder="Module 1: Architecture and Design&#10;Module 2: Threats, Attacks, and Vulnerabilities&#10;Module 3: Hands-on Lab Exercises..."
+                      />
+                    </Field>
+                    <Field label="Outline Document (PDF)">
+                      <DocumentUploader
+                        value={programForm.outlineFileUrl}
+                        onChange={(url) => setProgramForm({ ...programForm, outlineFileUrl: url })}
+                      />
+                    </Field>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 3: Schedule & Delivery */}
+            {programTab === "schedule" && (
+              <div className="space-y-4 itsc-popover-enter">
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <Field label="Duration" htmlFor="prog-duration">
+                    <Input
+                      id="prog-duration"
+                      value={programForm.duration}
+                      onChange={(e) => setProgramForm({ ...programForm, duration: e.target.value })}
+                      placeholder="e.g. 5 Days or 40 Hours"
+                    />
+                  </Field>
+                  <Field label="Delivery Mode" htmlFor="prog-delivery">
+                    <Input
+                      id="prog-delivery"
+                      value={programForm.deliveryMode}
+                      onChange={(e) => setProgramForm({ ...programForm, deliveryMode: e.target.value })}
+                      placeholder="e.g. Instructor-led Classroom / Virtual"
+                    />
+                  </Field>
+                  <Field label="Skill Level" htmlFor="prog-level">
+                    <Input
+                      id="prog-level"
+                      value={programForm.level}
+                      onChange={(e) => setProgramForm({ ...programForm, level: e.target.value })}
+                      placeholder="e.g. Foundation / Intermediate / Advanced"
+                    />
+                  </Field>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 4: Publishing & Media */}
+            {programTab === "publishing" && (
+              <div className="space-y-4 itsc-popover-enter">
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <Field label="Status" htmlFor="prog-status" required>
+                    <Select
+                      id="prog-status"
+                      value={programForm.status}
+                      onChange={(e) =>
+                        setProgramForm({ ...programForm, status: e.target.value as ContentStatus })
+                      }
+                    >
+                      {statusOptions.map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
+                    </Select>
+                    <p className="mt-1 text-xs text-gray-500">Only published programs appear publicly.</p>
+                  </Field>
+                  <Field label="Featured on Home">
+                    <Select
+                      id="prog-featured"
+                      value={programForm.isFeatured ? "true" : "false"}
+                      onChange={(e) =>
+                        setProgramForm({ ...programForm, isFeatured: e.target.value === "true" })
+                      }
+                    >
+                      <option value="false">No</option>
+                      <option value="true">Yes</option>
+                    </Select>
+                  </Field>
+                  <Field label="Sort Order" htmlFor="prog-sort">
+                    <Input
+                      id="prog-sort"
+                      type="number"
+                      value={programForm.sortOrder}
+                      onChange={(e) =>
+                        setProgramForm({ ...programForm, sortOrder: Number(e.target.value) || 0 })
+                      }
+                    />
+                  </Field>
+                </div>
+
+                <Field label="Featured Image">
+                  <ImageUploader
+                    value={programForm.featuredImage}
+                    onChange={(url) => setProgramForm({ ...programForm, featuredImage: url })}
+                    label="Featured Image"
                   />
                 </Field>
               </div>
-            </div>
+            )}
 
-            <div className="flex justify-end gap-3">
-              <Button type="button" variant="outline" onClick={closeProgramForm}>
+            {/* Multi-step Footer Navigation */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-6 border-t border-gray-200">
+              <Button type="button" variant="outline" onClick={closeProgramForm} className="itsc-press">
                 Cancel
               </Button>
-              <Button type="submit" disabled={savingProgram}>
-                {savingProgram ? (
-                  <>
-                    <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : editingProgram ? (
-                  "Save Changes"
-                ) : (
-                  "Create Program"
+
+              <div className="flex items-center gap-2">
+                {programTab !== "basic" && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      if (programTab === "curriculum") setProgramTab("basic");
+                      else if (programTab === "schedule") setProgramTab("curriculum");
+                      else if (programTab === "publishing") setProgramTab("schedule");
+                    }}
+                    className="itsc-press flex items-center gap-1.5"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    <span>Back</span>
+                  </Button>
                 )}
-              </Button>
+
+                {programTab !== "publishing" ? (
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      if (programTab === "basic") setProgramTab("curriculum");
+                      else if (programTab === "curriculum") setProgramTab("schedule");
+                      else if (programTab === "schedule") setProgramTab("publishing");
+                    }}
+                    className="itsc-press bg-brand-navy hover:bg-brand-ink text-white flex items-center gap-1.5"
+                  >
+                    <span>Next step</span>
+                    <ChevronRight className="h-4 w-4 text-brand-gold" />
+                  </Button>
+                ) : null}
+
+                <Button
+                  type="submit"
+                  disabled={savingProgram}
+                  className="itsc-press bg-brand-gold hover:bg-brand-gold-600 text-brand-navy font-bold shadow-sm"
+                >
+                  {savingProgram ? (
+                    <>
+                      <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" />
+                      <span>Saving...</span>
+                    </>
+                  ) : editingProgram ? (
+                    "Save Changes"
+                  ) : (
+                    "Create Program"
+                  )}
+                </Button>
+              </div>
             </div>
           </form>
         </div>

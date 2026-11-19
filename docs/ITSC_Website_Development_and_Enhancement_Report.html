@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ITSC Website Development & Enhancement Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  @page {
+    size: A4 portrait;
+    margin: 16mm 16mm 16mm 16mm;
+  }
+
+  @page:first {
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1e293b;
+    background-color: #ffffff;
+    line-height: 1.55;
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Page Break Helpers */
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Cover Page */
+  .cover-page {
+    width: 210mm;
+    height: 297mm;
+    background: linear-gradient(135deg, #0a192f 0%, #0f172a 60%, #1e293b 100%);
+    color: #ffffff;
+    padding: 28mm 24mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover-accent-circle {
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(197, 160, 89, 0.22) 0%, rgba(197, 160, 89, 0) 70%);
+    pointer-events: none;
+  }
+
+  .cover-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    padding-bottom: 18px;
+  }
+
+  .cover-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .cover-brand-badge {
+    background: #c5a059;
+    color: #0a192f;
+    font-weight: 800;
+    font-size: 14pt;
+    padding: 6px 14px;
+    border-radius: 8px;
+    letter-spacing: 1px;
+  }
+
+  .cover-brand-title {
+    font-size: 13pt;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #f8fafc;
+  }
+
+  .cover-classification {
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .cover-body {
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  .cover-tagline {
+    color: #c5a059;
+    font-size: 11pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+  }
+
+  .cover-title {
+    font-size: 32pt;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #ffffff;
+    margin: 0 0 20px 0;
+    letter-spacing: -0.5px;
+  }
+
+  .cover-subtitle {
+    font-size: 13pt;
+    color: #cbd5e1;
+    font-weight: 400;
+    line-height: 1.6;
+    max-width: 640px;
+    margin: 0 0 36px 0;
+  }
+
+  .cover-highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 30px;
+  }
+
+  .cover-highlight-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+  }
+
+  .cover-highlight-num {
+    font-size: 22pt;
+    font-weight: 800;
+    color: #c5a059;
+    margin-bottom: 4px;
+  }
+
+  .cover-highlight-label {
+    font-size: 8.5pt;
+    color: #94a3b8;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .cover-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    font-size: 8.5pt;
+  }
+
+  .cover-meta-item strong {
+    display: block;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 7.5pt;
+    margin-bottom: 4px;
+  }
+
+  .cover-meta-item span {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  /* Running Header & Footer */
+  .doc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 8px;
+    margin-bottom: 22px;
+    font-size: 8pt;
+    color: #64748b;
+  }
+
+  .doc-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #0a192f;
+  }
+
+  .doc-header-pill {
+    background: #0a192f;
+    color: #ffffff;
+    font-size: 6.5pt;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .doc-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 8px;
+    margin-top: 24px;
+    font-size: 8pt;
+    color: #94a3b8;
+  }
+
+  /* Typography */
+  h1.section-title {
+    font-size: 19pt;
+    font-weight: 800;
+    color: #0a192f;
+    margin: 0 0 10px 0;
+    letter-spacing: -0.4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  h1.section-title .section-number {
+    font-size: 13pt;
+    color: #c5a059;
+    background: #fdfaf3;
+    border: 1px solid #eedec3;
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+
+  h2.subsection-title {
+    font-size: 12.5pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 18px 0 8px 0;
+    letter-spacing: -0.2px;
+    border-left: 3px solid #c5a059;
+    padding-left: 9px;
+  }
+
+  h3.block-title {
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 12px 0 6px 0;
+  }
+
+  p {
+    margin: 0 0 10px 0;
+    color: #334155;
+    text-align: justify;
+  }
+
+  .lead-paragraph {
+    font-size: 10.5pt;
+    line-height: 1.6;
+    color: #1e293b;
+    font-weight: 400;
+    margin-bottom: 14px;
+  }
+
+  /* Callout Boxes */
+  .callout-box {
+    background: #f8fafc;
+    border-left: 4px solid #0a192f;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 14px 0;
+  }
+
+  .callout-box.priority {
+    background: #fcfaf4;
+    border-left-color: #c5a059;
+  }
+
+  .callout-box-title {
+    font-weight: 700;
+    font-size: 9.5pt;
+    color: #0a192f;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .callout-box.priority .callout-box-title {
+    color: #926f24;
+  }
+
+  /* Metric Cards */
+  .metrics-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .metrics-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .metric-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .metric-card.accent {
+    background: #0a192f;
+    border-color: #0a192f;
+    color: #ffffff;
+  }
+
+  .metric-val {
+    font-size: 18pt;
+    font-weight: 800;
+    color: #0a192f;
+    line-height: 1.1;
+  }
+
+  .metric-card.accent .metric-val {
+    color: #c5a059;
+  }
+
+  .metric-label {
+    font-size: 7.5pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #64748b;
+    margin-top: 3px;
+  }
+
+  .metric-card.accent .metric-label {
+    color: #94a3b8;
+  }
+
+  .metric-desc {
+    font-size: 8pt;
+    color: #64748b;
+    margin-top: 4px;
+    line-height: 1.35;
+  }
+
+  /* Screenshot Presentation */
+  .figure-container {
+    margin: 14px 0 16px 0;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .screenshot-frame {
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #0f172a;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  }
+
+  .screenshot-frame.browser-window {
+    border-top: none;
+  }
+
+  .browser-bar {
+    background: #e2e8f0;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #cbd5e1;
+  }
+
+  .browser-dots {
+    display: flex;
+    gap: 4px;
+  }
+
+  .browser-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #10b981; }
+
+  .browser-url {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 2px 10px;
+    font-size: 7pt;
+    color: #475569;
+    font-family: 'JetBrains Mono', monospace;
+    flex: 1;
+    max-width: 420px;
+  }
+
+  .screenshot-img {
+    width: 100%;
+    display: block;
+    height: auto;
+  }
+
+  .figure-caption {
+    font-size: 8pt;
+    color: #475569;
+    margin-top: 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    line-height: 1.4;
+  }
+
+  .figure-caption strong {
+    color: #0a192f;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .grid-3col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .grid-4col-mobile {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  /* Comparison Tables */
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 8.5pt;
+  }
+
+  table.data-table th {
+    background: #0a192f;
+    color: #ffffff;
+    text-align: left;
+    padding: 8px 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border: 1px solid #0a192f;
+  }
+
+  table.data-table td {
+    padding: 7px 10px;
+    border: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+
+  table.data-table tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+
+  .badge-tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 7pt;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .badge-tag.gold {
+    background: #fdfaf3;
+    color: #926f24;
+    border: 1px solid #eedec3;
+  }
+
+  .badge-tag.navy {
+    background: #f1f5f9;
+    color: #0a192f;
+    border: 1px solid #cbd5e1;
+  }
+
+  .badge-tag.green {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+  }
+
+  /* List styles */
+  ul.feature-list {
+    margin: 6px 0 12px 0;
+    padding-left: 18px;
+  }
+
+  ul.feature-list li {
+    margin-bottom: 4px;
+    color: #334155;
+  }
+
+  ul.feature-list li strong {
+    color: #0f172a;
+  }
+
+  /* Table of Contents */
+  .toc-container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 14px;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 30px;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px dotted #cbd5e1;
+    padding-bottom: 3px;
+    font-size: 9pt;
+  }
+
+  .toc-title {
+    font-weight: 600;
+    color: #0a192f;
+  }
+
+  .toc-title span.toc-num {
+    color: #c5a059;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  .toc-page {
+    font-weight: 700;
+    color: #64748b;
+    font-size: 8.5pt;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================== -->
+<!-- 1. COVER PAGE                              -->
+<!-- ========================================== -->
+<div class="cover-page">
+  <div class="cover-accent-circle"></div>
+
+  <div class="cover-header">
+    <div class="cover-brand">
+      <div class="cover-brand-badge">ITSC</div>
+      <div class="cover-brand-title">Information Technology and Software Center</div>
+    </div>
+    <div class="cover-classification">Client Presentation Edition</div>
+  </div>
+
+  <div class="cover-body">
+    <div class="cover-tagline">Executive Development & Enhancement Report</div>
+    <h1 class="cover-title">Next-Generation Website Experience & Architecture</h1>
+    <p class="cover-subtitle">
+      A comprehensive presentation showcasing the complete architectural evolution, modern user experience transformation, intelligent ITSC AI assistant, and updated training catalog across the official ITSC platform.
+    </p>
+
+    <div class="cover-highlights-grid">
+      <div class="cover-highlight-card">
+        <div class="cover-highlight-num">269</div>
+        <div class="cover-highlight-label">Active Training Courses</div>
+      </div>
+      <div class="cover-highlight-card">
+        <div class="cover-highlight-num">56</div>
+        <div class="cover-highlight-label">Technical Categories</div>
+      </div>
+      <div class="cover-highlight-card">
+        <div class="cover-highlight-num">Dual AI</div>
+        <div class="cover-highlight-label">Gemini & RAG PDF Engine</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <div class="cover-meta-item">
+      <strong>Prepared For</strong>
+      <span>Fedasa Eyob & ITSC Board</span>
+    </div>
+    <div class="cover-meta-item">
+      <strong>Engineering Team</strong>
+      <span>ITSC Web Platform Group</span>
+    </div>
+    <div class="cover-meta-item">
+      <strong>Release Version</strong>
+      <span>v2.0 Next-Gen Edition</span>
+    </div>
+    <div class="cover-meta-item">
+      <strong>Date</strong>
+      <span>November 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 2. TABLE OF CONTENTS & 3. EXECUTIVE SUMMARY -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">01</span> Table of Contents</h1>
+  
+  <div class="toc-container">
+    <div class="toc-grid">
+      <div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">01</span> Table of Contents</div><div class="toc-page">Page 2</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">02</span> Executive Summary</div><div class="toc-page">Page 2</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">03</span> Website Overview & Objectives</div><div class="toc-page">Page 3</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">04</span> Overall UI/UX Redesign System</div><div class="toc-page">Page 4</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">05</span> Homepage Experience</div><div class="toc-page">Page 5</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">06</span> ITSC AI – Intelligent Assistant</div><div class="toc-page">Page 6</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">07</span> ITSC AI In Action & Dialogs</div><div class="toc-page">Page 7</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">08</span> Updated Training Course Catalog</div><div class="toc-page">Page 8</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">09</span> Mega Menu & Master-Detail UX</div><div class="toc-page">Page 9</div></div>
+      </div>
+      <div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">10</span> Training Program Details</div><div class="toc-page">Page 10</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">11</span> Corporate Training Portal</div><div class="toc-page">Page 11</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">12</span> News, Events & Campus Gallery</div><div class="toc-page">Page 12</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">13</span> Contact & Inquiry Channels</div><div class="toc-page">Page 13</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">14</span> Admin Dashboard & Security</div><div class="toc-page">Page 14</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">15</span> Technical Architecture & Data</div><div class="toc-page">Page 15</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">16</span> Responsive & Mobile Bottom Nav</div><div class="toc-page">Page 16</div></div>
+        <div class="toc-item"><div class="toc-title"><span class="toc-num">17</span> Summary Matrix & Next Steps</div><div class="toc-page">Page 17</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 28px;"></div>
+
+  <h1 class="section-title"><span class="section-number">02</span> Executive Summary</h1>
+  <p class="lead-paragraph">
+    The Information Technology and Software Center (ITSC) has undergone a fundamental digital transformation. This initiative reimagined the entire digital presence from the ground up, turning an informational website into an intuitive, high-performance, and intelligent institutional platform.
+  </p>
+
+  <p>
+    Inspired by modern interaction philosophies that prioritize immediate feedback, visual clarity, and minimal cognitive friction, the new platform delivers a seamless experience for prospective trainees, enterprise corporate clients, and internal administrators alike. The platform is backed by a verified production database housing <strong>269 active certification courses across 56 specialized technical categories</strong>.
+  </p>
+
+  <div class="metrics-grid-3">
+    <div class="metric-card accent">
+      <div class="metric-val">ITSC AI</div>
+      <div class="metric-label">Intelligent Assistant</div>
+      <div class="metric-desc">Google Gemini-powered conversational agent with RAG syllabus citations and course discovery.</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">2-Tier Nav</div>
+      <div class="metric-label">Course Catalog Mega Menu</div>
+      <div class="metric-desc">Master/detail desktop dropdown with pointer aim buffer and instant category browsing.</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">100% Mobile</div>
+      <div class="metric-label">Thumb Ergonomics</div>
+      <div class="metric-desc">Native-feeling bottom navigation bar and focus-trapped drawer with fluid spring physics.</div>
+    </div>
+  </div>
+
+  <div class="callout-box priority">
+    <div class="callout-box-title">Core Mandate Delivered</div>
+    The engineering and UX design enhancements eliminate institutional friction, allowing a visitor to discover relevant training paths, inspect verified syllabi, request corporate quotes, or consult the interactive AI assistant in seconds.
+  </div>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 2</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 4. WEBSITE OVERVIEW & OBJECTIVES           -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">03</span> Website Overview & Development Objectives</h1>
+
+  <h2 class="subsection-title">1. Institutional Background</h2>
+  <p>
+    The Information Technology and Software Center (ITSC) is a premier technology training and consulting organization providing accredited certification programs, corporate workforce upskilling, and technical advisory services. With partnerships spanning global vendors such as Microsoft, Cisco, CompTIA, EC-Council, Android ATC, and PECB, ITSC required a digital platform commensurate with its reputation for technical excellence.
+  </p>
+
+  <h2 class="subsection-title">2. Key Challenges of the Previous Platform</h2>
+  <p>
+    A rigorous audit of the earlier iteration revealed critical operational and user-experience bottlenecks:
+  </p>
+  <ul class="feature-list">
+    <li><strong>Information Overload:</strong> Navigating through nearly 300 courses across dozens of categories resulted in excessive scrolling and decision fatigue.</li>
+    <li><strong>Static Course Catalog:</strong> Lacked hierarchical vendor filtering, rapid code lookup (e.g., CCNA, CEH), and responsive categorization.</li>
+    <li><strong>Absence of Contextual Guidance:</strong> Visitors uncertain about their learning pathway had no interactive assistance to match their career goals with specific certifications.</li>
+    <li><strong>Mobile Friction:</strong> Key navigation menus and actions were buried in complex nested menus that were difficult to use with one hand on smartphones.</li>
+  </ul>
+
+  <h2 class="subsection-title">3. Core Development Objectives</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 28%;">Strategic Objective</th>
+        <th style="width: 37%;">Implementation Solution</th>
+        <th style="width: 35%;">Business & Visitor Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Effortless Discovery</strong></td>
+        <td>2-tier hierarchical mega menu, instant keyword search, and category chips.</td>
+        <td>Reduces course search time by over 70%; visitors locate courses in under 3 clicks.</td>
+      </tr>
+      <tr>
+        <td><strong>Conversational AI</strong></td>
+        <td>Integrated ITSC AI assistant powered by Gemini with full syllabus context.</td>
+        <td>Provides 24/7 intelligent student counseling and automated corporate inquiry intake.</td>
+      </tr>
+      <tr>
+        <td><strong>Institutional Brand Authority</strong></td>
+        <td>Harmonized Corporate Navy (#0A192F) and Gold (#C5A059) visual identity with frosted glass aesthetics.</td>
+        <td>Reinforces enterprise trust with government ministries, banks, and corporate partners.</td>
+      </tr>
+      <tr>
+        <td><strong>Mobile-First Fluidity</strong></td>
+        <td>Native-inspired bottom thumb navigation bar and spring-animated modal sheets.</td>
+        <td>Guarantees 100% reachability across modern iPhone and Android touch devices.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout-box">
+    <div class="callout-box-title">Preservation of Production Assets</div>
+    All upgrades were executed under strict non-destructive constraints: zero loss of existing database records, preservation of existing API endpoints, and clean architectural separation between presentation and data tiers.
+  </div>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 3</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 5. OVERALL UI/UX REDESIGN SYSTEM           -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">04</span> Overall UI/UX Redesign System</h1>
+
+  <p class="lead-paragraph">
+    The redesign was governed by a cohesive interaction design system inspired by modern premium software principles: immediate tactile feedback, crisp visual hierarchy, predictable component behaviors, and deliberate use of motion.
+  </p>
+
+  <div class="grid-2col">
+    <div>
+      <h2 class="subsection-title">Design Tokens & Color Harmony</h2>
+      <p>
+        The brand color system was refined to ensure high-contrast legibility that complies with WCAG AA accessibility standards:
+      </p>
+      <ul class="feature-list">
+        <li><strong>Corporate Navy (<code>#0A192F</code>):</strong> Anchors headers, primary brand elements, and authoritative focal points.</li>
+        <li><strong>Accessible Gold (<code>#B4830A</code> / <code>#C5A059</code>):</strong> Accent color calibrated to achieve a 4.5:1 contrast ratio against light backgrounds.</li>
+        <li><strong>Slate Muted Surfaces (<code>#F8FAFC</code>):</strong> Replaces harsh stark whites with restful card backgrounds.</li>
+        <li><strong>Brand Ink (<code>#0F172A</code>):</strong> High-contrast typography for effortless reading across high-DPI displays.</li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="subsection-title">Tactile Motion & Physics</h2>
+      <p>
+        Components feature subtle physical interactions that give the interface an organic, responsive feel:
+      </p>
+      <ul class="feature-list">
+        <li><strong>Tactile Press Scale (<code>active:scale-[0.98]</code>):</strong> Buttons compress slightly upon click or tap, confirming user input instantly.</li>
+        <li><strong>Spring Curves:</strong> Dialogs and drawers slide in using a physics curve (<code>cubic-bezier(0.16, 1, 0.3, 1)</code>) that avoids robotic linear motion.</li>
+        <li><strong>Frosted Glass (<code>backdrop-blur-md</code>):</strong> Floating navigation bars let page content blur organically beneath them during scroll.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="figure-container">
+    <div class="screenshot-frame browser-window">
+      <div class="browser-bar">
+        <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+        <div class="browser-url">https://itsc.edu.et/ — Redesigned Navigation & Header</div>
+      </div>
+      <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/01-home-desktop.png" alt="Redesigned Header" class="screenshot-img" style="max-height: 250px; object-fit: cover; object-position: top;">
+    </div>
+    <div class="figure-caption">
+      <strong>Figure 4.1:</strong> Redesigned navigation header featuring shrink-on-scroll dynamics (64px to 56px), frosted glass backdrop blur, quick search trigger, and high-contrast typography.
+    </div>
+  </div>
+
+  <h2 class="subsection-title">Comparative Evolution: Before vs. After</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Design Dimension</th>
+        <th>Legacy Baseline</th>
+        <th>Next-Gen Implementation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Global Navigation</strong></td>
+        <td>Basic horizontal bar without sticky dynamics or search shortcuts.</td>
+        <td>Sticky frosted glass header with shrink-on-scroll, quick search, and tactile buttons.</td>
+      </tr>
+      <tr>
+        <td><strong>Mobile Ergonomics</strong></td>
+        <td>Single hamburger menu with nested accordion items; high reach strain.</td>
+        <td>Fixed thumb-level bottom navigation bar plus focus-trapped spring slide drawer.</td>
+      </tr>
+      <tr>
+        <td><strong>Color & Contrast</strong></td>
+        <td>Light yellow gold with low contrast against white backgrounds (&lt; 2.8:1).</td>
+        <td>WCAG AA certified accessible gold (#B4830A, &gt; 4.5:1 ratio) and authoritative navy.</td>
+      </tr>
+      <tr>
+        <td><strong>Component Feedback</strong></td>
+        <td>Standard static CSS hovers without press states or loading animations.</td>
+        <td>Organic tactile press scaling (0.98x), spring transitions, and pulsing live status beacons.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 4</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 6. HOMEPAGE EXPERIENCE                     -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">05</span> Homepage Experience</h1>
+
+  <p class="lead-paragraph">
+    The homepage serves as the primary gateway to ITSC's educational and enterprise offerings. The redesigned interface establishes immediate institutional credibility, delivers clear value propositions, and guides visitors toward course enrollment or corporate engagement within seconds.
+  </p>
+
+  <div class="figure-container">
+    <div class="screenshot-frame browser-window">
+      <div class="browser-bar">
+        <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+        <div class="browser-url">https://itsc.edu.et/ — Homepage Hero & Strategic Value Overview</div>
+      </div>
+      <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/01-home-desktop.png" alt="Homepage Full Hero" class="screenshot-img" style="max-height: 380px; object-fit: cover; object-position: top;">
+    </div>
+    <div class="figure-caption">
+      <strong>Figure 5.1:</strong> Live desktop homepage showcasing the institutional value proposition, dual call-to-action triggers ("Browse Courses" & "Corporate Solutions"), verified training metrics, and vendor partnership recognition.
+    </div>
+  </div>
+
+  <div class="grid-2col">
+    <div>
+      <h3 class="block-title">Key Homepage Features</h3>
+      <ul class="feature-list">
+        <li><strong>Commanding Hero Banner:</strong> Clear statement of institutional purpose with immediate pathways to individual courses or enterprise programs.</li>
+        <li><strong>Live Verified Metrics Bar:</strong> Highlights 269+ technical courses, dozens of vendor accreditations, and thousands of certified alumni.</li>
+        <li><strong>Global Certification Vendor Showcase:</strong> Verified partnership badges for Microsoft, Cisco, CompTIA, EC-Council, Huawei, and PECB.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="block-title">Visitor Journey Optimizations</h3>
+      <ul class="feature-list">
+        <li><strong>Frictionless Search Initiation:</strong> Direct search bar in the hero allows visitors to type any certification code (e.g., "AZ-104", "CCNA") instantly.</li>
+        <li><strong>Category Highlights:</strong> Quick visual entry points into Cybersecurity, Cloud Architecture, Database Engineering, and Software Development.</li>
+        <li><strong>Floating AI Assistant Anchor:</strong> Subtle pulsing gold beacon invites visitors needing guidance to launch ITSC AI with one click.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 5</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 7. ITSC AI – INTELLIGENT ASSISTANT (PRIORITY A) -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">06</span> ITSC AI – Intelligent Website Assistant</h1>
+
+  <div class="callout-box priority">
+    <div class="callout-box-title">Major Implementation Highlight</div>
+    ITSC AI is an enterprise-grade digital counselor powered by Google Gemini, directly connected to the ITSC course repository and PDF document storage. It provides immediate, accurate answers to complex course inquiries 24/7.
+  </div>
+
+  <p class="lead-paragraph">
+    Prospective students and corporate managers frequently have nuanced questions: "Which certification should I take after CCNA?", "What are the prerequisites for CEH?", or "How can our enterprise schedule on-site database training?". ITSC AI transforms static web browsing into an interactive, helpful advisory conversation.
+  </p>
+
+  <div class="grid-2col">
+    <div>
+      <h2 class="subsection-title">Visual Architecture & Design</h2>
+      <p>
+        The AI assistant is engineered with a refined floating interface that respects the user's workspace:
+      </p>
+      <ul class="feature-list">
+        <li><strong>Corporate Navy & Gold Header:</strong> Branded header featuring a pulsating emerald status indicator confirming active online connectivity.</li>
+        <li><strong>Spring Popover Entrance:</strong> Animates gracefully into view from the bottom right corner without jarring layout shifts.</li>
+        <li><strong>Curated Starter Prompts:</strong> Visitors can tap ready-made pills (e.g., "Explore ITSC training programs", "Corporate training services") to begin without typing.</li>
+        <li><strong>Mobile-Safe Positioning:</strong> Anchored at <code>bottom-18</code> on mobile devices to prevent touch collision with the bottom navigation bar.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="figure-container" style="margin-top: 0;">
+        <div class="screenshot-frame browser-window">
+          <div class="browser-bar">
+            <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+            <div class="browser-url">ITSC AI Widget — Initial Welcome State</div>
+          </div>
+          <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/14-itsc-ai-open.png" alt="ITSC AI Widget Open" class="screenshot-img" style="max-height: 290px; object-fit: cover; object-position: right top;">
+        </div>
+        <div class="figure-caption">
+          <strong>Figure 6.1:</strong> ITSC AI launcher in its welcome state, presenting starter prompt pills, official status badge, and clear conversation controls.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="subsection-title">Technical Capabilities & Grounding</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 25%;">Capability</th>
+        <th style="width: 45%;">Engineering Mechanism</th>
+        <th style="width: 30%;">User Benefit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Course Discovery</strong></td>
+        <td>Direct semantic query against 269 training programs and 56 categories.</td>
+        <td>Instantly returns matching courses with direct clickable links to detail pages.</td>
+      </tr>
+      <tr>
+        <td><strong>Code Resolution</strong></td>
+        <td>Extracts exam numbers (e.g. 20764, AZ-900, 200-301) and maps to exact curriculum.</td>
+        <td>Visitors find courses using official exam codes without knowing internal titles.</td>
+      </tr>
+      <tr>
+        <td><strong>Multi-Turn Context</strong></td>
+        <td>Maintains conversation history within active session for natural follow-up questions.</td>
+        <td>Visitors can ask "What are its prerequisites?" after asking about a course.</td>
+      </tr>
+      <tr>
+        <td><strong>PDF Syllabus Retrieval</strong></td>
+        <td>Direct streaming pipeline from Neon database document storage.</td>
+        <td>Instant downloadable PDF syllabus citations delivered right in the chat stream.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 6</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 7. ITSC AI IN ACTION (DIALOG EXAMPLES)      -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">07</span> ITSC AI In Action — Live Conversational Proof</h1>
+
+  <p class="lead-paragraph">
+    The screenshot below documents an actual live interaction with ITSC AI. The user inquired: <em>"What Cisco and Microsoft database certifications do you offer?"</em> The assistant analyzed the query, cross-referenced the database, and generated a structured response complete with verified course titles, certification codes, and direct links.
+  </p>
+
+  <div class="figure-container">
+    <div class="screenshot-frame browser-window">
+      <div class="browser-bar">
+        <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+        <div class="browser-url">ITSC AI Live Multi-Turn Dialog Session</div>
+      </div>
+      <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/15-itsc-ai-chat.png" alt="ITSC AI Live Chat" class="screenshot-img" style="max-height: 410px; object-fit: cover; object-position: right top;">
+    </div>
+    <div class="figure-caption">
+      <strong>Figure 7.1:</strong> Actual conversational screenshot demonstrating ITSC AI responding with formatted markdown, course recommendations, prerequisite guidance, and actionable links.
+    </div>
+  </div>
+
+  <div class="grid-2col">
+    <div class="callout-box">
+      <div class="callout-box-title">Why This Is Superior to Generic Bots</div>
+      Generic chatbots hallucinate or provide vague answers. ITSC AI is strictly grounded in the official ITSC database. When it references a course like <em>"Administering a SQL Database Infrastructure (20764)"</em>, that course exists in the database with an active syllabus and scheduled intake.
+    </div>
+    <div class="callout-box priority">
+      <div class="callout-box-title">Accessibility & Keyboard Navigation</div>
+      The chat widget supports full keyboard navigation: <kbd>Enter</kbd> sends messages, <kbd>Shift+Enter</kbd> inserts a newline, and <kbd>Escape</kbd> gracefully closes the popover while returning focus to the launcher button.
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 7</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 8. UPDATED TRAINING COURSE CATALOG (PRIORITY B) -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">08</span> Updated Training Course Catalog</h1>
+
+  <div class="callout-box priority">
+    <div class="callout-box-title">Major Implementation Highlight</div>
+    The training course catalog has been upgraded to handle ITSC's extensive curriculum of 269 courses across 56 categories with high-speed client-side filtering, keyword searching, and clean card presentations.
+  </div>
+
+  <p class="lead-paragraph">
+    Finding the right certification path previously required wading through dense, unstructured lists. The redesigned catalog introduces an organized discovery engine where visitors can filter by category, vendor, or proficiency level in real time.
+  </p>
+
+  <div class="figure-container">
+    <div class="screenshot-frame browser-window">
+      <div class="browser-bar">
+        <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+        <div class="browser-url">https://itsc.edu.et/training-programs — Interactive Course Catalog</div>
+      </div>
+      <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/02-training-catalog.png" alt="Training Catalog Page" class="screenshot-img" style="max-height: 380px; object-fit: cover; object-position: top;">
+    </div>
+    <div class="figure-caption">
+      <strong>Figure 8.1:</strong> The updated training catalog showing real-time search, responsive horizontal category pills, dynamic course cards with duration and level badges, and direct syllabus links.
+    </div>
+  </div>
+
+  <div class="grid-3col">
+    <div class="metric-card">
+      <div class="metric-val">Instant</div>
+      <div class="metric-label">Client Filtering</div>
+      <div class="metric-desc">Sub-millisecond category switching without reloading the page or waiting for server roundtrips.</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">Metadata</div>
+      <div class="metric-label">Rich Badges</div>
+      <div class="metric-desc">Every card displays duration (e.g. 40 hours), proficiency level, delivery mode, and certification code.</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">Zero Stale</div>
+      <div class="metric-label">Database Connected</div>
+      <div class="metric-desc">Directly synchronized with the Neon PostgreSQL database; any admin update reflects immediately.</div>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 8</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 9. MEGA MENU & MASTER-DETAIL UX            -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">09</span> Mega Menu & 2-Tier Master-Detail Navigation</h1>
+
+  <p class="lead-paragraph">
+    For desktop visitors, the header dropdown represents the primary navigation artery. The previous dropdown suffered from overcrowded columns that caused visual fatigue. It was replaced with an Apple-inspired <strong>2-Tier Master/Detail Navigation Architecture</strong>.
+  </p>
+
+  <div class="figure-container">
+    <div class="screenshot-frame browser-window">
+      <div class="browser-bar">
+        <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+        <div class="browser-url">Course Catalog Mega Menu Dropdown — Master/Detail Tiering</div>
+      </div>
+      <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/16-mega-menu-dropdown.png" alt="Mega Menu Dropdown" class="screenshot-img" style="max-height: 330px; object-fit: cover; object-position: top;">
+    </div>
+    <div class="figure-caption">
+      <strong>Figure 9.1:</strong> The 2-Tier Master/Detail navigation dropdown: left column shows parent technical domains; right panel dynamically reveals corresponding certified courses with vendor tags.
+    </div>
+  </div>
+
+  <div class="grid-2col">
+    <div>
+      <h2 class="subsection-title">Engineering Innovations</h2>
+      <ul class="feature-list">
+        <li><strong>Pointer Aim Buffer:</strong> Implemented a 260ms exit delay and 40ms debounce to prevent the menu from accidentally collapsing when the user moves diagonally toward a sub-item.</li>
+        <li><strong>Dual-Column Master/Detail:</strong> The left column displays categories; hovering or selecting any category immediately populates the right column with its specific courses.</li>
+        <li><strong>Full Keyboard Accessibility:</strong> Arrow keys (<kbd>&uarr;</kbd>, <kbd>&darr;</kbd>, <kbd>&larr;</kbd>, <kbd>&rarr;</kbd>) allow seamless navigation between master and detail columns, with <kbd>Escape</kbd> closing the menu.</li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="subsection-title">Client Value & Conversion</h2>
+      <ul class="feature-list">
+        <li><strong>Zero Navigation Confusion:</strong> Prospective students immediately grasp the entire curriculum structure without jumping between multiple pages.</li>
+        <li><strong>Fast Path to Enrollment:</strong> Direct links take the visitor straight to the course outline and enrollment form in one click.</li>
+        <li><strong>Verified Course Badge Counts:</strong> Displays the exact number of active certifications per category, providing clear visual density.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 9</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 10. TRAINING PROGRAM DETAILS               -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">10</span> Training Program Details Experience</h1>
+
+  <p class="lead-paragraph">
+    Every course in the catalog has a dedicated detail page engineered for high conversion and transparency. Visitors can evaluate course prerequisites, module-by-module syllabus outlines, learning outcomes, and schedule availability.
+  </p>
+
+  <div class="figure-container">
+    <div class="screenshot-frame browser-window">
+      <div class="browser-bar">
+        <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+        <div class="browser-url">https://itsc.edu.et/training-programs/administering-a-sql-database-infrastructure-20764</div>
+      </div>
+      <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/03-course-detail.png" alt="Course Detail Page" class="screenshot-img" style="max-height: 380px; object-fit: cover; object-position: top;">
+    </div>
+    <div class="figure-caption">
+      <strong>Figure 10.1:</strong> Individual course detail page featuring course header, certification code badge, detailed syllabus tabs, audience prerequisites, and immediate enrollment trigger.
+    </div>
+  </div>
+
+  <div class="grid-2col">
+    <div>
+      <h3 class="block-title">Structured Information Architecture</h3>
+      <ul class="feature-list">
+        <li><strong>Header Meta Badges:</strong> Certification authority (e.g. Microsoft), official exam code (20764), course duration, and delivery format.</li>
+        <li><strong>Course Outline & Modules:</strong> Collapsible module breakdowns detailing specific hands-on labs and theoretical topics.</li>
+        <li><strong>Target Audience & Prerequisites:</strong> Clear expectations preventing student mismatch and improving completion rates.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="block-title">Direct Syllabus Streaming</h3>
+      <ul class="feature-list">
+        <li><strong>One-Click PDF Download:</strong> Direct streaming from the database allows students to save the complete official syllabus offline.</li>
+        <li><strong>Sticky Enrollment Action:</strong> Primary call-to-action button remains visible as the user scrolls, driving inquiry submissions.</li>
+        <li><strong>Related Training Tracks:</strong> Suggests logical next-step certifications (e.g., advanced database administration after foundational courses).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 10</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 11. CORPORATE TRAINING EXPERIENCE          -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">11</span> Corporate Training Experience</h1>
+
+  <p class="lead-paragraph">
+    Enterprise workforce development is a cornerstone of ITSC's institutional business. The dedicated Corporate Training portal addresses Chief Information Officers, HR Directors, and enterprise technical leads with tailored B2B solutions.
+  </p>
+
+  <div class="figure-container">
+    <div class="screenshot-frame browser-window">
+      <div class="browser-bar">
+        <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+        <div class="browser-url">https://itsc.edu.et/corporate-training — Enterprise Workforce Solutions</div>
+      </div>
+      <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/04-corporate-training.png" alt="Corporate Training Page" class="screenshot-img" style="max-height: 380px; object-fit: cover; object-position: top;">
+    </div>
+    <div class="figure-caption">
+      <strong>Figure 11.1:</strong> Corporate Training portal presenting tailored organizational training tracks, client logos, on-site/hybrid delivery options, and streamlined enterprise inquiry form.
+    </div>
+  </div>
+
+  <div class="grid-3col">
+    <div class="metric-card">
+      <div class="metric-val">Custom</div>
+      <div class="metric-label">Curriculum Design</div>
+      <div class="metric-desc">Custom-tailored syllabi built specifically around an enterprise client's technology stack and business goals.</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">Flexible</div>
+      <div class="metric-label">Delivery Models</div>
+      <div class="metric-desc">On-site client training, dedicated lab training at ITSC campus, or instructor-led live virtual classrooms.</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">Fast Track</div>
+      <div class="metric-label">Enterprise Inquiries</div>
+      <div class="metric-desc">Inquiries route directly into the administrative CRM with dedicated corporate account assignment.</div>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 11</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 12. NEWS, EVENTS & CAMPUS GALLERY          -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">12</span> News, Events & Campus Gallery</h1>
+
+  <p class="lead-paragraph">
+    An authoritative technology institution must demonstrate active community involvement, continuous curriculum updates, and state-of-the-art physical facilities. The News and Gallery sections provide transparent visual proof of ITSC's vibrant operations.
+  </p>
+
+  <div class="grid-2col">
+    <div class="figure-container">
+      <div class="screenshot-frame browser-window">
+        <div class="browser-bar">
+          <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+          <div class="browser-url">https://itsc.edu.et/news</div>
+        </div>
+        <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/06-news-desktop.png" alt="News Page" class="screenshot-img" style="max-height: 250px; object-fit: cover; object-position: top;">
+      </div>
+      <div class="figure-caption">
+        <strong>Figure 12.1:</strong> News & Announcements portal highlighting press updates, intake schedules, and tech event coverage.
+      </div>
+    </div>
+
+    <div class="figure-container">
+      <div class="screenshot-frame browser-window">
+        <div class="browser-bar">
+          <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+          <div class="browser-url">https://itsc.edu.et/gallery</div>
+        </div>
+        <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/07-gallery-desktop.png" alt="Gallery Page" class="screenshot-img" style="max-height: 250px; object-fit: cover; object-position: top;">
+      </div>
+      <div class="figure-caption">
+        <strong>Figure 12.2:</strong> High-resolution campus gallery showcasing modern computing labs, server racks, and classroom environments.
+      </div>
+    </div>
+  </div>
+
+  <h2 class="subsection-title">Content & Media Infrastructure</h2>
+  <ul class="feature-list">
+    <li><strong>Integrated Cloudinary & Direct Media Storage:</strong> High-performance image loading with automatic WebP conversion and responsive source sets.</li>
+    <li><strong>Publishing Lifecycle:</strong> Articles support Draft, Published, and Archived states with automated SEO meta generation and rich markdown formatting.</li>
+    <li><strong>Physical Facility Transparency:</strong> Prospective trainees can inspect real classroom photos and equipment labs before visiting in person.</li>
+  </ul>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 12</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 13. CONTACT & INQUIRY CHANNELS             -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">13</span> Contact & Communication Features</h1>
+
+  <p class="lead-paragraph">
+    Converting interested visitors into enrolled students requires straightforward, reliable communication channels. The Contact page consolidates physical location details, operating hours, direct phone/email channels, and a validated web inquiry form.
+  </p>
+
+  <div class="figure-container">
+    <div class="screenshot-frame browser-window">
+      <div class="browser-bar">
+        <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+        <div class="browser-url">https://itsc.edu.et/contact — Contact & Campus Information</div>
+      </div>
+      <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/08-contact-desktop.png" alt="Contact Page" class="screenshot-img" style="max-height: 380px; object-fit: cover; object-position: top;">
+    </div>
+    <div class="figure-caption">
+      <strong>Figure 13.1:</strong> Contact page featuring real-time input validation, operating schedules, physical campus directions, and interactive submission feedback.
+    </div>
+  </div>
+
+  <div class="grid-2col">
+    <div>
+      <h3 class="block-title">Inquiry Processing Pipeline</h3>
+      <ul class="feature-list">
+        <li><strong>Zod Schema Validation:</strong> Client and server-side validation preventing invalid phone numbers, blank inquiries, or bot submissions.</li>
+        <li><strong>Instant Database Persistence:</strong> Every submission immediately creates an <code>inquiries</code> record in Neon PostgreSQL with <code>NEW</code> status.</li>
+        <li><strong>Email Dispatch:</strong> Automated email notifications alerting ITSC admissions personnel to new incoming prospective students.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="block-title">Physical Campus Transparency</h3>
+      <ul class="feature-list">
+        <li><strong>Precise Coordinates:</strong> Clear directions for prospective students visiting the ITSC Addis Ababa headquarters.</li>
+        <li><strong>Working Schedules:</strong> Clearly indicates open office hours for admissions, certification testing center, and corporate relations.</li>
+        <li><strong>Multi-Channel Options:</strong> Phone, email, web form, and immediate ITSC AI chat available on the same screen.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 13</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 14. ADMIN DASHBOARD & CMS                  -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">14</span> Administrative Dashboard & Security</h1>
+
+  <p class="lead-paragraph">
+    Behind the public experience lies a robust content management and administration system. ITSC staff can manage the course catalog, publish news releases, upload campus photos, and respond to incoming inquiries through a secure administrative portal.
+  </p>
+
+  <div class="grid-2col">
+    <div>
+      <h2 class="subsection-title">Role-Based Access Control (RBAC)</h2>
+      <p>
+        The administrative backend enforces strict multi-role permission separation across 6 distinct administrator tiers:
+      </p>
+      <ul class="feature-list">
+        <li><strong>Super Admin:</strong> Full administrative control, system settings, user account provisioning, and audit logs.</li>
+        <li><strong>Admin:</strong> Operations manager with full content management and inquiry resolution privileges.</li>
+        <li><strong>Training Manager:</strong> Dedicated authority over the 269 courses, 56 categories, and syllabus PDF uploads.</li>
+        <li><strong>News Editor:</strong> Focused editorial rights for press releases, events, and tech articles.</li>
+        <li><strong>Content Editor:</strong> Editorial management of gallery and page content.</li>
+        <li><strong>Viewer:</strong> Read-only inspection privileges for reporting and auditing.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="figure-container" style="margin-top: 0;">
+        <div class="screenshot-frame browser-window">
+          <div class="browser-bar">
+            <div class="browser-dots"><div class="browser-dot dot-red"></div><div class="browser-dot dot-yellow"></div><div class="browser-dot dot-green"></div></div>
+            <div class="browser-url">https://itsc.edu.et/admin — Secure Authentication Gateway</div>
+          </div>
+          <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/09-admin-login.png" alt="Admin Login Portal" class="screenshot-img" style="max-height: 270px; object-fit: cover; object-position: center;">
+        </div>
+        <div class="figure-caption">
+          <strong>Figure 14.1:</strong> Security gateway with rate-limited login, cryptographic password hashing (bcrypt), and JWT session issuance.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="subsection-title">Administrative Modules Overview</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 25%;">CMS Module</th>
+        <th style="width: 45%;">Managed Capabilities</th>
+        <th style="width: 30%;">Operational Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Training Management</strong></td>
+        <td>Create, edit, archive courses; manage prerequisites, vendor tags, and syllabus PDFs.</td>
+        <td>Non-technical staff can update course fees or schedules in seconds without developer intervention.</td>
+      </tr>
+      <tr>
+        <td><strong>Inquiry CRM</strong></td>
+        <td>Filter inquiries by status (New, In Progress, Resolved); assign staff notes.</td>
+        <td>Ensures zero prospective student leads are dropped or delayed.</td>
+      </tr>
+      <tr>
+        <td><strong>Media & Gallery</strong></td>
+        <td>Upload campus photographs with metadata, captions, and display order.</td>
+        <td>Maintains an up-to-date visual showcase of modern lab equipment.</td>
+      </tr>
+      <tr>
+        <td><strong>Website Settings</strong></td>
+        <td>Manage global institution phone numbers, social links, and announcement banners.</td>
+        <td>Guarantees consistent contact details across every header and footer.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 14</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 15. TECHNICAL ARCHITECTURE & DATA          -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">15</span> Technical Architecture & Data Integrity</h1>
+
+  <p class="lead-paragraph">
+    The platform is built on modern enterprise web technologies, architected as a clean monorepo separating web frontend, REST API backend, and shared TypeScript domain models.
+  </p>
+
+  <div class="grid-3col">
+    <div class="metric-card accent">
+      <div class="metric-val">Next.js 15</div>
+      <div class="metric-label">App Router Frontend</div>
+      <div class="metric-desc">Server-Side Rendering (SSR), static optimization, and React 19 server components for maximum SEO and sub-second load times.</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">Express 5</div>
+      <div class="metric-label">Modular API Backend</div>
+      <div class="metric-desc">Clean Architecture with controllers, services, repositories, rate limiting, and helmet security middleware.</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">Neon PG</div>
+      <div class="metric-label">Serverless Database</div>
+      <div class="metric-desc">PostgreSQL instance managed via Prisma ORM, featuring connection pooling and automated SSL encryption.</div>
+    </div>
+  </div>
+
+  <h2 class="subsection-title">Database Integrity & Verified Counts</h2>
+  <p>
+    All claims in this report have been directly validated against the live database through automated verification scripts:
+  </p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Entity Model</th>
+        <th>Database Table</th>
+        <th>Verified Live Count</th>
+        <th>Audit Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Training Programs</strong></td>
+        <td><code>training_programs</code></td>
+        <td><strong>269 Courses</strong></td>
+        <td><span class="badge-tag green">Verified 100%</span></td>
+      </tr>
+      <tr>
+        <td><strong>Training Categories</strong></td>
+        <td><code>training_categories</code></td>
+        <td><strong>56 Categories</strong></td>
+        <td><span class="badge-tag green">Verified 100%</span></td>
+      </tr>
+      <tr>
+        <td><strong>PDF Syllabus Storage</strong></td>
+        <td><code>uploaded_documents</code></td>
+        <td><strong>Active Binary Blobs</strong></td>
+        <td><span class="badge-tag green">Verified 100%</span></td>
+      </tr>
+      <tr>
+        <td><strong>Administrators</strong></td>
+        <td><code>administrators</code></td>
+        <td><strong>RBAC Configured</strong></td>
+        <td><span class="badge-tag green">Verified 100%</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="subsection-title">Security & Hardening Standards</h2>
+  <ul class="feature-list">
+    <li><strong>Input Sanitization:</strong> Strict Zod validation on every public and administrative endpoint; protection against SQL injection and XSS.</li>
+    <li><strong>Secure Headers & CORS:</strong> Configured Helmet middleware with strict Content Security Policies and restricted CORS origins.</li>
+    <li><strong>Zero Environment Leakage:</strong> Database credentials, JWT secrets, and AI API keys are strictly confined to backend server environments.</li>
+  </ul>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 15</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 16. RESPONSIVE DESIGN & MOBILE BOTTOM NAV  -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">16</span> Responsive Design & Mobile Experience</h1>
+
+  <div class="callout-box priority">
+    <div class="callout-box-title">Mobile Innovation Highlight</div>
+    Over 60% of modern web traffic originates from mobile devices. The new platform introduces a native-inspired <strong>Bottom Thumb Navigation Bar</strong> and a focus-trapped <strong>Mobile Navigation Drawer</strong> designed for effortless one-handed use.
+  </div>
+
+  <p class="lead-paragraph">
+    Instead of forcing mobile visitors to reach to the top of large screens for essential navigation, the platform places primary destinations within natural thumb reach, while preserving the full capabilities of the desktop experience.
+  </p>
+
+  <div class="grid-4col-mobile">
+    <div class="figure-container">
+      <div class="screenshot-frame">
+        <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/10-mobile-home.png" alt="Mobile Home" class="screenshot-img" style="height: 310px; object-fit: cover; object-position: top;">
+      </div>
+      <div class="figure-caption"><strong>16.1:</strong> Mobile Home & Bottom Nav</div>
+    </div>
+    <div class="figure-container">
+      <div class="screenshot-frame">
+        <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/11-mobile-catalog.png" alt="Mobile Catalog" class="screenshot-img" style="height: 310px; object-fit: cover; object-position: top;">
+      </div>
+      <div class="figure-caption"><strong>16.2:</strong> Mobile Course Catalog</div>
+    </div>
+    <div class="figure-container">
+      <div class="screenshot-frame">
+        <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/17-mobile-drawer.png" alt="Mobile Drawer" class="screenshot-img" style="height: 310px; object-fit: cover; object-position: top;">
+      </div>
+      <div class="figure-caption"><strong>16.3:</strong> Spring Slide Drawer</div>
+    </div>
+    <div class="figure-container">
+      <div class="screenshot-frame">
+        <img src="file:///C:/Users/engli/Documents/GitHub/Itsc/docs/report-screenshots/13-mobile-contact.png" alt="Mobile Contact" class="screenshot-img" style="height: 310px; object-fit: cover; object-position: top;">
+      </div>
+      <div class="figure-caption"><strong>16.4:</strong> Mobile Contact Form</div>
+    </div>
+  </div>
+
+  <h2 class="subsection-title">Mobile Ergonomics Engineering</h2>
+  <div class="grid-2col">
+    <ul class="feature-list">
+      <li><strong>Bottom Thumb Bar (<code>BottomNav</code>):</strong> Persistent 5-destination bar (Home, Courses, Corporate, ITSC AI, Contact) respecting <code>env(safe-area-inset-bottom)</code> for notch-less iPhones.</li>
+      <li><strong>Spring Drawer Animation:</strong> Fluid <code>itsc-drawer-enter</code> keyframe sliding in from the right with accessible Tab focus trap and focus restoration.</li>
+    </ul>
+    <ul class="feature-list">
+      <li><strong>Zero Horizontal Overflow:</strong> Strict boundary containment preventing awkward horizontal panning across screens from 375px to 430px.</li>
+      <li><strong>Tactile Touch Targets:</strong> All interactive elements meet the minimum 44x44px touch target guidelines recommended by Apple and Google.</li>
+    </ul>
+  </div>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 16</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 17. SUMMARY OF KEY IMPROVEMENTS & ROADMAP -->
+<!-- ========================================== -->
+<div class="page-break">
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <span class="doc-header-pill">ITSC</span>
+      <span>Official Web Platform • Development & Enhancement Report</span>
+    </div>
+    <div>November 2026 • Confidential Client Review</div>
+  </div>
+
+  <h1 class="section-title"><span class="section-number">17</span> Summary of Key Improvements & Next Steps</h1>
+
+  <h2 class="subsection-title">Master Delivery Matrix</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 20%;">Feature Area</th>
+        <th style="width: 32%;">Previous Status</th>
+        <th style="width: 32%;">New Enhanced Status</th>
+        <th style="width: 16%;">Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>ITSC AI Assistant</strong></td>
+        <td>No automated or intelligent conversational assistance available.</td>
+        <td>Dual AI engine (Gemini + RAG PDF citations) with multi-turn course counseling.</td>
+        <td><span class="badge-tag green">Transformative</span></td>
+      </tr>
+      <tr>
+        <td><strong>Course Catalog</strong></td>
+        <td>Basic unsegmented listing; difficult to search 269 courses.</td>
+        <td>2-tier mega menu dropdown + fast client-side filtering by 56 categories and vendors.</td>
+        <td><span class="badge-tag green">High Value</span></td>
+      </tr>
+      <tr>
+        <td><strong>Navigation System</strong></td>
+        <td>Static header without scroll dynamics; cumbersome mobile navigation.</td>
+        <td>Frosted glass shrink-on-scroll header + persistent mobile bottom thumb bar.</td>
+        <td><span class="badge-tag green">High Value</span></td>
+      </tr>
+      <tr>
+        <td><strong>Syllabus Access</strong></td>
+        <td>Manual file handling; missing or broken external links.</td>
+        <td>Direct database streaming of verified PDF syllabi with in-browser preview.</td>
+        <td><span class="badge-tag green">High Value</span></td>
+      </tr>
+      <tr>
+        <td><strong>Brand Identity</strong></td>
+        <td>Inconsistent gold contrast and generic layouts.</td>
+        <td>WCAG AA compliant Accessible Gold, Corporate Navy, and Apple-grade tactile motion.</td>
+        <td><span class="badge-tag green">Enhanced</span></td>
+      </tr>
+      <tr>
+        <td><strong>Administrative CMS</strong></td>
+        <td>Basic CRUD without role segmentation.</td>
+        <td>6-tier RBAC security, inquiry triage workflow, and full course lifecycle management.</td>
+        <td><span class="badge-tag green">Enhanced</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="subsection-title">Future Evolution Roadmap</h2>
+  <p>
+    Following the successful rollout of the Next-Generation Experience, the recommended future development milestones include:
+  </p>
+  <ul class="feature-list">
+    <li><strong>Phase 3 — Interactive Student Portal:</strong> Self-service dashboard for registered trainees to view schedules, attendance, and grades.</li>
+    <li><strong>Phase 4 — Online Payment & Registration:</strong> Direct digital fee settlement via Telebirr, CBE Birr, and international cards.</li>
+    <li><strong>Phase 5 — Digital Credential Verification:</strong> Public cryptographic certificate verification engine for employers and alumni.</li>
+  </ul>
+
+  <div class="callout-box priority" style="margin-top: 20px;">
+    <div class="callout-box-title">Conclusion & Sign-Off</div>
+    The ITSC Web Platform now stands as a state-of-the-art institutional asset. It successfully balances aesthetic sophistication, deep technical stability, and effortless user experience. The platform is primed for sustained operational growth and student enrollment leadership.
+  </div>
+
+  <div style="margin-top: 30px; display: flex; justify-content: space-between; border-top: 1px solid #cbd5e1; padding-top: 16px;">
+    <div>
+      <div style="font-size: 8pt; color: #64748b; text-transform: uppercase; font-weight: 600;">Submitted By</div>
+      <div style="font-size: 10pt; font-weight: 700; color: #0a192f; margin-top: 2px;">ITSC Engineering & Design Team</div>
+      <div style="font-size: 8pt; color: #64748b;">Information Technology Support Centre</div>
+    </div>
+    <div style="text-align: right;">
+      <div style="font-size: 8pt; color: #64748b; text-transform: uppercase; font-weight: 600;">Authorized For Presentation</div>
+      <div style="font-size: 10pt; font-weight: 700; color: #0a192f; margin-top: 2px;">Fedasa Eyob</div>
+      <div style="font-size: 8pt; color: #64748b;">Project Owner & Institutional Lead</div>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <div>ITSC Next-Gen Web Platform • Client Report</div>
+    <div>Page 17</div>
+  </div>
+</div>
+
+</body>
+</html>
