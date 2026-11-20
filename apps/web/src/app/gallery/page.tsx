@@ -15,7 +15,7 @@ export default async function GalleryPage() {
 
   return (
     <>
-      <Section className="border-b border-gray-200 bg-white">
+      <Section className="border-b border-gray-200/80 bg-white py-8 sm:py-10">
         <Container className="max-w-3xl text-center">
           <PageHero eyebrow={eyebrow} title={title} description={intro} />
         </Container>

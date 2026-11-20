@@ -20,10 +20,10 @@ export default async function CorporateTrainingPage() {
 
   return (
     <>
-      <Section className="border-b border-gray-200 bg-white">
+      <Section className="border-b border-gray-200/80 bg-white py-8 sm:py-10">
         <Container className="max-w-3xl text-center">
           <PageHero eyebrow={eyebrow} title={title} description={intro} />
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
             <Button asChild size="lg">
               <Link href={primaryCta.href}>
                 {primaryCta.label}

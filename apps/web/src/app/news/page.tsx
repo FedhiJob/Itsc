@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/section";
+import { PageHero } from "@/components/ui/page-hero";
 import { getNewsContent } from "@/lib/api/news";
 import { ImageContainer } from "@/lib/image";
 
@@ -17,13 +18,13 @@ export default async function NewsPage() {
 
   return (
     <>
-      <Section className="border-b border-gray-200 bg-white">
+      <Section className="border-b border-gray-200/80 bg-white py-8 sm:py-10">
         <Container className="max-w-3xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-gold">{eyebrow}</p>
-          <h1 className="mt-4 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl">
-            {title}
-          </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-500">{intro}</p>
+          <PageHero eyebrow={eyebrow} title={title} description={intro} />
+
+
+
+
         </Container>
       </Section>
 
