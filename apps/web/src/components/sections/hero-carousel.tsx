@@ -20,8 +20,8 @@ interface Slide {
 const slides: Slide[] = [
   {
     src: "/carousel/image-0.jpg",
-    alt: "ITSC Technology Support visual identity with connected technology imagery",
-    eyebrow: "ITSC Technology Support",
+    alt: "ITSC visual identity with connected technology imagery",
+    eyebrow: "ITSC",
     title: "Build the skills that move technology forward.",
     description: "Practical technology training, certification, and enterprise support for ambitious professionals and organizations."
   },

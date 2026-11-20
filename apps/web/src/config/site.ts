@@ -7,7 +7,7 @@ export const siteConfig = {
   apiUrl: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api/v1",
   links: {
     email: "info@itsc.com.et",
-    phone: "+251 000 000 000",
+    phone: "+251 11 550 7150",
     address: "Addis Ababa, Ethiopia"
   }
 };

@@ -348,7 +348,7 @@ export function CourseCatalogDropdown({ onNavigate, isMobile = false }: CourseCa
         href="/training-programs"
         onKeyDown={handleTriggerKeyDown}
         className={cn(
-          "itsc-press inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
+          "itsc-press inline-flex items-center gap-1.5 rounded-md px-2.5 xl:px-3 py-1.5 text-[13px] xl:text-sm font-medium whitespace-nowrap transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
           pathname.startsWith("/training-programs")
             ? "bg-brand-gold/15 font-semibold text-brand-ink"
             : "text-gray-600",
@@ -358,10 +358,10 @@ export function CourseCatalogDropdown({ onNavigate, isMobile = false }: CourseCa
         aria-haspopup="menu"
         aria-controls="desktop-catalog-dropdown"
       >
-        <span>Certifications &amp; Courses</span>
+        <span className="whitespace-nowrap">Courses &amp; Certs</span>
         <ChevronDown
           aria-hidden="true"
-          className={cn("h-4 w-4 transition-transform duration-200", isOpen && "rotate-180")}
+          className={cn("h-3.5 w-3.5 transition-transform duration-200", isOpen && "rotate-180")}
         />
       </Link>
 

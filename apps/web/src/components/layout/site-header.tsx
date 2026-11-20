@@ -189,12 +189,12 @@ export function SiteHeader() {
             />
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Main navigation">
+          <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Main navigation">
             <Link
               href="/"
               aria-current={pathname === "/" ? "page" : undefined}
               className={cn(
-                "itsc-press rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
+                "itsc-press whitespace-nowrap rounded-md px-2.5 xl:px-3 py-1.5 text-[13px] xl:text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
                 pathname === "/" ? "bg-brand-gold/15 text-brand-ink font-semibold" : "text-gray-600"
               )}
             >
@@ -205,7 +205,7 @@ export function SiteHeader() {
               href="/about"
               aria-current={pathname === "/about" ? "page" : undefined}
               className={cn(
-                "itsc-press rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
+                "itsc-press whitespace-nowrap rounded-md px-2.5 xl:px-3 py-1.5 text-[13px] xl:text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
                 pathname === "/about" ? "bg-brand-gold/15 text-brand-ink font-semibold" : "text-gray-600"
               )}
             >
@@ -219,7 +219,7 @@ export function SiteHeader() {
               href="/corporate-training"
               aria-current={pathname === "/corporate-training" ? "page" : undefined}
               className={cn(
-                "itsc-press rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
+                "itsc-press whitespace-nowrap rounded-md px-2.5 xl:px-3 py-1.5 text-[13px] xl:text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
                 pathname === "/corporate-training" ? "bg-brand-gold/15 text-brand-ink font-semibold" : "text-gray-600"
               )}
             >
@@ -230,7 +230,7 @@ export function SiteHeader() {
               href="/news"
               aria-current={pathname.startsWith("/news") ? "page" : undefined}
               className={cn(
-                "itsc-press rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
+                "itsc-press whitespace-nowrap rounded-md px-2.5 xl:px-3 py-1.5 text-[13px] xl:text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
                 pathname.startsWith("/news") ? "bg-brand-gold/15 text-brand-ink font-semibold" : "text-gray-600"
               )}
             >
@@ -241,7 +241,7 @@ export function SiteHeader() {
               href="/gallery"
               aria-current={pathname === "/gallery" ? "page" : undefined}
               className={cn(
-                "itsc-press rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
+                "itsc-press whitespace-nowrap rounded-md px-2.5 xl:px-3 py-1.5 text-[13px] xl:text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
                 pathname === "/gallery" ? "bg-brand-gold/15 text-brand-ink font-semibold" : "text-gray-600"
               )}
             >
@@ -252,7 +252,7 @@ export function SiteHeader() {
               href="/contact"
               aria-current={pathname === "/contact" ? "page" : undefined}
               className={cn(
-                "itsc-press rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
+                "itsc-press whitespace-nowrap rounded-md px-2.5 xl:px-3 py-1.5 text-[13px] xl:text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
                 pathname === "/contact" ? "bg-brand-gold/15 text-brand-ink font-semibold" : "text-gray-600"
               )}
             >
@@ -260,38 +260,41 @@ export function SiteHeader() {
             </Link>
           </nav>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
             {/* Quick Spotlight Search Trigger */}
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent("itsc:open-search"))}
-              className="itsc-press inline-flex items-center gap-1.5 h-9 rounded-lg border border-gray-200/80 px-2.5 text-xs text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-brand-gold"
+              className="itsc-press inline-flex items-center gap-1.5 h-8.5 rounded-lg border border-gray-200/80 px-2.5 text-xs text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-brand-gold"
               aria-label="Search training courses (Cmd+K)"
               title="Search training courses (Cmd+K)"
             >
-              <Search aria-hidden="true" className="h-4 w-4" />
+              <Search aria-hidden="true" className="h-3.5 w-3.5 text-gray-500" />
               <span className="hidden md:inline text-xs text-gray-500 font-normal">Search...</span>
               <kbd className="hidden md:inline-flex items-center rounded bg-gray-100 border border-gray-200 px-1 py-0.5 text-[10px] font-mono text-gray-500">
                 ⌘K
               </kbd>
             </button>
 
+            {/* Direct Call Now Action Button */}
             <a
               href={`tel:${siteConfig.links.phone}`}
-              className="itsc-press hidden items-center gap-1.5 text-xs font-semibold text-gray-600 transition-colors hover:text-brand-gold-700 xl:inline-flex"
+              className="itsc-press hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-brand-gold/70 bg-brand-gold/15 px-3 py-1.5 text-xs font-bold text-brand-navy whitespace-nowrap transition-all duration-200 hover:bg-brand-gold hover:text-brand-ink hover:shadow-xs focus-visible:outline-2 focus-visible:outline-brand-gold"
+              aria-label="Call ITSC directly"
+              title={`Call ITSC directly at ${siteConfig.links.phone}`}
             >
               <Phone aria-hidden="true" className="h-3.5 w-3.5 text-brand-gold-700" />
-              {siteConfig.links.phone}
+              <span className="whitespace-nowrap">Call Now</span>
             </a>
 
             <Button
               size="sm"
-              className="hidden sm:inline-flex shadow-xs"
+              className="hidden sm:inline-flex shadow-xs whitespace-nowrap text-xs font-bold px-3 py-1.5"
               onClick={() => window.dispatchEvent(new CustomEvent("itsc:open-chat"))}
               aria-label="Open ITSC AI assistant"
             >
-              <Bot aria-hidden="true" className="h-4 w-4" />
-              <span>ITSC AI</span>
+              <Bot aria-hidden="true" className="h-3.5 w-3.5" />
+              <span className="whitespace-nowrap">ITSC AI</span>
             </Button>
 
             <button
@@ -457,15 +460,14 @@ export function SiteHeader() {
               </Link>
             </nav>
 
-            <div className="shrink-0 space-y-3 border-t border-gray-100 px-5 py-4 bg-gray-50/50">
+            <div className="shrink-0 space-y-2.5 border-t border-gray-100 px-5 py-4 bg-gray-50/50">
               <a
                 href={`tel:${siteConfig.links.phone}`}
-                className="itsc-press flex items-center gap-2.5 text-sm font-medium text-gray-600"
+                className="itsc-press flex items-center justify-center gap-2 rounded-xl border border-brand-gold/60 bg-brand-gold/15 py-2.5 text-xs sm:text-sm font-bold text-brand-navy transition-colors hover:bg-brand-gold hover:text-brand-ink whitespace-nowrap"
+                aria-label={`Call ITSC directly at ${siteConfig.links.phone}`}
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white border border-gray-200">
-                  <Phone aria-hidden="true" className="h-4 w-4 text-brand-gold-accessible" />
-                </span>
-                <span>{siteConfig.links.phone}</span>
+                <Phone aria-hidden="true" className="h-4 w-4 text-brand-gold-700" />
+                <span>Call Now ({siteConfig.links.phone})</span>
               </a>
               <Button
                 className="w-full shadow-xs"
