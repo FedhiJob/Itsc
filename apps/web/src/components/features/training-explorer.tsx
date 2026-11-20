@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { BookOpen, Search, X, SlidersHorizontal, Check } from "lucide-react";
 import type { TrainingCategory, TrainingProgramSummary } from "@itsc/shared";
 import { TrainingCard } from "./training-card";
@@ -46,6 +46,38 @@ export function TrainingExplorer({
   const [selectedSubcat, setSelectedSubcat] = useState<string>(initialSubcatSlug);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  // Touch swipe-down-to-dismiss tracking for mobile filter sheet
+  const [filterDragY, setFilterDragY] = useState(0);
+  const [isFilterDragging, setIsFilterDragging] = useState(false);
+  const filterTouchStartYRef = useRef<number | null>(null);
+
+  const handleFilterTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    if (touch) {
+      filterTouchStartYRef.current = touch.clientY;
+      setIsFilterDragging(true);
+    }
+  };
+
+  const handleFilterTouchMove = (e: React.TouchEvent) => {
+    if (filterTouchStartYRef.current === null) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+    const deltaY = touch.clientY - filterTouchStartYRef.current;
+    if (deltaY > 0) {
+      setFilterDragY(deltaY);
+    }
+  };
+
+  const handleFilterTouchEnd = () => {
+    if (filterDragY > 60) {
+      setMobileFilterOpen(false);
+    }
+    setFilterDragY(0);
+    setIsFilterDragging(false);
+    filterTouchStartYRef.current = null;
+  };
 
   // Subcategories belonging to the active vendor
   const currentVendor = useMemo(() => {
@@ -239,21 +271,33 @@ export function TrainingExplorer({
         </div>
       )}
 
-      {/* Mobile Filter Sheet (ISSUE-PUB-05 with sticky apply/reset footer) */}
+      {/* Mobile Filter Sheet (ISSUE-PUB-05 with sticky apply/reset footer and touch sliding gestures) */}
       {mobileFilterOpen && (
         <div
           role="dialog"
           aria-modal="true"
           aria-label="Filter courses by vendor and category"
-          className="fixed inset-0 z-50 flex flex-col justify-end bg-black/50 backdrop-blur-xs md:hidden"
+          className="fixed inset-0 z-50 flex flex-col justify-end bg-black/40 backdrop-blur-[2px] md:hidden"
           onClick={() => setMobileFilterOpen(false)}
         >
           <div
-            className="itsc-popover-enter flex max-h-[85vh] flex-col rounded-t-3xl bg-white shadow-2xl"
+            onTouchStart={handleFilterTouchStart}
+            onTouchMove={handleFilterTouchMove}
+            onTouchEnd={handleFilterTouchEnd}
+            style={{
+              transform: filterDragY > 0 ? `translateY(${filterDragY}px)` : undefined,
+              transition: isFilterDragging ? "none" : "transform 260ms cubic-bezier(0.16, 1, 0.3, 1)"
+            }}
+            className="itsc-sheet-enter flex max-h-[85vh] flex-col rounded-t-3xl bg-white shadow-2xl overscroll-contain"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Grab handle for touch sliding */}
+            <div className="flex justify-center pt-3 pb-1 cursor-grab touch-none">
+              <div className="h-1.5 w-12 rounded-full bg-gray-300 hover:bg-gray-400 transition-colors" />
+            </div>
+
             {/* Sheet Header */}
-            <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+            <div className="flex items-center justify-between border-b border-gray-100 px-5 py-3">
               <div>
                 <h3 className="text-base font-bold text-gray-900">Filter Courses</h3>
                 <p className="text-xs text-gray-500">
@@ -263,7 +307,7 @@ export function TrainingExplorer({
               <button
                 type="button"
                 onClick={() => setMobileFilterOpen(false)}
-                className="itsc-press rounded-full p-2 text-gray-400 hover:bg-gray-100"
+                className="itsc-press rounded-full p-2 text-gray-400 hover:bg-gray-100 cursor-pointer"
                 aria-label="Close filter drawer"
               >
                 <X className="h-5 w-5" />

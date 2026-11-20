@@ -18,6 +18,44 @@ export function SiteHeader() {
   const drawerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
+  // Touch swipe-to-dismiss tracking for mobile drawer
+  const [dragOffsetX, setDragOffsetX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    if (touch) {
+      touchStartXRef.current = touch.clientX;
+      touchStartYRef.current = touch.clientY;
+      setIsDragging(true);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+    const deltaX = touch.clientX - touchStartXRef.current;
+    const deltaY = Math.abs(touch.clientY - (touchStartYRef.current ?? touch.clientY));
+
+    // If predominantly horizontal swiping to the right
+    if (deltaX > 0 && deltaX > deltaY) {
+      setDragOffsetX(deltaX);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (dragOffsetX > 55) {
+      setMenuOpen(false);
+    }
+    setDragOffsetX(0);
+    setIsDragging(false);
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+  };
+
   // Shrink-on-scroll listener for desktop & mobile
   useEffect(() => {
     const handleScroll = () => {
@@ -40,15 +78,14 @@ export function SiteHeader() {
     }
 
     const previousActive = document.activeElement as HTMLElement | null;
+    const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    // Focus the close button when opened
+    // Focus the first interactive element inside menu when opened
     const timer = setTimeout(() => {
       if (drawerRef.current) {
-        const closeBtn = drawerRef.current.querySelector<HTMLButtonElement>('button[aria-label="Close navigation menu"]');
-        if (closeBtn) {
-          closeBtn.focus();
-        }
+        const firstFocusable = drawerRef.current.querySelector<HTMLElement>('button, a, input');
+        firstFocusable?.focus();
       }
     }, 50);
 
@@ -90,7 +127,7 @@ export function SiteHeader() {
 
     return () => {
       clearTimeout(timer);
-      document.body.style.overflow = "";
+      document.body.style.overflow = originalOverflow;
       document.removeEventListener("keydown", onKeyDown);
       if (previousActive && typeof previousActive.focus === "function") {
         previousActive.focus();
@@ -260,19 +297,23 @@ export function SiteHeader() {
             <button
               ref={triggerRef}
               type="button"
-              onClick={() => setMenuOpen(true)}
-              className="itsc-press inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200/80 text-gray-900 transition-colors hover:bg-gray-100 lg:hidden focus-visible:outline-2 focus-visible:outline-brand-gold"
-              aria-label="Open navigation menu"
+              onClick={() => setMenuOpen((prev) => !prev)}
+              className="itsc-press inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200/80 text-gray-900 transition-colors hover:bg-gray-100 lg:hidden focus-visible:outline-2 focus-visible:outline-brand-gold cursor-pointer"
+              aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
             >
-              <Menu aria-hidden="true" className="h-5 w-5" />
+              {menuOpen ? (
+                <X aria-hidden="true" className="h-5 w-5 text-brand-navy" />
+              ) : (
+                <Menu aria-hidden="true" className="h-5 w-5" />
+              )}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Slide-Out Spring Menu */}
+      {/* Mobile Slide-Out Drawer with Touch Swipe & Click Everywhere */}
       {menuOpen ? (
         <div
           className="fixed inset-0 z-[100] lg:hidden"
@@ -280,32 +321,46 @@ export function SiteHeader() {
           aria-modal="true"
           aria-label="Mobile navigation"
         >
-          {/* Backdrop with smooth blur */}
+          {/* Backdrop scrim - click anywhere on the exposed page to dismiss */}
           <button
             type="button"
             aria-label="Close navigation menu"
             onClick={() => setMenuOpen(false)}
-            className="absolute inset-0 h-full w-full bg-brand-navy/50 backdrop-blur-[3px] transition-opacity duration-200"
+            className="absolute inset-0 h-full w-full bg-brand-navy/40 backdrop-blur-[2px] transition-opacity duration-200 cursor-pointer"
           />
 
-          {/* Drawer container with focus trap and spring motion */}
+          {/* Drawer container:
+              - Sized to w-[82vw] max-w-[315px] so it NEVER covers the whole page (leaves 18%-25% screen visible on the left)
+              - Touch swipe right to dismiss
+              - Smooth spring transform
+          */}
           <div
             id="mobile-menu"
             ref={drawerRef}
-            className="itsc-drawer-enter absolute inset-y-0 right-0 flex w-full max-w-[22rem] flex-col bg-white shadow-2xl pb-[env(safe-area-inset-bottom,1.5rem)]"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            style={{
+              transform: dragOffsetX > 0 ? `translateX(${dragOffsetX}px)` : undefined,
+              transition: isDragging ? "none" : "transform 260ms cubic-bezier(0.16, 1, 0.3, 1)"
+            }}
+            className="itsc-drawer-enter absolute inset-y-0 right-0 flex w-[82vw] max-w-[315px] flex-col bg-white shadow-2xl rounded-l-3xl border-l border-gray-100 overscroll-contain pb-[env(safe-area-inset-bottom,1.5rem)]"
           >
+            {/* Grab handle indicator on the left edge */}
+            <div className="absolute left-1.5 top-1/2 -translate-y-1/2 h-12 w-1 rounded-full bg-gray-300 opacity-70 pointer-events-none" />
+
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-gray-100 px-5">
               <Image
                 src={logo}
                 alt="ITSC"
                 width={120}
                 height={44}
-                className="h-auto w-auto max-h-10 object-contain"
+                className="h-auto w-auto max-h-9 object-contain"
               />
               <button
                 type="button"
                 onClick={() => setMenuOpen(false)}
-                className="itsc-press inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-brand-gold"
+                className="itsc-press inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-brand-gold cursor-pointer"
                 aria-label="Close navigation menu"
               >
                 <X aria-hidden="true" className="h-5 w-5" />
@@ -319,11 +374,11 @@ export function SiteHeader() {
                   setMenuOpen(false);
                   setTimeout(() => window.dispatchEvent(new CustomEvent("itsc:open-search")), 150);
                 }}
-                className="itsc-press w-full mb-3 flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50/80 px-3.5 py-2.5 text-xs text-gray-500 hover:bg-gray-100"
+                className="itsc-press w-full mb-3 flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50/80 px-3.5 py-2.5 text-xs text-gray-500 hover:bg-gray-100 cursor-pointer"
               >
                 <span className="flex items-center gap-2">
                   <Search className="h-4 w-4 text-brand-gold" />
-                  <span>Search 269+ courses...</span>
+                  <span>Search 260+ courses...</span>
                 </span>
                 <kbd className="rounded bg-white border border-gray-200 px-1.5 py-0.5 text-[10px] font-mono text-gray-500">
                   ⌘K
@@ -334,7 +389,7 @@ export function SiteHeader() {
                 href="/"
                 onClick={() => setMenuOpen(false)}
                 className={cn(
-                  "itsc-press block rounded-lg px-3.5 py-2.5 text-[15px] font-medium transition-colors hover:bg-gray-100",
+                  "itsc-press block rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors hover:bg-gray-100",
                   pathname === "/" ? "bg-brand-gold/15 font-bold text-brand-ink" : "text-gray-700"
                 )}
               >
@@ -345,7 +400,7 @@ export function SiteHeader() {
                 href="/about"
                 onClick={() => setMenuOpen(false)}
                 className={cn(
-                  "itsc-press block rounded-lg px-3.5 py-2.5 text-[15px] font-medium transition-colors hover:bg-gray-100",
+                  "itsc-press block rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors hover:bg-gray-100",
                   pathname === "/about" ? "bg-brand-gold/15 font-bold text-brand-ink" : "text-gray-700"
                 )}
               >
@@ -361,7 +416,7 @@ export function SiteHeader() {
                 href="/corporate-training"
                 onClick={() => setMenuOpen(false)}
                 className={cn(
-                  "itsc-press block rounded-lg px-3.5 py-2.5 text-[15px] font-medium transition-colors hover:bg-gray-100",
+                  "itsc-press block rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors hover:bg-gray-100",
                   pathname === "/corporate-training" ? "bg-brand-gold/15 font-bold text-brand-ink" : "text-gray-700"
                 )}
               >
@@ -372,7 +427,7 @@ export function SiteHeader() {
                 href="/news"
                 onClick={() => setMenuOpen(false)}
                 className={cn(
-                  "itsc-press block rounded-lg px-3.5 py-2.5 text-[15px] font-medium transition-colors hover:bg-gray-100",
+                  "itsc-press block rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors hover:bg-gray-100",
                   pathname.startsWith("/news") ? "bg-brand-gold/15 font-bold text-brand-ink" : "text-gray-700"
                 )}
               >
@@ -383,7 +438,7 @@ export function SiteHeader() {
                 href="/gallery"
                 onClick={() => setMenuOpen(false)}
                 className={cn(
-                  "itsc-press block rounded-lg px-3.5 py-2.5 text-[15px] font-medium transition-colors hover:bg-gray-100",
+                  "itsc-press block rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors hover:bg-gray-100",
                   pathname === "/gallery" ? "bg-brand-gold/15 font-bold text-brand-ink" : "text-gray-700"
                 )}
               >
@@ -394,7 +449,7 @@ export function SiteHeader() {
                 href="/contact"
                 onClick={() => setMenuOpen(false)}
                 className={cn(
-                  "itsc-press block rounded-lg px-3.5 py-2.5 text-[15px] font-medium transition-colors hover:bg-gray-100",
+                  "itsc-press block rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors hover:bg-gray-100",
                   pathname === "/contact" ? "bg-brand-gold/15 font-bold text-brand-ink" : "text-gray-700"
                 )}
               >
