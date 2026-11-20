@@ -130,7 +130,7 @@ const WELCOME_MESSAGE: ExtendedChatMessage = {
 /**
  * Lightweight inline markdown renderer for bold text and relative/absolute markdown links
  */
-function FormattedMessageText({ text }: { text: string }) {
+function FormattedMessageText({ text, onNavigate }: { text: string; onNavigate?: () => void }) {
   const parts: React.ReactNode[] = [];
   const lines = text.split('\n');
 
@@ -160,6 +160,7 @@ function FormattedMessageText({ text }: { text: string }) {
           <Link
             key={`link-${lineIdx}-${match.index}`}
             href={href}
+            onClick={() => onNavigate?.()}
             className="inline-flex items-center gap-0.5 font-semibold text-blue-600 hover:text-blue-800 hover:underline"
           >
             {label}
@@ -206,7 +207,7 @@ function renderBoldText(text: string, keyPrefix: string): React.ReactNode {
   });
 }
 
-function CourseCard({ course }: { course: StructuredCourse }) {
+function CourseCard({ course, onNavigate }: { course: StructuredCourse; onNavigate?: () => void }) {
   return (
     <div className="mt-2 rounded-xl border border-blue-100 bg-white p-3 shadow-xs transition-all hover:border-brand-navy/30 hover:shadow-sm">
       <div className="flex items-start justify-between gap-2">
@@ -238,6 +239,7 @@ function CourseCard({ course }: { course: StructuredCourse }) {
       <div className="mt-2.5 pt-2 border-t border-gray-100 flex items-center justify-between gap-2">
         <Link
           href={`/contact?subject=enrollment&source=${encodeURIComponent(`/training-programs/${course.slug}`)}&sourceLabel=${encodeURIComponent(course.title)}`}
+          onClick={() => onNavigate?.()}
           className="inline-flex items-center gap-1 text-[11px] font-medium text-gray-600 hover:text-brand-ink transition-colors"
         >
           <Mail className="h-3 w-3 text-brand-gold-accessible" />
@@ -245,6 +247,7 @@ function CourseCard({ course }: { course: StructuredCourse }) {
         </Link>
         <Link
           href={`/training-programs/${course.slug}`}
+          onClick={() => onNavigate?.()}
           className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 hover:text-blue-800 transition-colors"
         >
           View details
@@ -319,6 +322,11 @@ export function ChatWidget() {
     window.addEventListener('itsc:open-chat', openChat);
     return () => window.removeEventListener('itsc:open-chat', openChat);
   }, []);
+
+  // Automatically hide/close the chat box when a new page loads or route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (isOpen && textareaRef.current) {
@@ -674,7 +682,10 @@ export function ChatWidget() {
                         : 'bg-white text-gray-800 rounded-bl-xs shadow-xs border border-gray-200/70'
                     }`}
                   >
-                    <FormattedMessageText text={message.content} />
+                    <FormattedMessageText
+                      text={message.content}
+                      onNavigate={() => setIsOpen(false)}
+                    />
 
                     {/* Retry button on error */}
                     {message.isError && (
@@ -698,7 +709,11 @@ export function ChatWidget() {
                           Recommended Courses ({message.courses.length})
                         </p>
                         {message.courses.map((course, cIdx) => (
-                          <CourseCard key={cIdx} course={course} />
+                          <CourseCard
+                            key={cIdx}
+                            course={course}
+                            onNavigate={() => setIsOpen(false)}
+                          />
                         ))}
                       </div>
                     )}
