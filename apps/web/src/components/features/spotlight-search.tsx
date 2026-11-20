@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X, BookOpen, Layers, ArrowRight, CornerDownLeft, Sparkles, Clock } from "lucide-react";
+import { Loading } from "@/components/ui/loading";
 
 interface SearchCategory {
   id: string;
@@ -231,10 +232,7 @@ export function SpotlightSearch() {
         {/* Results Container */}
         <div ref={listRef} className="max-h-[60vh] overflow-y-auto p-4 space-y-4 overscroll-contain">
           {isLoading && !data ? (
-            <div className="py-12 text-center text-sm text-gray-500">
-              <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-brand-gold border-t-transparent mr-2" />
-              Loading certification index...
-            </div>
+            <Loading variant="inline" text="Loading certification index..." />
           ) : query.trim() ? (
             allNavItems.length > 0 ? (
               <div className="space-y-4">

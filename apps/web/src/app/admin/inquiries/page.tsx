@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Building2, Inbox, Loader2, Mail, Phone } from "lucide-react";
 import { Select } from "@/components/ui/select";
+import { Loading } from "@/components/ui/loading";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { adminApi, type ContactInquiry, type InquiryStatus } from "@/lib/admin/api";
 
@@ -63,7 +64,7 @@ export default function AdminInquiriesPage() {
 
       {loading ? (
         <div className="flex items-center justify-center rounded-lg border border-gray-200 bg-white py-16">
-          <Loader2 aria-hidden="true" className="h-6 w-6 animate-spin text-brand-gold" />
+          <Loading variant="inline" text="Loading inquiries..." />
         </div>
       ) : inquiries.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white px-6 py-16 text-center">

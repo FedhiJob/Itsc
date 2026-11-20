@@ -16,6 +16,7 @@ import {
   X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Loading } from "@/components/ui/loading";
 import { clearSession, getUser, isAuthenticated, type AdminUser } from "@/lib/admin/auth";
 
 const adminNavigation = [
@@ -57,9 +58,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (checking) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <Loader2 aria-hidden="true" className="h-8 w-8 animate-spin text-brand-gold" />
-      </div>
+      <Loading
+        variant="fullscreen"
+        text="Verifying admin credentials..."
+      />
     );
   }
 

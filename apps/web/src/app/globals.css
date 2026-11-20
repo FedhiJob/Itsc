@@ -233,6 +233,22 @@ a {
   animation: itsc-popover-in 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@keyframes itsc-indeterminate {
+  0% {
+    transform: translateX(-120%);
+  }
+  50% {
+    transform: translateX(40%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.itsc-indeterminate {
+  animation: itsc-indeterminate 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
