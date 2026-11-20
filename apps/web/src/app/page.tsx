@@ -15,7 +15,7 @@ export default async function Home() {
   const { hero, services, stats, partners, missionVision, cta } = await getHomepageContent();
   const { programs } = await getTrainingContent();
   const featured = programs.filter((program) => program.isFeatured);
-  const featuredPrograms = (featured.length > 0 ? featured : programs).slice(0, 3);
+  const featuredPrograms = (featured.length > 0 ? featured : programs).slice(0, 4);
 
   return (
     <>
@@ -73,9 +73,13 @@ export default async function Home() {
             </div>
             <Button asChild variant="outline"><Link href="/training-programs">All programs <ArrowRight aria-hidden="true" className="h-4 w-4" /></Link></Button>
           </Reveal>
-          <div className="mt-10 grid gap-6 lg:grid-cols-3">
+          <div className="mt-8 flex overflow-x-auto snap-x snap-mandatory gap-3.5 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-4 scrollbar-none">
             {featuredPrograms.map((program, index) => (
-              <Reveal key={program.id} style={{ transitionDelay: `${index * 100}ms` }}>
+              <Reveal
+                key={program.id}
+                className="w-[72vw] max-w-[280px] shrink-0 snap-start sm:w-auto h-full"
+                style={{ transitionDelay: `${index * 80}ms` }}
+              >
                 <TrainingCard
                   title={program.title}
                   slug={program.slug}
